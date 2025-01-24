@@ -3,11 +3,25 @@ import './startmenu.css';
 import { Player } from '../types';
 import { PlayerListitem } from './PlayerListItem';
 
+const pastellivärit = [
+   '#FAD0C4', // Vaaleanpunainen
+   '#A8E6CF', // Mintunvihreä
+   '#C1D3FE', // Vaaleansiniharmaa
+   '#E6A9EC', // Laventeli
+   '#FFB3AB', // Persikkainen
+   '#FFF1A8', // Vaaleankeltainen
+   '#B3E5FC', // Taivaan sininen
+   '#D4E157', // Vaaleanvihreä
+   '#FFCC80', // Pehmeä oranssi
+   '#D1C4E9', // Vaaleanlila
+];
+
 type StartMenuProps = {
    changeScene: () => void;
 };
 
 export function StartMenu({ changeScene }: StartMenuProps) {
+   const [i, setI] = useState(0);
    const [name, setName] = useState('');
    const [players, setPlayers] = useState<Player[]>([]);
 
@@ -28,9 +42,16 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             ...players,
             {
                name,
-               color: '#94edcf',
+               color: pastellivärit[i],
             },
          ]);
+         const newI = i + 1;
+
+         if (newI >= pastellivärit.length) {
+            setI(0);
+         } else {
+            setI(i + 1);
+         }
          setName('');
       }
    };
