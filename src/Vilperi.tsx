@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 import App from './App';
 import { PlayerModelType } from './types';
+import { pastellivärit } from './startmenu/StartMenu';
 
 interface Props {
    model: PlayerModelType;
@@ -15,7 +16,20 @@ export const PlayerModel = (props: Props) => {
    } as React.CSSProperties;
 
    return (
-      <div className={getPlayerClassNames(model)} style={cssVars} />
+      <div
+         style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+         }}
+      >
+         <div
+            className={getPlayerClassNames(model)}
+            style={cssVars}
+         />
+      </div>
    );
 };
 
@@ -36,7 +50,10 @@ const getPlayerClassNames = (model: PlayerModelType) => {
          break;
    }
 
-   return `player ${modelClassName}`;
+   const randomAnimation = Math.ceil(Math.random() * 4);
+   let animation = `bubble-idle-animation-${randomAnimation}`;
+
+   return `player ${modelClassName} ${animation}`;
 };
 
 export const Router = () => {
@@ -63,19 +80,19 @@ export const Vilperi = () => {
          <VilperiRow>
             <VilperiBox size="small">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[0]}
                   model={PlayerModelType.Monkey}
                />
             </VilperiBox>
             <VilperiBox size="medium">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[0]}
                   model={PlayerModelType.Monkey}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[0]}
                   model={PlayerModelType.Monkey}
                />
             </VilperiBox>
@@ -83,19 +100,19 @@ export const Vilperi = () => {
          <VilperiRow>
             <VilperiBox size="small">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[1]}
                   model={PlayerModelType.Ninja}
                />
             </VilperiBox>
             <VilperiBox size="medium">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[1]}
                   model={PlayerModelType.Ninja}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[1]}
                   model={PlayerModelType.Ninja}
                />
             </VilperiBox>
@@ -103,19 +120,19 @@ export const Vilperi = () => {
          <VilperiRow>
             <VilperiBox size="small">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[2]}
                   model={PlayerModelType.Robot}
                />
             </VilperiBox>
             <VilperiBox size="medium">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[2]}
                   model={PlayerModelType.Robot}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[2]}
                   model={PlayerModelType.Robot}
                />
             </VilperiBox>
@@ -123,19 +140,19 @@ export const Vilperi = () => {
          <VilperiRow>
             <VilperiBox size="small">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[3]}
                   model={PlayerModelType.Wizard}
                />
             </VilperiBox>
             <VilperiBox size="medium">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[3]}
                   model={PlayerModelType.Wizard}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
-                  color={randomHexColorCode()}
+                  color={pastellivärit[3]}
                   model={PlayerModelType.Wizard}
                />
             </VilperiBox>

@@ -20,7 +20,7 @@ export const useMasterState = create<MasterState>()(
       setPlayers: players => set(() => ({ players })),
       movePlayer: (id, pos) =>
          set(state => {
-            const p = state.players.find(e => e.id == id);
+            const p = state.players.find((e: any) => e.id == id);
             if (p) {
                p.pos = pos;
                console.log(p.queueueueueuedActions[0])

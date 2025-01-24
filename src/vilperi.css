@@ -12,6 +12,53 @@
       rgba(255, 255, 255, 0) 10%,
       var(--player-color, #ffffff) 120%
    );
+   will-change: transform;
+}
+
+.bubble-idle-animation-1 {
+   animation-name: bubbleIdle;
+   animation-duration: 2s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+}
+
+.bubble-idle-animation-2 {
+   animation-name: bubbleIdle;
+   animation-duration: 2.2s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+}
+
+.bubble-idle-animation-3 {
+   animation-name: bubbleIdle;
+   animation-duration: 1.8s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+}
+
+.bubble-idle-animation-4 {
+   animation-name: bubbleIdle;
+   animation-duration: 2.3s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+}
+
+@keyframes bubbleIdle {
+   0% {
+      transform: scaleX(0.9) scaleY(0.9);
+   }
+
+   33% {
+      transform: scaleX(0.97) scaleY(0.83);
+   }
+
+   66% {
+      transform: scaleX(0.83) scaleY(0.97);
+   }
+
+   100% {
+      transform: scaleX(0.9) scaleY(0.9);
+   }
 }
 
 .player-ninja {
