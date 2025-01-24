@@ -43,6 +43,7 @@ function App() {
 
    return (
       <div className="container">
+         <button onClick={toggleScene}>toggle scene</button>
          <div className="game-container">
             <div
                className="game-grid"
@@ -63,7 +64,6 @@ function App() {
                   : Math.round(Math.random() * 10)}
             </button>
             <p>Tsumonjää</p>
-            <button onClick={toggleScene}>toggle scene</button>
          </div>
          <p className="read-the-docs">Hähähähä</p>
       </div>
