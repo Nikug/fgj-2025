@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { StartMenu } from './startmenu/StartMenu';
-import { useMasterState } from './states/MasterState'
+import { useMasterState } from './states/MasterState';
 import './App.css';
-import { Scene, V2 } from './types';
+import { Scene } from './types';
 import { Player } from './Player';
 
 export const rows = 10;
@@ -10,25 +10,27 @@ export const cols = 10;
 
 function App() {
    const [scene, setScene] = useState<Scene>(Scene.StartMenu);
-   const [playerPosition, setPlayerPosition] = useState<V2>({
-      x: 5,
-      y: 5,
-   });
+   const count = useMasterState((state) => state.count)
+   const increaseCount = useMasterState((state) => state.increase)
+   const player = useMasterState(state => state.players[0]);
+   const movePlayer = useMasterState(state => state.movePlayer);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
-            const count = useMasterState((state) => state.count)
             const drawPlayer =
-               row === playerPosition.y && col === playerPosition.x;
+               row === player.pos.y && col === player.pos.x;
             grid.push(
-               <div className="game-tile" onClick={useMasterState((state) => state.increase)} key={`${row} ${col}`}>
+               <div className="game-tile" onClick={increaseCount} key={`${row} ${col}`}>
                   {count}
                   {drawPlayer && (
                      <Player
-                        position={playerPosition}
-                        setPosition={setPlayerPosition}
+                        id={player.id}
+                        position={player.pos}
+                        setPosition={pos =>
+                           movePlayer(player.id, pos)
+                        }
                      />
                   )}
                </div>,
@@ -52,7 +54,9 @@ function App() {
 
    return (
       <div className="container">
-         <button onClick={toggleScene}>toggle scene</button>
+         <div style={{ padding: '1rem' }}>
+            <button onClick={toggleScene}>toggle scene</button>
+         </div>
          <div className="game-container">
             <div
                className="game-grid"
