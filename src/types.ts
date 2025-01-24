@@ -5,6 +5,7 @@ export interface V2 {
 
 export interface Player {
    name: string;
+   mode: PlayerModelType;
    color: string;
    pos: V2;
    id: string;

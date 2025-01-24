@@ -3,6 +3,7 @@ import './startmenu.css';
 import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
 import { id } from '../id';
+import { PlayerModelType } from '../types';
 
 const pastellivärit = [
    '#FAD0C4', // Vaaleanpunainen
@@ -17,6 +18,19 @@ const pastellivärit = [
    '#D1C4E9', // Vaaleanlila
 ];
 
+export const mapPlayerModeToEmoji = (mode: PlayerModelType) => {
+   switch (mode) {
+      case PlayerModelType.Monkey:
+         return '🐵';
+      case PlayerModelType.Ninja:
+         return '🥷';
+      case PlayerModelType.Robot:
+         return '🤖';
+      case PlayerModelType.Wizard:
+         return '🧙';
+   }
+};
+
 type StartMenuProps = {
    changeScene: () => void;
 };
@@ -26,6 +40,17 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       pastellivärit.sort(() => Math.random() - 0.5),
    );
    const [i, setI] = useState(0);
+   const playerModes = [
+      PlayerModelType.Monkey,
+      PlayerModelType.Ninja,
+      PlayerModelType.Robot,
+      PlayerModelType.Wizard,
+   ];
+   const getRandomPlayerMode = () =>
+      playerModes[Math.floor(Math.random() * playerModes.length)];
+   const [playerMode, setPlayerMode] = useState(
+      getRandomPlayerMode(),
+   );
    const [name, setName] = useState('');
    const setPlayers = useMasterState(state => state.setPlayers);
    const players = useMasterState(state => state.players);
@@ -47,11 +72,13 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             ...players,
             {
                name,
+               mode: playerMode,
                color: colors[i],
                pos: { x: 0, y: 0 },
                id: id(),
             },
          ]);
+         setPlayerMode(getRandomPlayerMode());
          const newI = i + 1;
 
          if (newI >= colors.length) {
@@ -82,7 +109,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             ))}
          </div>
 
-         <div>
+         <div className="add-player">
             <p>Lisää pelaaja</p>
             <input
                autoFocus
@@ -92,6 +119,20 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                   e.key === 'Enter' ? addPlayer() : null
                }
             ></input>
+            <div className="player-modes">
+               {playerModes.map(mode => (
+                  <button
+                     className={
+                        'player-mode-button ' +
+                        (mode === playerMode ? 'selected' : '')
+                     }
+                     key={mode}
+                     onClick={() => setPlayerMode(mode)}
+                  >
+                     {mapPlayerModeToEmoji(mode)}
+                  </button>
+               ))}
+            </div>
          </div>
       </div>
    );
