@@ -19,6 +19,7 @@ function App() {
    if (scene === Scene.StartMenu) {
       return <StartMenu changeScene={toggleScene} />;
    }
+
    const rows = 10;
    const cols = 10;
 
