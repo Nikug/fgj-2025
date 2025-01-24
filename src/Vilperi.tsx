@@ -1,5 +1,4 @@
 import App from './App';
-import './vilperi.css';
 
 export const PlayerModel = () => {
    return <div className="player" />;
