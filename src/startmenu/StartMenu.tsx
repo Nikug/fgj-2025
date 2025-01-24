@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './startmenu.css';
 import { Player } from '../types';
 import { PlayerListitem } from './PlayerListItem';
+import { useMasterState } from '../states/MasterState';
 
 const pastellivärit = [
    '#FAD0C4', // Vaaleanpunainen
@@ -23,7 +24,8 @@ type StartMenuProps = {
 export function StartMenu({ changeScene }: StartMenuProps) {
    const [i, setI] = useState(0);
    const [name, setName] = useState('');
-   const [players, setPlayers] = useState<Player[]>([]);
+   const setPlayers = useMasterState(state => state.setPlayers);
+   const players = useMasterState(state => state.players);
 
    const playerNameChanged = (
       event: React.ChangeEvent<HTMLInputElement>,
@@ -43,6 +45,8 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             {
                name,
                color: pastellivärit[i],
+               pos: { x: 0, y: 0 },
+               id: players.length,
             },
          ]);
          const newI = i + 1;
