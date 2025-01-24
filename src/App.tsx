@@ -30,8 +30,7 @@ function App() {
                   >
                      {drawPlayer && (
                         <Player
-                           id={player.id}
-                           position={player.pos}
+                           player={player}
                            setPosition={pos =>
                               movePlayer(player.id, pos)
                            }

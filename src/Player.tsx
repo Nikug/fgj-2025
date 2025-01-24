@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { V2 } from './types';
+import { Player as PlayerType, PlayerModelType, V2 } from './types';
 import { cols, rows } from './App';
 import { playSound } from './audio';
+import { PlayerModel } from './Vilperi';
 
 interface Props {
-   position: V2;
-   id: number;
+   player: PlayerType;
    setPosition: (newPos: V2) => void;
 }
 
@@ -18,11 +18,11 @@ const loopBounds = (width: number, height: number, pos: V2) => {
 };
 
 export const Player = (props: Props) => {
-   const { position, setPosition } = props;
+   const { player, setPosition } = props;
 
    useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
-         const newPos = { ...position };
+         const newPos = { ...player.pos };
          if (e.key === 'ArrowUp') newPos.y -= 1;
          if (e.key === 'ArrowDown') newPos.y += 1;
          if (e.key === 'ArrowLeft') newPos.x -= 1;
@@ -36,7 +36,12 @@ export const Player = (props: Props) => {
       addEventListener('keydown', handleKeyDown);
 
       return () => removeEventListener('keydown', handleKeyDown);
-   }, [position, setPosition]);
+   }, [player.pos, setPosition]);
 
-   return <div className="player"></div>;
+   return (
+      <PlayerModel
+         model={PlayerModelType.Monkey}
+         color={player.color}
+      />
+   );
 };
