@@ -17,6 +17,7 @@ function App() {
       state => state.queueueueAction,
    );
    const gamePhase = useMasterState(state => state.gamePhase);
+   const playerTurn = useMasterState(state => state.getPlayerTurn);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -80,7 +81,14 @@ function App() {
             </div>
          </div>
          {gamePhase === GamePhase.Planning && (
-            <div className="phase">It is planning my dudes</div>
+            <>
+               <div className="phase">
+                  <div className="phase-inner">
+                     <p>It is planning my dudes</p>
+                     <p>Turn: {playerTurn()?.name}</p>
+                  </div>
+               </div>
+            </>
          )}
       </div>
    );
