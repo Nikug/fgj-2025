@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { StartMenu } from './startmenu/StartMenu';
 import './App.css';
 import { V2 } from './types';
 import { Player } from './Player';
@@ -6,7 +7,13 @@ import { Player } from './Player';
 export const rows = 10;
 export const cols = 10;
 
+export const enum Scene {
+   StartMenu,
+   Game,
+}
+
 function App() {
+   const [scene, setScene] = useState<Scene>(Scene.StartMenu);
    const [playerPosition, setPlayerPosition] = useState<V2>({
       x: 5,
       y: 5,
@@ -36,8 +43,18 @@ function App() {
 
    const divs = generateDivs();
 
+   const toggleScene = () =>
+      setScene(
+         scene === Scene.StartMenu ? Scene.Game : Scene.StartMenu,
+      );
+
+   if (scene === Scene.StartMenu) {
+      return <StartMenu changeScene={toggleScene} />;
+   }
+
    return (
       <div className="container">
+         <button onClick={toggleScene}>toggle scene</button>
          <div className="game-container">
             <div
                className="game-grid"
