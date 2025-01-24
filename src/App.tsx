@@ -10,8 +10,6 @@ export const cols = 10;
 
 function App() {
    const [scene, setScene] = useState<Scene>(Scene.StartMenu);
-   const count = useMasterState(state => state.count);
-   const increaseCount = useMasterState(state => state.increase);
    const players = useMasterState(state => state.players);
    const movePlayer = useMasterState(state => state.movePlayer);
 
@@ -25,7 +23,6 @@ function App() {
                grid.push(
                   <div
                      className="game-tile"
-                     onClick={increaseCount}
                      key={`${row} ${col}`}
                   >
                      {drawPlayer && (
