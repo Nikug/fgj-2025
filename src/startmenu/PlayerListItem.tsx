@@ -10,12 +10,13 @@ export function PlayerListitem({
    removePlayer,
 }: PlayerListItemProps) {
    return (
-      <div key={player.name} className="player-list-item">
+      <div
+         key={player.name}
+         className="player-list-item"
+         style={{ backgroundColor: player.color }}
+      >
          <div>{player.name}</div>
-         <div
-            className="start-menu__player-color"
-            style={{ backgroundColor: player.color }}
-         ></div>
+         <button className="player-list-item__remove">❌</button>
       </div>
    );
 }
