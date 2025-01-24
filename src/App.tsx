@@ -19,26 +19,26 @@ function App() {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
-            for (const player of players) {
-               const drawPlayer =
-                  row === player.pos.y && col === player.pos.x;
-               grid.push(
-                  <div
-                     className="game-tile"
-                     onClick={increaseCount}
-                     key={`${row} ${col}`}
-                  >
-                     {drawPlayer && (
-                        <Player
-                           player={player}
-                           setPosition={pos =>
-                              movePlayer(player.id, pos)
-                           }
-                        />
-                     )}
-                  </div>,
-               );
-            }
+            const hasPlayer = players.find(
+               player =>
+                  player.pos.x === col && player.pos.y === row,
+            );
+            grid.push(
+               <div
+                  className="game-tile"
+                  onClick={increaseCount}
+                  key={`${row} ${col}`}
+               >
+                  {hasPlayer && (
+                     <Player
+                        player={hasPlayer}
+                        setPosition={pos =>
+                           movePlayer(hasPlayer.id, pos)
+                        }
+                     />
+                  )}
+               </div>,
+            );
          }
       }
 
