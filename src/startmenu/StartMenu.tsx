@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import './startmenu.css';
+import { Player } from '../types';
 
 type StartMenuProps = {
    changeScene: () => void;
 };
 
 export function StartMenu({ changeScene }: StartMenuProps) {
-   const [players, setPlayers] = useState<string[]>([]);
+   const [players, setPlayers] = useState<Player[]>([]);
+
    return (
       <div className="start-menu">
          <div className="star-name__title">BUBBLE BABBLE</div>
