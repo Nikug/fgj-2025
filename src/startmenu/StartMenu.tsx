@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './startmenu.css';
-import { Player } from '../types';
 import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
 
@@ -22,6 +21,9 @@ type StartMenuProps = {
 };
 
 export function StartMenu({ changeScene }: StartMenuProps) {
+   const [colors] = useState(
+      pastellivärit.sort(() => Math.random() - 0.5),
+   );
    const [i, setI] = useState(0);
    const [name, setName] = useState('');
    const setPlayers = useMasterState(state => state.setPlayers);
@@ -44,14 +46,14 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             ...players,
             {
                name,
-               color: pastellivärit[i],
+               color: colors[i],
                pos: { x: 0, y: 0 },
                id: players.length,
             },
          ]);
          const newI = i + 1;
 
-         if (newI >= pastellivärit.length) {
+         if (newI >= colors.length) {
             setI(0);
          } else {
             setI(i + 1);
