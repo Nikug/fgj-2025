@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StartMenu } from './startmenu/StartMenu';
 import { useMasterState } from './states/MasterState';
 import './App.css';
-import { Scene } from './types';
+import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
 
@@ -13,6 +13,11 @@ function App() {
    const [scene, setScene] = useState<Scene>(Scene.StartMenu);
    const players = useMasterState(state => state.players);
    const movePlayer = useMasterState(state => state.movePlayer);
+   const queueueuAction = useMasterState(
+      state => state.queueueueAction,
+   );
+   const gamePhase = useMasterState(state => state.gamePhase);
+   const playerTurn = useMasterState(state => state.getPlayerTurn);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -29,6 +34,9 @@ function App() {
                         player={hasPlayer}
                         setPosition={pos =>
                            movePlayer(hasPlayer.id, pos)
+                        }
+                        queueueuAction={actions =>
+                           queueueuAction(hasPlayer.id, actions)
                         }
                      />
                   )}
@@ -72,6 +80,16 @@ function App() {
                {divs}
             </div>
          </div>
+         {gamePhase === GamePhase.Planning && (
+            <>
+               <div className="phase">
+                  <div className="phase-inner">
+                     <p>It is planning my dudes</p>
+                     <p>Turn: {playerTurn()?.name}</p>
+                  </div>
+               </div>
+            </>
+         )}
       </div>
    );
 }
