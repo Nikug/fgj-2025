@@ -4,7 +4,7 @@ import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
 import { id } from '../id';
 
-const pastellivärit = [
+export const pastellivärit = [
    '250, 208, 196', // Vaaleanpunainen
    '168, 230, 207', // Mintunvihreä
    '193, 211, 254', // Vaaleansiniharmaa
