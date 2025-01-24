@@ -27,3 +27,10 @@
 .game-tile:hover {
   background-color: #555;
 }
+
+.player {
+  border-radius: 50%;
+  background-color: #f00;
+  width: 100%;
+  height: 100%;
+}
