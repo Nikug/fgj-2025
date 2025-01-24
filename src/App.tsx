@@ -1,7 +1,12 @@
 import { useState } from 'react';
-import './App.css';
 import { StartMenu } from './startmenu/StartMenu';
 import { useMasterState } from './states/MasterState'
+import './App.css';
+import { V2 } from './types';
+import { Player } from './Player';
+
+export const rows = 10;
+export const cols = 10;
 
 export const enum Scene {
    StartMenu,
@@ -9,35 +14,48 @@ export const enum Scene {
 }
 
 function App() {
-   const [count, setCount] = useState(0);
-   const [scene, setScene] = useState<Scene>(Scene.StartMenu)
+   const [scene, setScene] = useState<Scene>(Scene.StartMenu);
+   const [playerPosition, setPlayerPosition] = useState<V2>({
+      x: 5,
+      y: 5,
+   });
 
-   const toggleScene = () => setScene(scene === Scene.StartMenu ? Scene.Game : Scene.StartMenu)
+   const generateDivs = () => {
+      const grid: React.ReactNode[] = [];
+      for (let row = 0; row < rows; row++) {
+         for (let col = 0; col < cols; col++) {
+            const drawPlayer =
+               row === playerPosition.y && col === playerPosition.x;
+            grid.push(
+               <div className="game-tile" key={`${row} ${col}`}>
+                  {drawPlayer && (
+                     <Player
+                        position={playerPosition}
+                        setPosition={setPlayerPosition}
+                     />
+                  )}
+               </div>,
+            );
+         }
+      }
+
+      return grid;
+   };
+
+   const divs = generateDivs();
+
+   const toggleScene = () =>
+      setScene(
+         scene === Scene.StartMenu ? Scene.Game : Scene.StartMenu,
+      );
 
    if (scene === Scene.StartMenu) {
-      return <StartMenu changeScene={toggleScene}/>
+      return <StartMenu changeScene={toggleScene} />;
    }
-const rows = 10;
-const cols = 10;
-
-const generateDivs = (rows: number, cols: number) => {
-   const grid: React.ReactNode[] = [];
-   const count = useMasterState((state) => state.count)
-   for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-         grid.push(
-            <div className="game-tile" onClick={useMasterState((state) => state.increase)} key={`${row} ${col}`}>{count}</div>,
-         );
-      }
-   }
-
-   return grid;
-};
-
-const divs = generateDivs(rows, cols);
 
    return (
       <div className="container">
+         <button onClick={toggleScene}>toggle scene</button>
          <div className="game-container">
             <div
                className="game-grid"
@@ -49,17 +67,6 @@ const divs = generateDivs(rows, cols);
                {divs}
             </div>
          </div>
-         <h1>Vite + React</h1>
-         <div className="card">
-            <button onClick={() => setCount(count => count + 1)}>
-               count is {Math.random() > 0.5 ? count : Math.round(Math.random() * 10)}
-            </button>
-            <p>Tsumonjää</p>
-            <button onClick={toggleScene}>
-               toggle scene
-            </button>
-         </div>
-         <p className="read-the-docs">Hähähähä</p>
       </div>
    );
 }
