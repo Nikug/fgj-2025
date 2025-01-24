@@ -27,9 +27,9 @@ function App() {
          <h1>Vite + React</h1>
          <div className="card">
             <button onClick={() => setCount(count => count + 1)}>
-               count is {count}
+               count is {Math.round(Math.random() * 10)}
             </button>
-            <p>Maija on tyhäm</p>
+            <p>Tsumonjää</p>
          </div>
          <p className="read-the-docs">Hähähähä</p>
       </>
