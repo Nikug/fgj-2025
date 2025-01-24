@@ -2,16 +2,22 @@
    height: 100%;
    width: 100%;
    border-radius: 50%;
-   background: radial-gradient(
-      rgba(255, 255, 255, 0.2),
-      var(--player-color, #ffffff)
-   );
 
+   /* Approved gradient */
    background: radial-gradient(
       circle,
-      rgba(255, 255, 255, 0) 10%,
-      var(--player-color, #ffffff) 120%
+      rgba(var(--player-color), 0.4) 30%,
+      rgb(var(--player-color)) 120%
    );
+
+   /* Alternate gradient
+   background: radial-gradient(
+      circle,
+      rgba(var(--player-color), 0.6) 20%,
+      rgba(var(--player-color), 0.8) 60%,
+      rgb(var(--player-color)) 70%
+   );
+   */
    will-change: transform;
 }
 
