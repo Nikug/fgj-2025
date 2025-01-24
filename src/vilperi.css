@@ -2,24 +2,27 @@
    height: 100%;
    width: 100%;
    border-radius: 50%;
+   background: radial-gradient(
+      rgba(255, 255, 255, 0.2),
+      var(--player-color, #ffffff)
+   );
+
+   background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0) 10%,
+      var(--player-color, #ffffff) 120%
+   );
+   filter: brightness(200%);
 }
 
 .player-ninja {
-   background-color: #938ee6;
-   background: radial-gradient(#ffffff, #938ee6);
 }
 
 .player-wizard {
-   background-color: #8eade6;
-   background: radial-gradient(#ffffff, #8eade6);
 }
 
 .player-robot {
-   background-color: #a3a39e;
-   background: radial-gradient(#ffffff, #a3a39e);
 }
 
 .player-monkey {
-   background-color: #b58150;
-   background: radial-gradient(#ffffff, #b58150);
 }

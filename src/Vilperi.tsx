@@ -4,12 +4,19 @@ import { PlayerModelType } from './types';
 
 interface Props {
    model: PlayerModelType;
+   color?: string;
 }
 
 export const PlayerModel = (props: Props) => {
-   const { model } = props;
+   const { model, color } = props;
 
-   return <div className={getPlayerClassNames(model)} />;
+   const cssVars = {
+      '--player-color': color,
+   } as React.CSSProperties;
+
+   return (
+      <div className={getPlayerClassNames(model)} style={cssVars} />
+   );
 };
 
 const getPlayerClassNames = (model: PlayerModelType) => {
@@ -55,46 +62,82 @@ export const Vilperi = () => {
       >
          <VilperiRow>
             <VilperiBox size="small">
-               <PlayerModel model={PlayerModelType.Monkey} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Monkey}
+               />
             </VilperiBox>
             <VilperiBox size="medium">
-               <PlayerModel model={PlayerModelType.Monkey} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Monkey}
+               />
             </VilperiBox>
             <VilperiBox size="large">
-               <PlayerModel model={PlayerModelType.Monkey} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Monkey}
+               />
             </VilperiBox>
          </VilperiRow>
          <VilperiRow>
             <VilperiBox size="small">
-               <PlayerModel model={PlayerModelType.Ninja} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Ninja}
+               />
             </VilperiBox>
             <VilperiBox size="medium">
-               <PlayerModel model={PlayerModelType.Ninja} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Ninja}
+               />
             </VilperiBox>
             <VilperiBox size="large">
-               <PlayerModel model={PlayerModelType.Ninja} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Ninja}
+               />
             </VilperiBox>
          </VilperiRow>
          <VilperiRow>
             <VilperiBox size="small">
-               <PlayerModel model={PlayerModelType.Robot} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Robot}
+               />
             </VilperiBox>
             <VilperiBox size="medium">
-               <PlayerModel model={PlayerModelType.Robot} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Robot}
+               />
             </VilperiBox>
             <VilperiBox size="large">
-               <PlayerModel model={PlayerModelType.Robot} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Robot}
+               />
             </VilperiBox>
          </VilperiRow>
          <VilperiRow>
             <VilperiBox size="small">
-               <PlayerModel model={PlayerModelType.Wizard} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Wizard}
+               />
             </VilperiBox>
             <VilperiBox size="medium">
-               <PlayerModel model={PlayerModelType.Wizard} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Wizard}
+               />
             </VilperiBox>
             <VilperiBox size="large">
-               <PlayerModel model={PlayerModelType.Wizard} />
+               <PlayerModel
+                  color={randomHexColorCode()}
+                  model={PlayerModelType.Wizard}
+               />
             </VilperiBox>
          </VilperiRow>
       </div>
@@ -141,4 +184,9 @@ const VilperiBox = (props: VilperiBoxProps) => {
          {children}
       </div>
    );
+};
+
+const randomHexColorCode = () => {
+   let n = (Math.random() * 0xfffff * 1000000).toString(16);
+   return '#' + n.slice(0, 6);
 };
