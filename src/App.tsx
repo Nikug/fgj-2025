@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import { StartMenu } from './startmenu/StartMenu';
+import { useMasterState } from './states/MasterState'
 
 export const enum Scene {
    StartMenu,
@@ -21,10 +22,11 @@ const cols = 10;
 
 const generateDivs = (rows: number, cols: number) => {
    const grid: React.ReactNode[] = [];
+   const count = useMasterState((state) => state.count)
    for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
          grid.push(
-            <div className="game-tile" key={`${row} ${col}`}></div>,
+            <div className="game-tile" onClick={useMasterState((state) => state.increase)} key={`${row} ${col}`}>{count}</div>,
          );
       }
    }
