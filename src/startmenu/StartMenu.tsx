@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './startmenu.css';
 import { Player } from '../types';
 import { PlayerListitem } from './PlayerListItem';
+import { useMasterState } from '../states/MasterState';
 
 type StartMenuProps = {
    changeScene: () => void;
@@ -9,7 +10,8 @@ type StartMenuProps = {
 
 export function StartMenu({ changeScene }: StartMenuProps) {
    const [name, setName] = useState('');
-   const [players, setPlayers] = useState<Player[]>([]);
+   const setPlayers = useMasterState(state => state.setPlayers);
+   const players = useMasterState(state => state.players);
 
    const playerNameChanged = (
       event: React.ChangeEvent<HTMLInputElement>,
@@ -29,6 +31,8 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             {
                name,
                color: '#94edcf',
+               pos: { x: 0, y: 0 },
+               id: players.length,
             },
          ]);
          setName('');
