@@ -2,9 +2,22 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
+import { StartMenu } from './startmenu/StartMenu';
+
+export const enum Scene {
+   StartMenu,
+   Game,
+}
 
 function App() {
    const [count, setCount] = useState(0);
+   const [scene, setScene] = useState<Scene>(Scene.StartMenu)
+
+   const toggleScene = () => setScene(scene === Scene.StartMenu ? Scene.Game : Scene.StartMenu)
+
+   if (scene === Scene.StartMenu) {
+      return <StartMenu changeScene={toggleScene}/>
+   }
 
    return (
       <>
@@ -30,6 +43,9 @@ function App() {
                count is {Math.random() > 0.5 ? count : Math.round(Math.random() * 10)}
             </button>
             <p>Tsumonjää</p>
+            <button onClick={toggleScene}>
+               toggle scene
+            </button>
          </div>
          <p className="read-the-docs">Hähähähä</p>
       </>
