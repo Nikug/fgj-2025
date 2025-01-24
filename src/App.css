@@ -37,3 +37,16 @@
 .game-tile:hover {
   background-color: #555;
 }
+
+.phase {
+  position: absolute;
+  top: 50;
+  left: 0;
+  right: 0;
+  height: 100px;
+  display: flex;
+  background-color: #000;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
