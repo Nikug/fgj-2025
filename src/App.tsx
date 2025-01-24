@@ -12,6 +12,7 @@ function App() {
    const [scene, setScene] = useState<Scene>(Scene.StartMenu);
    const players = useMasterState(state => state.players);
    const movePlayer = useMasterState(state => state.movePlayer);
+   const queueueuAction = useMasterState(state => state.queueueueAction);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -28,6 +29,9 @@ function App() {
                         player={hasPlayer}
                         setPosition={pos =>
                            movePlayer(hasPlayer.id, pos)
+                        }
+                        queueueuAction={actions =>
+                           queueueuAction(hasPlayer.id, actions)
                         }
                      />
                   )}

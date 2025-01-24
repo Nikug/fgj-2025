@@ -50,6 +50,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                color: colors[i],
                pos: { x: 0, y: 0 },
                id: id(),
+               queueueueueuedActions: []
             },
          ]);
          const newI = i + 1;

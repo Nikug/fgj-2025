@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Player as PlayerType, PlayerModelType, V2 } from './types';
+import { Player as PlayerType, PlayerModelType, V2, Action } from './types';
 import { cols, rows } from './App';
 import { playSound } from './audio';
 import { PlayerModel } from './Vilperi';
@@ -7,6 +7,7 @@ import { PlayerModel } from './Vilperi';
 interface Props {
    player: PlayerType;
    setPosition: (newPos: V2) => void;
+   queueueuAction: (actions: Action[]) => void;
 }
 
 const loopBounds = (width: number, height: number, pos: V2) => {
@@ -18,17 +19,32 @@ const loopBounds = (width: number, height: number, pos: V2) => {
 };
 
 export const Player = (props: Props) => {
-   const { player, setPosition } = props;
+   const { player, setPosition, queueueuAction } = props;
 
    useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
-         const newPos = { ...player.pos };
-         if (e.key === 'ArrowUp') newPos.y -= 1;
-         if (e.key === 'ArrowDown') newPos.y += 1;
-         if (e.key === 'ArrowLeft') newPos.x -= 1;
-         if (e.key === 'ArrowRight') newPos.x += 1;
+         const {pos, queueueueueuedActions} = player;
+         const newPos = {...pos}
+         const newQueueueueueueueueueudActions = queueueueueuedActions.slice()
+         if (e.key === 'ArrowUp') {
+            newPos.y -= 1;
+            newQueueueueueueueueueudActions.push(Action.MoveUp);
+         }
+         if (e.key === 'ArrowDown') {
+            newPos.y += 1;
+            newQueueueueueueueueueudActions.push(Action.MoveDown);
+         }
+         if (e.key === 'ArrowLeft') {
+            newPos.x -= 1;
+            newQueueueueueueueueueudActions.push(Action.MoveLeft);
+         }
+         if (e.key === 'ArrowRight') {
+            newPos.x += 1;
+            newQueueueueueueueueueudActions.push(Action.MoveRight);
+         }
          if (e.key === ' ') playSound('bonk');
 
+         queueueuAction(newQueueueueueueueueueudActions);
          const looped = loopBounds(cols, rows, newPos);
          setPosition(looped);
       };

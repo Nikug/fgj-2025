@@ -3,11 +3,20 @@ export interface V2 {
    y: number;
 }
 
+export const enum Action {
+   MoveUp,
+   MoveDown,
+   MoveLeft,
+   MoveRight,
+   Attack
+}
+
 export interface Player {
    name: string;
    color: string;
    pos: V2;
    id: string;
+   queueueueueuedActions: Action[];
 }
 
 export const enum Scene {
