@@ -54,7 +54,9 @@ function App() {
 
    return (
       <div className="container">
-         <button onClick={toggleScene}>toggle scene</button>
+         <div style={{ padding: '1rem' }}>
+            <button onClick={toggleScene}>toggle scene</button>
+         </div>
          <div className="game-container">
             <div
                className="game-grid"

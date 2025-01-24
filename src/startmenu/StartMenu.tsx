@@ -28,7 +28,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             ...players,
             {
                name,
-               color: 'red',
+               color: '#94edcf',
             },
          ]);
          setName('');
