@@ -43,6 +43,9 @@ export const Player = (props: Props) => {
             newQueueueueueueueueueudActions.push(Action.MoveRight);
          }
          if (e.key === ' ') playSound('bonk');
+         if (e.key === 'b') {
+            newQueueueueueueueueueudActions.push(Action.Attack);
+         }
 
          queueueuAction(newQueueueueueueueueueudActions);
          const looped = loopBounds(cols, rows, newPos);
