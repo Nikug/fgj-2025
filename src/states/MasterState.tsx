@@ -23,7 +23,7 @@ export const useMasterState = create<MasterState>()(
             const p = state.players.find((e: any) => e.id == id);
             if (p) {
                p.pos = pos;
-               console.log(p.queueueueueuedActions[0])
+               console.log(p.queueueueueuedActions[0]);
             }
          }),
       queueueueAction: (id, actions) =>
@@ -32,6 +32,6 @@ export const useMasterState = create<MasterState>()(
             if (p) {
                p.queueueueueuedActions = actions;
             }
-         }) 
+         }),
    })),
 );
