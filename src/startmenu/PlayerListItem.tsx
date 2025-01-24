@@ -1,4 +1,5 @@
 import { Player } from '../types';
+import { mapPlayerModeToEmoji } from './StartMenu';
 
 type PlayerListItemProps = {
    player: Player;
@@ -15,6 +16,7 @@ export function PlayerListitem({
          className="player-list-item"
          style={{ backgroundColor: player.color }}
       >
+         <div>{mapPlayerModeToEmoji(player.mode)}</div>
          <div>{player.name}</div>
          <button
             onClick={() => removePlayer(player.name)}

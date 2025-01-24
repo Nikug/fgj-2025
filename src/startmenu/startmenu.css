@@ -26,6 +26,7 @@
     padding: 1rem;
     color: black;
     border-radius: 8px;
+    font-size: 1.5rem;
 }
 
 .player-list-item__remove {
@@ -36,4 +37,33 @@
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+}
+
+.add-player {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.player-modes {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.player-mode-button {
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0.5rem;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    background-color: lightgray;
+    font-size: 2rem;
+
+    &.selected {
+        background-color: lightgreen;
+    }
 }
