@@ -76,7 +76,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                color: colors[i],
                pos: { x: 0, y: 0 },
                id: id(),
-               queueueueueuedActions: []
+               queueueueueuedActions: [],
             },
          ]);
          setPlayerMode(getRandomPlayerMode());
