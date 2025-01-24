@@ -2,16 +2,11 @@ import { useState } from 'react';
 import { StartMenu } from './startmenu/StartMenu';
 import { useMasterState } from './states/MasterState'
 import './App.css';
-import { V2 } from './types';
+import { Scene, V2 } from './types';
 import { Player } from './Player';
 
 export const rows = 10;
 export const cols = 10;
-
-export const enum Scene {
-   StartMenu,
-   Game,
-}
 
 function App() {
    const [scene, setScene] = useState<Scene>(Scene.StartMenu);
