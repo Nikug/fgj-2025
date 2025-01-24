@@ -3,6 +3,10 @@
    height: calc(100vh - 2rem);
    overflow: hidden;
    padding: 1rem;
+   width: calc(100vw - 2rem);
+   height: calc(100vh - 2rem);
+   overflow: hidden;
+   background-color: #000;
 }
 
 .game-container {
