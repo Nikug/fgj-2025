@@ -1,15 +1,42 @@
 import { useState } from 'react';
-import './App.css';
 import { StartMenu } from './startmenu/StartMenu';
+import './App.css';
+import { Scene, V2 } from './types';
+import { Player } from './Player';
 
-export const enum Scene {
-   StartMenu,
-   Game,
-}
+export const rows = 10;
+export const cols = 10;
 
 function App() {
-   const [count, setCount] = useState(0);
    const [scene, setScene] = useState<Scene>(Scene.StartMenu);
+   const [playerPosition, setPlayerPosition] = useState<V2>({
+      x: 5,
+      y: 5,
+   });
+
+   const generateDivs = () => {
+      const grid: React.ReactNode[] = [];
+      for (let row = 0; row < rows; row++) {
+         for (let col = 0; col < cols; col++) {
+            const drawPlayer =
+               row === playerPosition.y && col === playerPosition.x;
+            grid.push(
+               <div className="game-tile" key={`${row} ${col}`}>
+                  {drawPlayer && (
+                     <Player
+                        position={playerPosition}
+                        setPosition={setPlayerPosition}
+                     />
+                  )}
+               </div>,
+            );
+         }
+      }
+
+      return grid;
+   };
+
+   const divs = generateDivs();
 
    const toggleScene = () =>
       setScene(
@@ -19,27 +46,6 @@ function App() {
    if (scene === Scene.StartMenu) {
       return <StartMenu changeScene={toggleScene} />;
    }
-
-   const rows = 10;
-   const cols = 10;
-
-   const generateDivs = (rows: number, cols: number) => {
-      const grid: React.ReactNode[] = [];
-      for (let row = 0; row < rows; row++) {
-         for (let col = 0; col < cols; col++) {
-            grid.push(
-               <div
-                  className="game-tile"
-                  key={`${row} ${col}`}
-               ></div>,
-            );
-         }
-      }
-
-      return grid;
-   };
-
-   const divs = generateDivs(rows, cols);
 
    return (
       <div className="container">
@@ -55,17 +61,6 @@ function App() {
                {divs}
             </div>
          </div>
-         <h1>Vite + React</h1>
-         <div className="card">
-            <button onClick={() => setCount(count => count + 1)}>
-               count is{' '}
-               {Math.random() > 0.5
-                  ? count
-                  : Math.round(Math.random() * 10)}
-            </button>
-            <p>Tsumonjää</p>
-         </div>
-         <p className="read-the-docs">Hähähähä</p>
       </div>
    );
 }
