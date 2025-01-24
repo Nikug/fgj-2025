@@ -10,31 +10,37 @@ export const cols = 10;
 
 function App() {
    const [scene, setScene] = useState<Scene>(Scene.StartMenu);
-   const count = useMasterState((state) => state.count)
-   const increaseCount = useMasterState((state) => state.increase)
-   const player = useMasterState(state => state.players[0]);
+   const count = useMasterState(state => state.count);
+   const increaseCount = useMasterState(state => state.increase);
+   const players = useMasterState(state => state.players);
    const movePlayer = useMasterState(state => state.movePlayer);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
-            const drawPlayer =
-               row === player.pos.y && col === player.pos.x;
-            grid.push(
-               <div className="game-tile" onClick={increaseCount} key={`${row} ${col}`}>
-                  {count}
-                  {drawPlayer && (
-                     <Player
-                        id={player.id}
-                        position={player.pos}
-                        setPosition={pos =>
-                           movePlayer(player.id, pos)
-                        }
-                     />
-                  )}
-               </div>,
-            );
+            for (const player of players) {
+               const drawPlayer =
+                  row === player.pos.y && col === player.pos.x;
+               grid.push(
+                  <div
+                     className="game-tile"
+                     onClick={increaseCount}
+                     key={`${row} ${col}`}
+                  >
+                     {count}
+                     {drawPlayer && (
+                        <Player
+                           id={player.id}
+                           position={player.pos}
+                           setPosition={pos =>
+                              movePlayer(player.id, pos)
+                           }
+                        />
+                     )}
+                  </div>,
+               );
+            }
          }
       }
 

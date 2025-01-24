@@ -1,11 +1,6 @@
 import { create } from 'zustand';
-import { V2 } from '../types';
+import { Player, V2 } from '../types';
 import { immer } from 'zustand/middleware/immer';
-
-interface Player {
-   pos: V2;
-   id: number;
-}
 
 interface MasterState {
    count: number;
@@ -20,7 +15,7 @@ export const useMasterState = create<MasterState>()(
    immer(set => ({
       count: 0,
       increase: () => set(state => ({ count: state.count + 1 })),
-      players: [{ pos: { x: 0, y: 0 }, id: 0 }],
+      players: [],
       setPlayers: players => set(() => ({ players })),
       movePlayer: (id, pos) =>
          set(state => {
@@ -31,4 +26,3 @@ export const useMasterState = create<MasterState>()(
          }),
    })),
 );
-
