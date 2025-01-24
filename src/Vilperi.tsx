@@ -15,7 +15,20 @@ export const PlayerModel = (props: Props) => {
    } as React.CSSProperties;
 
    return (
-      <div className={getPlayerClassNames(model)} style={cssVars} />
+      <div
+         style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+         }}
+      >
+         <div
+            className={getPlayerClassNames(model)}
+            style={cssVars}
+         />
+      </div>
    );
 };
 
@@ -36,7 +49,10 @@ const getPlayerClassNames = (model: PlayerModelType) => {
          break;
    }
 
-   return `player ${modelClassName}`;
+   const randomAnimation = Math.ceil(Math.random() * 4);
+   let animation = `bubble-idle-animation-${randomAnimation}`;
+
+   return `player ${modelClassName} ${animation}`;
 };
 
 export const Router = () => {
