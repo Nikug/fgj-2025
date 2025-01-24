@@ -6,13 +6,14 @@ type AvatarProps = {
 };
 
 export function Avatar({ player }: AvatarProps) {
-   const { name, mode } = player;
+   const { name, mode, queueueueueuedActions } = player;
 
    return (
       <div>
          <div className="avatar">
             <div className="avatar__model">{mode}</div>
             <div className="avatar__name">{name}</div>
+            <div>{queueueueueuedActions}</div>
          </div>
       </div>
    );
