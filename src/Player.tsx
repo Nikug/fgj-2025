@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { V2 } from './types';
 import { cols, rows } from './App';
+import { playSound } from './audio';
 
 interface Props {
    position: V2;
@@ -25,6 +26,7 @@ export const Player = (props: Props) => {
          if (e.key === 'ArrowDown') newPos.y += 1;
          if (e.key === 'ArrowLeft') newPos.x -= 1;
          if (e.key === 'ArrowRight') newPos.x += 1;
+         if (e.key === ' ') playSound('bonk');
 
          const looped = loopBounds(cols, rows, newPos);
          setPosition(looped);
