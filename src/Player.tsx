@@ -5,6 +5,7 @@ import { playSound } from './audio';
 
 interface Props {
    position: V2;
+   id: number;
    setPosition: (newPos: V2) => void;
 }
 

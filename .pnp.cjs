@@ -35,6 +35,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-react-hooks", "virtual:912aca50bef0beeced728d553137e552fc37d0ff7b1d78433aa71c2d669f76455230461d6f7425dfe5a1767dc28e757a91c610c4281c081d51668b269e1aca0d#npm:5.1.0"],\
           ["eslint-plugin-react-refresh", "virtual:912aca50bef0beeced728d553137e552fc37d0ff7b1d78433aa71c2d669f76455230461d6f7425dfe5a1767dc28e757a91c610c4281c081d51668b269e1aca0d#npm:0.4.18"],\
           ["globals", "npm:15.14.0"],\
+          ["immer", "npm:10.1.1"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:912aca50bef0beeced728d553137e552fc37d0ff7b1d78433aa71c2d669f76455230461d6f7425dfe5a1767dc28e757a91c610c4281c081d51668b269e1aca0d#npm:18.3.1"],\
           ["typescript", "patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"],\
@@ -1986,6 +1987,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-react-hooks", "virtual:912aca50bef0beeced728d553137e552fc37d0ff7b1d78433aa71c2d669f76455230461d6f7425dfe5a1767dc28e757a91c610c4281c081d51668b269e1aca0d#npm:5.1.0"],\
           ["eslint-plugin-react-refresh", "virtual:912aca50bef0beeced728d553137e552fc37d0ff7b1d78433aa71c2d669f76455230461d6f7425dfe5a1767dc28e757a91c610c4281c081d51668b269e1aca0d#npm:0.4.18"],\
           ["globals", "npm:15.14.0"],\
+          ["immer", "npm:10.1.1"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:912aca50bef0beeced728d553137e552fc37d0ff7b1d78433aa71c2d669f76455230461d6f7425dfe5a1767dc28e757a91c610c4281c081d51668b269e1aca0d#npm:18.3.1"],\
           ["typescript", "patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"],\
@@ -2216,6 +2218,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/ignore-npm-5.3.2-346d3ba017-10c0.zip/node_modules/ignore/",\
         "packageDependencies": [\
           ["ignore", "npm:5.3.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["immer", [\
+      ["npm:10.1.1", {\
+        "packageLocation": "../../.yarn/berry/cache/immer-npm-10.1.1-973ae10d09-10c0.zip/node_modules/immer/",\
+        "packageDependencies": [\
+          ["immer", "npm:10.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3457,7 +3468,7 @@ const RAW_RUNTIME_STATE =
           ["@types/immer", null],\
           ["@types/react", "npm:18.3.18"],\
           ["@types/use-sync-external-store", null],\
-          ["immer", null],\
+          ["immer", "npm:10.1.1"],\
           ["react", "npm:18.3.1"],\
           ["use-sync-external-store", null]\
         ],\
