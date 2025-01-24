@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './startmenu.css';
 import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
+import { id } from '../id';
 
 const pastellivärit = [
    '#FAD0C4', // Vaaleanpunainen
@@ -48,7 +49,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                name,
                color: colors[i],
                pos: { x: 0, y: 0 },
-               id: players.length,
+               id: id(),
             },
          ]);
          const newI = i + 1;

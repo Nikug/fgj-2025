@@ -7,7 +7,7 @@ export interface Player {
    name: string;
    color: string;
    pos: V2;
-   id: number;
+   id: string;
 }
 
 export const enum Scene {
