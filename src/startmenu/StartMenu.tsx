@@ -5,17 +5,17 @@ import { useMasterState } from '../states/MasterState';
 import { id } from '../id';
 import { PlayerModelType } from '../types';
 
-const pastellivärit = [
-   '#FAD0C4', // Vaaleanpunainen
-   '#A8E6CF', // Mintunvihreä
-   '#C1D3FE', // Vaaleansiniharmaa
-   '#E6A9EC', // Laventeli
-   '#FFB3AB', // Persikkainen
-   '#FFF1A8', // Vaaleankeltainen
-   '#B3E5FC', // Taivaan sininen
-   '#D4E157', // Vaaleanvihreä
-   '#FFCC80', // Pehmeä oranssi
-   '#D1C4E9', // Vaaleanlila
+export const pastellivärit = [
+   '250, 208, 196', // Vaaleanpunainen
+   '168, 230, 207', // Mintunvihreä
+   '193, 211, 254', // Vaaleansiniharmaa
+   '230, 169, 236', // Laventeli
+   '255, 179, 171', // Persikkainen
+   '255, 241, 168', // Vaaleankeltainen
+   '179, 229, 252', // Taivaan sininen
+   '212, 225, 87', // Vaaleanvihreä
+   '255, 204, 128', // Pehmeä oranssi
+   '209, 196, 233', // Vaaleanlila
 ];
 
 export const mapPlayerModeToEmoji = (mode: PlayerModelType) => {
@@ -76,6 +76,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                color: colors[i],
                pos: { x: 0, y: 0 },
                id: id(),
+               queueueueueuedActions: []
             },
          ]);
          setPlayerMode(getRandomPlayerMode());

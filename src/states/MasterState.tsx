@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GamePhase, Player, V2 } from '../types';
+import { GamePhase, Player, V2, Action } from '../types';
 import { immer } from 'zustand/middleware/immer';
 
 interface MasterState {
@@ -9,6 +9,7 @@ interface MasterState {
    players: Player[];
    setPlayers: (players: Player[]) => void;
    movePlayer: (id: string, pos: V2) => void;
+   queueueueAction: (id: string, actions: Action[]) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -22,6 +23,14 @@ export const useMasterState = create<MasterState>()(
             const p = state.players.find((e: any) => e.id == id);
             if (p) {
                p.pos = pos;
+               console.log(p.queueueueueuedActions[0]);
+            }
+         }),
+      queueueueAction: (id, actions) =>
+         set(state => {
+            const p = state.players.find(e => e.id == id);
+            if (p) {
+               p.queueueueueuedActions = actions;
             }
          }),
    })),
