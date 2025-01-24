@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './startmenu.css';
 import { Player } from '../types';
+import { PlayerListitem } from './PlayerListItem';
 
 type StartMenuProps = {
    changeScene: () => void;
@@ -18,14 +19,24 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    };
 
    const addPlayer = () => {
-      setPlayers([
-         ...players,
-         {
-            name,
-            color: 'red',
-         },
-      ]);
-      setName('');
+      const nameExists = players.find(
+         player => player.name === name,
+      );
+
+      if (!nameExists) {
+         setPlayers([
+            ...players,
+            {
+               name,
+               color: 'red',
+            },
+         ]);
+         setName('');
+      }
+   };
+
+   const removePlayer = (name: string) => {
+      setPlayers(players.filter(player => player.name !== name));
    };
 
    return (
@@ -35,22 +46,23 @@ export function StartMenu({ changeScene }: StartMenuProps) {
 
          <div className="start-menu__player-list">
             {players.map(player => (
-               <div key={player.name} className="start-menu__player">
-                  <div
-                     className="start-menu__player-color"
-                     style={{ backgroundColor: player.color }}
-                  ></div>
-                  <div>{player.name}</div>
-               </div>
+               <PlayerListitem
+                  key={player.name}
+                  player={player}
+                  removePlayer={removePlayer}
+               />
             ))}
          </div>
 
          <div>
             <p>Lisää pelaaja</p>
             <input
+               autoFocus
                value={name}
                onChange={playerNameChanged}
-               onSubmit={addPlayer}
+               onKeyDown={e =>
+                  e.key === 'Enter' ? addPlayer() : null
+               }
             ></input>
          </div>
       </div>
