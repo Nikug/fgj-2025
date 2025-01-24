@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { StartMenu } from './startmenu/StartMenu';
+import { useMasterState } from './states/MasterState'
 import './App.css';
 import { Scene, V2 } from './types';
 import { Player } from './Player';
@@ -18,10 +19,12 @@ function App() {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
+            const count = useMasterState((state) => state.count)
             const drawPlayer =
                row === playerPosition.y && col === playerPosition.x;
             grid.push(
-               <div className="game-tile" key={`${row} ${col}`}>
+               <div className="game-tile" onClick={useMasterState((state) => state.increase)} key={`${row} ${col}`}>
+                  {count}
                   {drawPlayer && (
                      <Player
                         position={playerPosition}
