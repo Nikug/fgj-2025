@@ -11,7 +11,7 @@ interface MasterState {
 
    players: Player[];
    setPlayers: (players: Player[]) => void;
-   movePlayer: (id: number, pos: V2) => void;
+   movePlayer: (id: string, pos: V2) => void;
 }
 
 export const useMasterState = create<MasterState>()(
