@@ -14,16 +14,17 @@ function App() {
       x: 5,
       y: 5,
    });
+   const count = useMasterState((state) => state.count)
+   const increaseCount = useMasterState((state) => state.increase)
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
-            const count = useMasterState((state) => state.count)
             const drawPlayer =
                row === playerPosition.y && col === playerPosition.x;
             grid.push(
-               <div className="game-tile" onClick={useMasterState((state) => state.increase)} key={`${row} ${col}`}>
+               <div className="game-tile" onClick={increaseCount} key={`${row} ${col}`}>
                   {count}
                   {drawPlayer && (
                      <Player
