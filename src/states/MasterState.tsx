@@ -28,7 +28,7 @@ export const useMasterState = create<MasterState>()(
          }),
       queueueueAction: (id, actions) =>
          set(state => {
-            const p = state.players.find(e => e.id == id);
+            const p = state.players.find((e: any) => e.id == id);
             if (p) {
                p.queueueueueuedActions = actions;
             }

@@ -14,7 +14,7 @@ export function PlayerListitem({
       <div
          key={player.name}
          className="player-list-item"
-         style={{ backgroundColor: player.color }}
+         style={{ backgroundColor: `rgb(${player.color})` }}
       >
          <div>{mapPlayerModeToEmoji(player.mode)}</div>
          <div>{player.name}</div>
