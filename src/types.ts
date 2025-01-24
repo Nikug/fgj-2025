@@ -6,6 +6,8 @@ export interface V2 {
 export interface Player {
    name: string;
    color: string;
+   pos: V2;
+   id: string;
 }
 
 export const enum Scene {
@@ -17,5 +19,10 @@ export const enum PlayerModelType {
    Monkey,
    Ninja,
    Robot,
-   Wizard
+   Wizard,
+}
+
+export const enum GamePhase {
+   Planning,
+   Action,
 }

@@ -10,26 +10,24 @@ export const cols = 10;
 
 function App() {
    const [scene, setScene] = useState<Scene>(Scene.StartMenu);
-   const count = useMasterState((state) => state.count)
-   const increaseCount = useMasterState((state) => state.increase)
-   const player = useMasterState(state => state.players[0]);
+   const players = useMasterState(state => state.players);
    const movePlayer = useMasterState(state => state.movePlayer);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
-            const drawPlayer =
-               row === player.pos.y && col === player.pos.x;
+            const hasPlayer = players.find(
+               player =>
+                  player.pos.x === col && player.pos.y === row,
+            );
             grid.push(
-               <div className="game-tile" onClick={increaseCount} key={`${row} ${col}`}>
-                  {count}
-                  {drawPlayer && (
+               <div className="game-tile" key={`${row} ${col}`}>
+                  {hasPlayer && (
                      <Player
-                        id={player.id}
-                        position={player.pos}
+                        player={hasPlayer}
                         setPosition={pos =>
-                           movePlayer(player.id, pos)
+                           movePlayer(hasPlayer.id, pos)
                         }
                      />
                   )}

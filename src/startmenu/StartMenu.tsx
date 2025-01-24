@@ -1,15 +1,34 @@
 import { useState } from 'react';
 import './startmenu.css';
-import { Player } from '../types';
 import { PlayerListitem } from './PlayerListItem';
+import { useMasterState } from '../states/MasterState';
+import { id } from '../id';
+
+const pastellivärit = [
+   '#FAD0C4', // Vaaleanpunainen
+   '#A8E6CF', // Mintunvihreä
+   '#C1D3FE', // Vaaleansiniharmaa
+   '#E6A9EC', // Laventeli
+   '#FFB3AB', // Persikkainen
+   '#FFF1A8', // Vaaleankeltainen
+   '#B3E5FC', // Taivaan sininen
+   '#D4E157', // Vaaleanvihreä
+   '#FFCC80', // Pehmeä oranssi
+   '#D1C4E9', // Vaaleanlila
+];
 
 type StartMenuProps = {
    changeScene: () => void;
 };
 
 export function StartMenu({ changeScene }: StartMenuProps) {
+   const [colors] = useState(
+      pastellivärit.sort(() => Math.random() - 0.5),
+   );
+   const [i, setI] = useState(0);
    const [name, setName] = useState('');
-   const [players, setPlayers] = useState<Player[]>([]);
+   const setPlayers = useMasterState(state => state.setPlayers);
+   const players = useMasterState(state => state.players);
 
    const playerNameChanged = (
       event: React.ChangeEvent<HTMLInputElement>,
@@ -28,9 +47,18 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             ...players,
             {
                name,
-               color: '#94edcf',
+               color: colors[i],
+               pos: { x: 0, y: 0 },
+               id: id(),
             },
          ]);
+         const newI = i + 1;
+
+         if (newI >= colors.length) {
+            setI(0);
+         } else {
+            setI(i + 1);
+         }
          setName('');
       }
    };

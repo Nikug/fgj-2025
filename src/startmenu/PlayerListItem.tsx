@@ -16,7 +16,12 @@ export function PlayerListitem({
          style={{ backgroundColor: player.color }}
       >
          <div>{player.name}</div>
-         <button className="player-list-item__remove">❌</button>
+         <button
+            onClick={() => removePlayer(player.name)}
+            className="player-list-item__remove"
+         >
+            ❌
+         </button>
       </div>
    );
 }
