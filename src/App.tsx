@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
 import { StartMenu } from './startmenu/StartMenu';
 
@@ -18,24 +16,36 @@ function App() {
    if (scene === Scene.StartMenu) {
       return <StartMenu changeScene={toggleScene}/>
    }
+const rows = 10;
+const cols = 10;
+
+const generateDivs = (rows: number, cols: number) => {
+   const grid: React.ReactNode[] = [];
+   for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+         grid.push(
+            <div className="game-tile" key={`${row} ${col}`}></div>,
+         );
+      }
+   }
+
+   return grid;
+};
+
+const divs = generateDivs(rows, cols);
 
    return (
-      <>
-         <div>
-            <a href="https://vite.dev" target="_blank">
-               <img
-                  src={viteLogo}
-                  className="logo"
-                  alt="Vite logo"
-               />
-            </a>
-            <a href="https://react.dev" target="_blank">
-               <img
-                  src={reactLogo}
-                  className="logo react"
-                  alt="React logo"
-               />
-            </a>
+      <div className="container">
+         <div className="game-container">
+            <div
+               className="game-grid"
+               style={{
+                  gridTemplateRows: `repeat(${rows}, 1fr)`,
+                  gridTemplateColumns: `repeat(${cols}, 1fr)`,
+               }}
+            >
+               {divs}
+            </div>
          </div>
          <h1>Vite + React</h1>
          <div className="card">
@@ -48,7 +58,7 @@ function App() {
             </button>
          </div>
          <p className="read-the-docs">Hähähähä</p>
-      </>
+      </div>
    );
 }
 
