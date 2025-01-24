@@ -4,6 +4,7 @@ import { useMasterState } from './states/MasterState';
 import './App.css';
 import { Scene } from './types';
 import { Player } from './Player';
+import { Avatar } from './Avatar';
 
 export const rows = 10;
 export const cols = 10;
@@ -54,6 +55,11 @@ function App() {
       <div className="container">
          <div style={{ padding: '1rem' }}>
             <button onClick={toggleScene}>toggle scene</button>
+         </div>
+         <div>
+            {players.map(player => (
+               <Avatar key={player.id} player={player} />
+            ))}
          </div>
          <div className="game-container">
             <div
