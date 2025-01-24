@@ -12,3 +12,10 @@ export const enum Scene {
    StartMenu,
    Game,
 }
+
+export const enum PlayerModelType {
+   Monkey,
+   Ninja,
+   Robot,
+   Wizard
+}

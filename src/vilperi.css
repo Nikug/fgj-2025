@@ -2,5 +2,24 @@
    height: 100%;
    width: 100%;
    border-radius: 50%;
-   background-color: #f00;
+}
+
+.player-ninja {
+   background-color: #938ee6;
+   background: radial-gradient(#ffffff, #938ee6);
+}
+
+.player-wizard {
+   background-color: #8eade6;
+   background: radial-gradient(#ffffff, #8eade6);
+}
+
+.player-robot {
+   background-color: #a3a39e;
+   background: radial-gradient(#ffffff, #a3a39e);
+}
+
+.player-monkey {
+   background-color: #b58150;
+   background: radial-gradient(#ffffff, #b58150);
 }
