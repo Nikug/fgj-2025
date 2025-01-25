@@ -13,9 +13,10 @@ import { immer } from 'zustand/middleware/immer';
 import { randomInt, shuffleList } from '../random';
 import { cols, rows } from '../App';
 import { resolver } from './resolver';
-import { obstacleList, obstacles } from '../map';
 import { id } from '../id';
-import { playerOverlap } from './notUtils';
+import { playerOverlap, randomPos } from './notUtils';
+import { obstacleList } from '../map';
+import { startGameMusic, stopGameMusic } from '../audio';
 
 export interface MasterState {
    scene: Scene;
@@ -25,11 +26,11 @@ export interface MasterState {
    setGamePhase: (phase: GamePhase) => void;
 
    players: Player[];
+   deadPlayers: Player[];
    setPlayers: (players: Player[]) => void;
    queueueueAction: (id: string, actions: Action[]) => void;
 
    weapons: Weapon[];
-   createAttaaak: (playerPos: V2, direction: Direction) => void;
 
    playerTurn: string | null;
    activePlayer: () => Player | null;
@@ -40,11 +41,14 @@ export interface MasterState {
    setPlayerOrder: (ids: string[]) => void;
 
    actionsPerTurn: number;
+   weaponMovePerTurn: number;
    runActionPhase: () => Promise<void>;
 
    obstacles: Obstacle[];
    hasObstacle: (pos: V2) => boolean;
    damageObstacle: (pos: V2, damage: number) => void;
+
+   killPlayer: (id: string) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -56,14 +60,25 @@ export const useMasterState = create<MasterState>()(
             let players: Player[] = [];
             if (scene === Scene.Game) {
                players = shuffleList(state.players);
-               players = players.map(player => ({
-                  ...player,
-                  pos: {
-                     x: randomInt(0, cols - 1),
-                     y: randomInt(0, rows - 1),
-                  },
-               }));
+               players = players.map(player => {
+                  let newPos: V2 = randomPos(cols, rows);
+                  while (
+                     state.hasObstacle(newPos) ||
+                     playerOverlap(newPos, state.players)
+                  ) {
+                     newPos = randomPos(cols, rows);
+                  }
+
+                  return {
+                     ...player,
+                     pos: newPos,
+                  };
+               });
+               startGameMusic();
+            } else {
+               stopGameMusic();
             }
+
             playerOrder = players.map(e => e.id);
             return {
                scene,
@@ -75,10 +90,12 @@ export const useMasterState = create<MasterState>()(
          }),
       playerOrder: [],
       actionsPerTurn: 5,
+      weaponMovePerTurn: 3,
       setPlayerOrder: ids => set(() => ({ playerOrder: ids })),
       gamePhase: GamePhase.Planning,
       setGamePhase: phase => set(() => ({ phase })),
       players: [],
+      deadPlayers: [],
       playerTurn: null,
       activePlayer: () =>
          get().players.find(p => p.id === get().playerTurn) ?? null,
@@ -91,9 +108,6 @@ export const useMasterState = create<MasterState>()(
       setPlayers: players =>
          set(() => ({ players, playerTurn: players[0].id })),
       weapons: [],
-      createAttaaak: (playerPos, direction) => {
-         
-      },
       runActionPhase: async () => {
          await resolver();
       },
@@ -143,6 +157,18 @@ export const useMasterState = create<MasterState>()(
                   }
                } else state.obstacles.push(obstacle);
             });
+         }),
+      killPlayer: id =>
+         set(state => {
+            const newPlayers: Player[] = [];
+            for (const player of state.players) {
+               if (player.id === id) {
+                  state.deadPlayers.push(player);
+               } else {
+                  newPlayers.push(player);
+               }
+            }
+            state.players = newPlayers;
          }),
    })),
 );

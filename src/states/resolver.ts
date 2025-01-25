@@ -6,6 +6,7 @@ import { Action, GamePhase, Player, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { playerOverlap } from './notUtils';
 import { moveFromElementToElement } from '../Vilperi';
+import { getTarget } from '../aleksi/aleksi';
 
 const TimeBetweenActions = 1000;
 
@@ -13,11 +14,27 @@ export const resolver = async () => {
    await sleep(TimeBetweenActions);
 
    useMasterState.setState(state => shuffleList(state.players));
+   await resolveMovements();
+   await resolveProjectiles();
+};
+const resolveProjectiles = async () => {
+   const weapons = useMasterState.getState().weapons;
+   const obstacles = useMasterState.getState().obstacles;
+   const players = useMasterState.getState().players;
+   for (const { pos, direction } of weapons) {
+      const target = getTarget(pos, direction, obstacles, players);
+      if (target) {
+         console.log(target);
+      }
+   }
+};
+const resolveMovements = async () => {
+   const alivePlayerCount = useMasterState.getState().players.length;
 
    // Main loop
    for (
       let playerIndex = 0;
-      playerIndex < useMasterState.getState().players.length;
+      playerIndex < alivePlayerCount;
       playerIndex++
    ) {
       useMasterState.setState(state => {
@@ -36,15 +53,18 @@ export const resolver = async () => {
          const action = player.queueueueueuedActions[actionIndex];
 
          const newPos = { ...player.pos };
-         const moevement = getMovement(action, player.pos)
+         const moevement = getMovement(action, player.pos);
 
          // DO NOT REMOVE THIS SLEEP OR YOU WILL FUCKED UP
          await sleep(1);
-         if (!useMasterState.getState().hasObstacle(moevement) && !playerOverlap(moevement, useMasterState.getState().players)) {
-            animatePlayerMovement(
-               player,
+         if (
+            !useMasterState.getState().hasObstacle(moevement) &&
+            !playerOverlap(
                moevement,
-            );
+               useMasterState.getState().players,
+            )
+         ) {
+            animatePlayerMovement(player, moevement);
          }
 
          // TIME BETWEEN ACTIONS SLEEP
@@ -101,28 +121,32 @@ export const resolver = async () => {
                });
                break;
             case Action.Attack:
-               const newWeapon: Weapon = {id: id(), pos: {x: player.pos.x + 1, y: player.pos.y}, direction: 'ltr'};
+               const newWeapon: Weapon = {
+                  id: id(),
+                  pos: { x: player.pos.x + 1, y: player.pos.y },
+                  direction: 'ltr',
+               };
                useMasterState.setState(state => {
-                  state.weapons = [...state.weapons, newWeapon]
-               })
+                  state.weapons = [...state.weapons, newWeapon];
+               });
                break;
             default:
                window.alert('what');
          }
       }
    }
-   
+
    await sleep(TimeBetweenActions);
 
    useMasterState.setState(state => {
-      state.gamePhase = GamePhase.Planning;
+      state.gamePhase = GamePhase.ActionAction;
       state.players = state.players.map(player => ({
          ...player,
          queueueueueuedActions: [],
       }));
-      state.players = shuffleList(state.players);
-      state.playerOrder = state.players.map(p => p.id);
-      state.playerTurn = state.players[0].id;
+      // state.players = shuffleList(state.players);
+      // state.playerOrder = state.players.map(p => p.id);
+      // state.playerTurn = state.players[0].id;
    });
 };
 

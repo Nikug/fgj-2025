@@ -7,6 +7,7 @@ import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
 import { Sahuli } from './aleksi/aleksi';
 import { popPlayer } from './Vilperi';
+import { AbsoluteWrapper } from './AbsoluteWrapper';
 
 export const rows = 10;
 export const cols = 10;
@@ -18,22 +19,24 @@ function App() {
    const weapons = useMasterState(state => state.weapons);
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
+   const playerTurnId = useMasterState(state => state.playerTurn);
    const hasObstacle = useMasterState(state => state.hasObstacle);
    const activePlayer = useMasterState(state => state.activePlayer);
    const actionsPerTurn = useMasterState(
       state => state.actionsPerTurn,
    );
+   const killPlayer = useMasterState(state => state.killPlayer);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
-            const hasPlayer = players.find(
+            const tilePlayers = players.filter(
                player =>
                   player.pos.x === col && player.pos.y === row,
             );
             const obstacle = hasObstacle({ x: col, y: row });
-            const hasWeapon = weapons.find(
+            const tileWeapons = weapons.filter(
                weapon =>
                   weapon.pos.x === col && weapon.pos.y === row,
             );
@@ -45,12 +48,18 @@ function App() {
                   data-y={row}
                >
                   {obstacle && <Obstacle />}
-                  {hasPlayer && !obstacle && (
-                     <Player player={hasPlayer} />
-                  )}
-                  {hasWeapon && !obstacle && (
-                     <Sahuli direction={hasWeapon.direction} />
-                  )}
+                  {tilePlayers.map(tilePlayer => (
+                     <Player
+                        key={tilePlayer.id}
+                        player={tilePlayer}
+                     />
+                  ))}
+                  {tileWeapons.map(tileWeapon => (
+                     <Sahuli
+                        key={tileWeapon.id}
+                        direction={tileWeapon.direction}
+                     />
+                  ))}
                </div>,
             );
          }
@@ -91,7 +100,7 @@ function App() {
                      <Avatar
                         key={player.id}
                         player={player}
-                        active={player.name === playerTurn()?.name}
+                        active={player.id === playerTurnId}
                      />
                   ))}
                </div>
@@ -117,9 +126,10 @@ function App() {
 
             {players.map((player, i) => (
                <button
+                  key={player.id}
                   onClick={() =>
                      popPlayer(player, () => {
-                        console.log('Remove player from state here');
+                        killPlayer(player.id);
                      })
                   }
                >
@@ -127,8 +137,11 @@ function App() {
                </button>
             ))}
 
-            <button onClick={toggleScene}>
-               Back to start screen
+            <button
+               className="back-to-menu-button"
+               onClick={toggleScene}
+            >
+               Back to menu
             </button>
          </div>
          <div className="game-container">

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { Direction } from '../types';
+import { Direction, Obstacle, Player, V2 } from '../types';
 
 export const Star = () => {
    return (
@@ -14,6 +14,51 @@ interface BansqProps {
 interface TaikuloinenProps {
    direction: Direction;
 }
+
+const filter = (
+   f: (e: Player | Obstacle) => boolean,
+   players: Player[],
+   obstacles: Obstacle[],
+) => {
+   return [...players.filter(f), ...obstacles.filter(f)];
+};
+
+export const getTarget = (
+   pos: V2,
+   direction: Direction,
+   obstacles: Obstacle[],
+   players: Player[],
+) => {
+   let predicate: (e: Player | Obstacle) => boolean;
+   let ab: (
+      prev: Player | Obstacle,
+      curr: Player | Obstacle,
+   ) => Player | Obstacle;
+   switch (direction) {
+      case 'ltr':
+         predicate = e => e.pos.y === pos.y && e.pos.x > pos.x;
+         ab = (prev, curr) =>
+            prev.pos.x < curr.pos.x ? prev : curr;
+         break;
+      case 'rtl':
+         predicate = e => e.pos.y === pos.y && e.pos.x < pos.x;
+         ab = (prev, curr) =>
+            prev.pos.x > curr.pos.x ? prev : curr;
+         break;
+      case 'ttb':
+         predicate = e => e.pos.x === pos.x && e.pos.y > pos.y;
+         ab = (prev, curr) =>
+            prev.pos.y > curr.pos.y ? prev : curr;
+         break;
+      case 'btt':
+         predicate = e => e.pos.x === pos.x && e.pos.y < pos.y;
+         ab = (prev, curr) =>
+            prev.pos.y < curr.pos.y ? prev : curr;
+         break;
+   }
+   const collidables = filter(predicate, players, obstacles);
+   return collidables.reduce(ab);
+};
 
 const getBansqTranslate = (direction: Direction) => {
    switch (direction) {

@@ -4,6 +4,9 @@ import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
 import { id } from '../id';
 import { PlayerModelType } from '../types';
+import menuSoundtrack from './../assets/whats_cooking_there.mp3';
+
+const menuAudio = new Audio(menuSoundtrack);
 
 export const pastellivärit = [
    '250, 208, 196', // Vaaleanpunainen
@@ -36,6 +39,7 @@ type StartMenuProps = {
 };
 
 export function StartMenu({ changeScene }: StartMenuProps) {
+   const userEventDetected = useRef(false);
    const nameInput = useRef<any>(null);
    const [colors] = useState(
       pastellivärit.sort(() => Math.random() - 0.5),
@@ -69,6 +73,38 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    };
 
    useEffect(() => {
+      if (userEventDetected.current) return;
+
+      const startMusic = () => {
+         if (userEventDetected.current) return;
+
+         userEventDetected.current = true;
+         menuAudio.loop = true;
+         menuAudio.play();
+      };
+
+      document.addEventListener('click', startMusic);
+      document.addEventListener('keydown', startMusic);
+
+      return () => {
+         menuAudio.pause();
+         menuAudio.currentTime = 0;
+         document.removeEventListener('click', startMusic);
+         document.removeEventListener('keydown', startMusic);
+      };
+   }, []);
+
+   // useEffect(() => {
+   //    menuAudio.loop = true;
+   //    menuAudio.play();
+
+   //    return () => {
+   //       menuAudio.pause();
+   //       menuAudio.currentTime = 0;
+   //    };
+   // }, []);
+
+   useEffect(() => {
       // add two players for testing
       setPlayers([
          {
@@ -79,6 +115,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             id: id(),
             queueueueueuedActions: [],
             elementId: `player-element-${id()}`,
+            isDead: false,
          },
          {
             name: 'Kalle',
@@ -88,6 +125,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             id: id(),
             queueueueueuedActions: [],
             elementId: `player-element-${id()}`,
+            isDead: false,
          },
       ]);
       setI(i + 2);
@@ -109,6 +147,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                id: id(),
                queueueueueuedActions: [],
                elementId: `player-element-${id()}`,
+               isDead: false,
             },
          ]);
          setPlayerMode(getRandomPlayerMode());

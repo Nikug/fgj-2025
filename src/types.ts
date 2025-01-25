@@ -26,6 +26,7 @@ export interface Player {
    id: string;
    queueueueueuedActions: Action[];
    elementId: string;
+   isDead: boolean;
 }
 
 export const enum Scene {
@@ -43,6 +44,7 @@ export const enum PlayerModelType {
 export const enum GamePhase {
    Planning,
    Action,
+   ActionAction,
 }
 
 export type Obstacle = {

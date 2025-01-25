@@ -18,6 +18,8 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
       const playerTurn = useMasterState(state => state.playerTurn);
       const qAction = useMasterState(state => state.queueueueAction);
 
+      const isOwnTurn = player.id === playerTurn;
+
       useEffect(() => {
          const handleKeyDown = (e: KeyboardEvent) => {
             if (playerTurn !== player.id) return;
@@ -62,6 +64,7 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
             id={player.elementId}
             model={PlayerModelType.Monkey}
             color={player.color}
+            highlight={isOwnTurn}
          />
       );
    },
