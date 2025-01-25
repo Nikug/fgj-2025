@@ -349,8 +349,9 @@ const AIPlayerLogic = async () => {
       if (dx === 0 && dy === 1) return 'ttb';
       if (dx === 0 && dy === -1) return 'btt';
 
-      const attackActions =
-         activePlayer.queueueueueuedActions.filter(
+      const attackActions = activePlayer.queueueueueuedActions
+         .concat(actions)
+         .filter(
             action =>
                action === Action.AttackLeft ||
                action === Action.AttackRight ||
@@ -386,7 +387,20 @@ const AIPlayerLogic = async () => {
          `Closest enemy found: Player ID ${closestEnemy.id}`,
       );
       const direction = attackDirection(closestEnemy.pos);
-      if (direction && actionsUsed < actionsPerTurn) {
+      const attackActions = activePlayer.queueueueueuedActions
+         .concat(actions)
+         .filter(
+            action =>
+               action === Action.AttackLeft ||
+               action === Action.AttackRight ||
+               action === Action.AttackUp ||
+               action === Action.AttackDown,
+         );
+      if (
+         attackActions.length < activePlayer.attacksPerTurn &&
+         direction &&
+         actionsUsed < actionsPerTurn
+      ) {
          const vammaDirection = {
             rtl: Action.AttackLeft,
             ltr: Action.AttackRight,
