@@ -261,9 +261,9 @@ const resolveMovements = async () => {
          ...player,
          queueueueueuedActions: [],
       }));
-      // state.players = shuffleList(state.players);
-      // state.playerOrder = state.players.map(p => p.id);
-      // state.playerTurn = state.players[0].id;
+      state.players = shuffleList(state.players);
+      state.playerOrder = state.players.map(p => p.id);
+      state.playerTurn = state.players[0].id;
    });
 };
 
