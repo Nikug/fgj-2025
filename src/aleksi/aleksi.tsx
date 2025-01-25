@@ -1,10 +1,14 @@
 import { PropsWithChildren } from 'react';
 
 export const Star = () => {
-   return <div className="star"></div>;
+   return (
+      <div className="starContainer">
+         <div className="star">★</div>
+      </div>
+   );
 };
 
-export const VilperiRow = (props: PropsWithChildren) => {
+const AleksiRow = (props: PropsWithChildren) => {
    return (
       <div
          style={{
@@ -24,7 +28,7 @@ interface AleksiBoxProps extends PropsWithChildren {
    size: 'small' | 'medium' | 'large';
 }
 
-export const AleksiBox = (props: AleksiBoxProps) => {
+const AleksiBox = (props: AleksiBoxProps) => {
    const { size, children } = props;
 
    const modelSize = {
@@ -56,7 +60,7 @@ export const Aleksi = () => {
             gap: '100px',
          }}
       >
-         <VilperiRow>
+         <AleksiRow>
             <AleksiBox size="small">
                <Star />
             </AleksiBox>
@@ -66,7 +70,7 @@ export const Aleksi = () => {
             <AleksiBox size="large">
                <Star />
             </AleksiBox>
-         </VilperiRow>
+         </AleksiRow>
       </div>
    );
 };
