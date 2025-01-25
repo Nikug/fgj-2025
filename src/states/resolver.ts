@@ -5,7 +5,7 @@ import { sleep } from '../sleep';
 import { Action, GamePhase, Player, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { oob, playerOverlap } from './notUtils';
-import { moveFromElementToElement } from '../Vilperi';
+import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import { getFromPos, getNextPos, getTarget } from '../aleksi/aleksi';
 
 const TimeBetweenActions = 1000;
@@ -37,17 +37,22 @@ const resolveProjectiles = async () => {
    }
 };
 
-const handleWeapon = async (weapon: Weapon) => {
+const handleWeapon = async (w: Weapon) => {
    const obstacles = useMasterState.getState().obstacles;
    const players = useMasterState.getState().players;
    const weaponDistance =
       useMasterState.getState().weaponMovePerTurn;
    const damageObstacle = useMasterState.getState().damageObstacle;
    const kill = useMasterState.getState().killPlayer;
+   const killAnime = useMasterState.getState().killPlayer;
    const moveWeapon = useMasterState.getState().moveWeapon;
+   const id = w.id;
    for (let i = 0; i < weaponDistance; i++) {
-      const nextPos = getNextPos(weapon.pos, weapon.direction);
-      await moveWeapon(weapon, nextPos);
+      const weapon = useMasterState
+         .getState()
+         .weapons.find(e => e.id === id);
+      const nextPos = getNextPos(weapon!.pos, weapon!.direction);
+      await moveWeapon(weapon!, nextPos);
       if (
          nextPos.x > 10 ||
          nextPos.y > 10 ||
@@ -58,14 +63,19 @@ const handleWeapon = async (weapon: Weapon) => {
          break;
       }
       const target = getFromPos(nextPos, obstacles, players);
+
+      console.log(nextPos);
+      console.log(target);
       if (target.player) {
-         kill(target.player.id);
-         console.log('hit player');
+         popPlayer(target.player, () => {
+            kill(target.player!.id);
+         });
+         console.log('hit player', target.player);
          break;
       }
       if (target.obs) {
          damageObstacle(target.obs.pos, 1);
-         console.log('damaged obstacle');
+         console.log('damaged obstacle', target.obs);
          break;
       }
    }

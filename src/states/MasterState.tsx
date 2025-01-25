@@ -153,7 +153,13 @@ export const useMasterState = create<MasterState>()(
          }
       },
       moveWeapon: async (w, pos) => {
-         return new Promise(resolve => resolve());
+         return new Promise(resolve => {
+            set(state => {
+               console.log('hahaa', pos);
+               state.weapons.find(e => e.id == w.id)!.pos = pos;
+            });
+            resolve();
+         });
       },
 
       obstacles: obstacleList(),
