@@ -36,7 +36,7 @@ export function SelectMoves({ playerId }: SelectMovesProps) {
    );
 
    const handleMove = (move: Action) => {
-      queueueueAction(playerId, [move]);
+      queueueueAction(playerId, [move], false);
    };
 
    return (
@@ -44,32 +44,32 @@ export function SelectMoves({ playerId }: SelectMovesProps) {
          <div className="select-moves__buttons">
             <ArrowKeyLayout>
                <button onClick={() => handleMove(Action.MoveUp)}>
-                  Move Up
+                  ⬆️ Move Up
                </button>
                <button onClick={() => handleMove(Action.MoveLeft)}>
-                  Move Left
+                  ⬅️ Move Left
                </button>
                <button onClick={() => handleMove(Action.MoveDown)}>
-                  Move Down
+                  ⬇️ Move Down
                </button>
                <button onClick={() => handleMove(Action.MoveRight)}>
-                  Move Right
+                  ➡️ Move Right
                </button>
             </ArrowKeyLayout>
             <ArrowKeyLayout>
                <button onClick={() => handleMove(Action.AttackUp)}>
-                  Attack up
+                  ✊ Attack up
                </button>
                <button onClick={() => handleMove(Action.AttackLeft)}>
-                  Attack left
+                  🤛 Attack left
                </button>
                <button onClick={() => handleMove(Action.AttackDown)}>
-                  Attack down
+                  👊 Attack down
                </button>
                <button
                   onClick={() => handleMove(Action.AttackRight)}
                >
-                  Attack right
+                  🤜 Attack right
                </button>
             </ArrowKeyLayout>
          </div>
