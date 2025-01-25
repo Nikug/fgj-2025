@@ -13,6 +13,8 @@ import { immer } from 'zustand/middleware/immer';
 import { randomInt, shuffleList } from '../random';
 import { cols, rows } from '../App';
 import { resolver } from './resolver';
+import { id } from '../id';
+import { playerOverlap, randomPos } from './notUtils';
 import { obstacleList } from '../map';
 
 export interface MasterState {
@@ -28,7 +30,6 @@ export interface MasterState {
    queueueueAction: (id: string, actions: Action[]) => void;
 
    weapons: Weapon[];
-   createAttaaak: (playerPos: V2, direction: Direction) => void;
 
    playerTurn: string | null;
    activePlayer: () => Player | null;
@@ -57,13 +58,16 @@ export const useMasterState = create<MasterState>()(
             let players: Player[] = [];
             if (scene === Scene.Game) {
                players = shuffleList(state.players);
-               players = players.map(player => ({
+               players = players.map(player => {
+                  let newPos: V2 = randomPos(cols, rows)
+                  while (state.hasObstacle(newPos) || playerOverlap(newPos, state.players)) {
+                     newPos = randomPos(cols, rows)
+                  }
+
+                  return ({
                   ...player,
-                  pos: {
-                     x: randomInt(0, cols - 1),
-                     y: randomInt(0, rows - 1),
-                  },
-               }));
+                  pos: newPos,
+               })});
             }
             playerOrder = players.map(e => e.id);
             return {
@@ -93,7 +97,6 @@ export const useMasterState = create<MasterState>()(
       setPlayers: players =>
          set(() => ({ players, playerTurn: players[0].id })),
       weapons: [],
-      createAttaaak: (playerPos, direction) => {},
       runActionPhase: async () => {
          await resolver();
       },
