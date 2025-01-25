@@ -65,9 +65,8 @@ export const resolver = async () => {
                });
                break;
             case Action.Attack:
-               console.log(player.id + " attaaaaaaaaak");
                useMasterState.setState(state => {
-                  state.attaaak(player.id, player.pos)
+                  state.createAttaaak(player.pos, 'ltr')
                })
                break;
             default:

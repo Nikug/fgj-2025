@@ -12,6 +12,12 @@ export const enum Action {
    Attack,
 }
 
+export interface Weapon {
+   id: string;
+   pos: V2;
+   direction: Direction;
+}
+
 export interface Player {
    name: string;
    mode: PlayerModelType;

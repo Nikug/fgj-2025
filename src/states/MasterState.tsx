@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GamePhase, Player, V2, Action, Scene } from '../types';
+import { GamePhase, Player, V2, Action, Scene, Weapon, Direction } from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { randomInt, shuffleList } from '../random';
 import { cols, rows } from '../App';
@@ -15,8 +15,10 @@ export interface MasterState {
    players: Player[];
    setPlayers: (players: Player[]) => void;
    movePlayer: (id: string, pos: V2) => void;
-   attaaak: (id: string, pos: V2) => void;
    queueueueAction: (id: string, actions: Action[]) => void;
+   
+   weapons: Weapon[];
+   createAttaaak: (pos: V2, direction: Direction) => void;
 
    playerTurn: string | null;
    setPlayerTurn: (id: string) => void;
@@ -77,7 +79,8 @@ export const useMasterState = create<MasterState>()(
                p.pos = pos;
             }
          }),
-      attaaak: (id, pos) => {
+      weapons: [],
+      createAttaaak: (playerPos, direction) => {
          console.log("very cool logic for weapon spawning and stuff")
       },
       runActionPhase: async () => {
