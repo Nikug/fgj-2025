@@ -109,6 +109,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             queueueueueuedActions: [],
             elementId: `player-element-${id()}`,
             isDead: false,
+            isAI: true,
          },
          {
             name: 'Kalle',
@@ -119,6 +120,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             queueueueueuedActions: [],
             elementId: `player-element-${id()}`,
             isDead: false,
+            isAI: true,
          },
       ]);
       setI(i + 2);

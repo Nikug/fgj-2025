@@ -35,12 +35,24 @@
 
 .player-list-item {
    display: flex;
-   flex-direction: row;
+   flex-direction: column;
    align-items: center;
    justify-content: space-between;
    flex-grow: 1;
    gap: 1rem;
    padding: 1rem;
+   color: black;
+   border-radius: 8px;
+   font-size: 1.5rem;
+}
+
+.player-list-item-row {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: space-between;
+   flex-grow: 1;
+   gap: 1rem;
    color: black;
    border-radius: 8px;
    font-size: 1.5rem;
@@ -62,6 +74,11 @@
    &:focus {
       outline: 5px solid rgb(255, 0, 255);
    }
+}
+
+.player-list-label {
+   font-weight: bold;
+   line-height: 0;
 }
 
 .add-player {
