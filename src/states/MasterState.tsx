@@ -225,6 +225,8 @@ export const useMasterState = create<MasterState>()(
                   );
                   if (!nextPlayer || nextPlayer.isDead) {
                      // Panic mode, this should not happen but it keeps happening all the time
+                     console.log('Going to panic');
+                     console.log('AAAAAAAAAAAAAA');
                      const newOrder = state.playerOrder.filter(id =>
                         state.players.some(
                            player =>
