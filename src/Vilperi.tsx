@@ -1,9 +1,4 @@
-import {
-   forwardRef,
-   PropsWithChildren,
-   useRef,
-   useState,
-} from 'react';
+import { forwardRef, PropsWithChildren, useRef } from 'react';
 import App from './App';
 import { Player as PlayerType, PlayerModelType } from './types';
 import { pastellivärit } from './startmenu/StartMenu';
@@ -182,21 +177,6 @@ export const Router = () => {
 };
 
 export const Vilperi = () => {
-   const player: PlayerType = {
-      name: 'Jaska',
-      mode: PlayerModelType.Monkey,
-      color: pastellivärit[5],
-      pos: { x: 0, y: 0 },
-      id: id(),
-      queueueueueuedActions: [],
-      elementId: `player-element-${id()}`,
-      isDead: false,
-      hasLazor: false,
-      attacksPerTurn: 1,
-   };
-
-   const [playerPopped, setPlayerPopped] = useState(false);
-
    return (
       <div
          style={{
