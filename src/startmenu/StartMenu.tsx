@@ -79,6 +79,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
          if (userEventDetected.current) return;
 
          userEventDetected.current = true;
+         menuAudio.loop = true;
          menuAudio.play();
       };
 
@@ -86,6 +87,8 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       document.addEventListener('keydown', startMusic);
 
       return () => {
+         menuAudio.pause();
+         menuAudio.currentTime = 0;
          document.removeEventListener('click', startMusic);
          document.removeEventListener('keydown', startMusic);
       };
