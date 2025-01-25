@@ -56,6 +56,7 @@ export interface MasterState {
    killPlayer: (id: string) => void;
    waitingAction: boolean;
    setWaitingAction: (wait: boolean) => void;
+   removeWeapons: (weapons: Weapon[]) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -120,6 +121,13 @@ export const useMasterState = create<MasterState>()(
       weapons: [],
       runActionPhase: async () => {
          await resolver();
+      },
+      removeWeapons: weapons => {
+         set(state => {
+            state.weapons = state.weapons.filter(
+               w => !weapons.find(e => e.id != w.id),
+            );
+         });
       },
       queueueueAction: (id, actions, newWaitingAction) => {
          if (get().gamePhase !== GamePhase.Planning) return;
