@@ -19,8 +19,6 @@ function App() {
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
 
-   console.log(players);
-
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
