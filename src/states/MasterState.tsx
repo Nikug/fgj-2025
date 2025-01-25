@@ -6,7 +6,7 @@ import {
    Action,
    Scene,
    Weapon,
-   Obstacle,
+   Obstacle, UnlimitedPoweeer
 } from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { shuffleList } from '../random';
@@ -36,6 +36,7 @@ export interface MasterState {
    ) => void;
 
    weapons: Weapon[];
+   powers: UnlimitedPoweeer[];
 
    playerTurn: string | null;
    activePlayer: () => Player | null;
@@ -132,6 +133,7 @@ export const useMasterState = create<MasterState>()(
             playerTurn: players[0]?.id ?? null,
          })),
       weapons: [],
+      powers: [],
       runActionPhase: async () => {
          await resolver();
       },

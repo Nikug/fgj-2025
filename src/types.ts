@@ -16,6 +16,16 @@ export const enum Action {
    Nothing,
 }
 
+export const enum PowerUp {
+   PlusOne,
+   Lazor
+}
+
+export interface UnlimitedPoweeer {
+   type: PowerUp;
+   pos: V2;
+}
+
 export interface Weapon {
    id: string;
    pos: V2;
