@@ -5,10 +5,10 @@ import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
-import { Sahuli } from './aleksi/aleksi';
 import { popPlayer } from './Vilperi';
 import { SelectMoves } from './SelectMoves';
 import { AnyWeapon } from './AnyWeapon';
+import { isAttack } from './superSecretFile';
 
 export const rows = 10;
 export const cols = 10;
@@ -17,6 +17,7 @@ function App() {
    const scene = useMasterState(state => state.scene);
    const setScene = useMasterState(state => state.setScene);
    const players = useMasterState(state => state.players);
+   const deadPlayers = useMasterState(state => state.deadPlayers);
    const weapons = useMasterState(state => state.weapons);
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
@@ -25,6 +26,9 @@ function App() {
    const activePlayer = useMasterState(state => state.activePlayer);
    const actionsPerTurn = useMasterState(
       state => state.actionsPerTurn,
+   );
+   const actionActionsPerTurn = useMasterState(
+      state => state.actionActionsPerTurn,
    );
    const killPlayer = useMasterState(state => state.killPlayer);
 
@@ -80,16 +84,23 @@ function App() {
       return <StartMenu changeScene={toggleScene} />;
    }
 
+   const gameOver = players.length <= 1;
    let instructionText = '';
 
-   switch (gamePhase) {
-      case GamePhase.Planning:
-         instructionText =
-            'Plan your moves. Use the buttons below or use arow keys to move your bubble and b + arrow keys to shoot.';
-         break;
-      case GamePhase.Action:
-         instructionText = 'Watch the action!';
-         break;
+   if (players.length === 1) {
+      instructionText = 'Game over! ' + players[0].name + ' won!';
+   } else if (players.length === 0) {
+      instructionText = 'Game over! No winners!';
+   } else {
+      switch (gamePhase) {
+         case GamePhase.Planning:
+            instructionText =
+               'Plan your moves. Use the buttons below or use arow keys to move your bubble and b + arrow keys to shoot.';
+            break;
+         case GamePhase.Action:
+            instructionText = 'Watch the action!';
+            break;
+      }
    }
 
    return (
@@ -97,7 +108,7 @@ function App() {
          <div className="sidebar">
             <div className="phase">
                <div className="players">
-                  {players.map(player => (
+                  {players.concat(deadPlayers ?? []).map(player => (
                      <Avatar
                         key={player.id}
                         player={player}
@@ -106,42 +117,36 @@ function App() {
                   ))}
                </div>
                <div className="phase-inner">
-                  {gamePhase === GamePhase.Planning && (
+                  {gamePhase === GamePhase.Planning && !gameOver && (
                      <div className="phase-inner__player-name">
-                        <span>{playerTurn()?.name}</span>
-                        <span>
-                           {` has 
-                           ${
+                        <span>{playerTurn()?.name} has</span>
+                        <p>
+                           {`${
                               actionsPerTurn -
                               (activePlayer()?.queueueueueuedActions
                                  .length ?? 0)
                            }${' / '}${actionsPerTurn}${' moves left'}`}
-                        </span>
+                        </p>
+                        <p>
+                           {`${
+                              actionActionsPerTurn -
+                              (activePlayer()?.queueueueueuedActions.filter(
+                                 isAttack,
+                              ).length ?? 0)
+                           }${' / '}${actionActionsPerTurn}${' attacks left'}`}
+                        </p>
                      </div>
                   )}
                   <div className="phase-inner__instructions">
                      {instructionText}
                   </div>
                   {playerTurnId &&
-                     gamePhase === GamePhase.Planning && (
+                     gamePhase === GamePhase.Planning &&
+                     !gameOver && (
                         <SelectMoves playerId={playerTurnId} />
                      )}
                </div>
             </div>
-
-            {players.map((player, i) => (
-               <button
-                  key={player.id}
-                  onClick={() =>
-                     popPlayer(player, () => {
-                        killPlayer(player.id);
-                     })
-                  }
-               >
-                  Kill player {i + 1}
-               </button>
-            ))}
-
             <button
                className="back-to-menu-button"
                onClick={toggleScene}

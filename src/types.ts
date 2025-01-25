@@ -13,6 +13,7 @@ export const enum Action {
    AttackDown,
    AttackLeft,
    AttackRight,
+   Nothing,
 }
 
 export interface Weapon {

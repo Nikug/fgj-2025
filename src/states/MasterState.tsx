@@ -6,17 +6,16 @@ import {
    Action,
    Scene,
    Weapon,
-   Direction,
    Obstacle,
 } from '../types';
 import { immer } from 'zustand/middleware/immer';
-import { randomInt, shuffleList } from '../random';
+import { shuffleList } from '../random';
 import { cols, rows } from '../App';
 import { resolver } from './resolver';
-import { id } from '../id';
 import { playerOverlap, randomPos } from './notUtils';
 import { obstacleList } from '../map';
 import { startGameMusic, stopGameMusic } from '../audio';
+import { isAttack } from '../superSecretFile';
 
 export interface MasterState {
    scene: Scene;
@@ -45,6 +44,7 @@ export interface MasterState {
    setPlayerOrder: (ids: string[]) => void;
 
    actionsPerTurn: number;
+   actionActionsPerTurn: number;
    weaponMovePerTurn: number;
    moveWeapon: (weapon: Weapon, pos: V2) => Promise<void>;
    runActionPhase: () => Promise<void>;
@@ -66,6 +66,7 @@ export const useMasterState = create<MasterState>()(
          set(state => {
             let playerOrder: string[] = [];
             let players: Player[] = [];
+
             if (scene === Scene.Game) {
                players = shuffleList(state.players);
                players = players.map(player => {
@@ -88,16 +89,20 @@ export const useMasterState = create<MasterState>()(
             }
 
             playerOrder = players.map(e => e.id);
+
+            // Reset state
             return {
                scene,
                playerOrder,
                players,
                gamePhase: GamePhase.Planning,
                playerTurn: playerOrder[0] ?? null,
+               weapons: [],
             };
          }),
       playerOrder: [],
       actionsPerTurn: 5,
+      actionActionsPerTurn: 1,
       weaponMovePerTurn: 3,
       setPlayerOrder: ids => set(() => ({ playerOrder: ids })),
       gamePhase: GamePhase.Planning,
@@ -125,7 +130,7 @@ export const useMasterState = create<MasterState>()(
       removeWeapons: weapons => {
          set(state => {
             state.weapons = state.weapons.filter(
-               w => !weapons.find(e => e.id != w.id),
+               w => !weapons.find(e => e.id == w.id),
             );
          });
       },
@@ -138,11 +143,18 @@ export const useMasterState = create<MasterState>()(
 
             state.waitingAction = newWaitingAction;
 
-            console.log('new actions', actions);
+            const isAttackAction = isAttack(actions[0]);
+            const alreadyDoneAttack =
+               p.queueueueueuedActions.some(isAttack);
+
+            let newAction = actions[0];
+            if (isAttackAction && alreadyDoneAttack) {
+               newAction = Action.Nothing;
+            }
 
             p.queueueueueuedActions = [
                ...p.queueueueueuedActions,
-               ...actions,
+               newAction,
             ];
             if (
                p.queueueueueuedActions.length >= state.actionsPerTurn
@@ -198,7 +210,11 @@ export const useMasterState = create<MasterState>()(
             const newPlayers: Player[] = [];
             for (const player of state.players) {
                if (player.id === id) {
-                  state.deadPlayers.push(player);
+                  state.deadPlayers.push({
+                     ...player,
+                     isDead: true,
+                     queueueueueuedActions: [],
+                  });
                } else {
                   newPlayers.push(player);
                }

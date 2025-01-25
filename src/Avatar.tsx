@@ -8,7 +8,8 @@ type AvatarProps = {
 };
 
 export function Avatar({ player, active }: AvatarProps) {
-   const { name, mode, color, queueueueueuedActions } = player;
+   const { name, mode, color, queueueueueuedActions, isDead } =
+      player;
 
    return (
       <div
@@ -16,7 +17,7 @@ export function Avatar({ player, active }: AvatarProps) {
          style={{ backgroundColor: `rgb(${color})` }}
       >
          <div className="avatar__model">
-            {mapPlayerModeToEmoji(mode)}
+            {isDead ? '☠️' : mapPlayerModeToEmoji(mode)}
          </div>
          <div className="avatar__name">{name}</div>
          <div>{queueueueueuedActions.length}</div>

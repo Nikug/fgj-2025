@@ -74,6 +74,16 @@
   background-color: #55555541;
 }
 
+.lore {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: rgba(141, 112, 144, 0.938);
+  
+  width: 100%;
+  overflow: auto;
+}
+
 .phase {
   width: 100%;
   flex-grow: 1;

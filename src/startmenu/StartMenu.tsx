@@ -8,6 +8,7 @@ import menuSoundtrack from './../assets/whats_cooking_there.mp3';
 import { playSound } from '../audio';
 import { FloatingPlayerBubble } from '../Vilperi2';
 import '../vilperi2.css';
+import { Lore } from '../Lore';
 
 const menuAudio = new Audio(menuSoundtrack);
 
@@ -167,68 +168,75 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    };
 
    return (
-      <div className="start-menu">
-         {players.map((player, i) => (
-            <FloatingPlayerBubble
-               key={player.id}
-               model={player.mode}
-               color={player.color}
-               name={player.name}
-               dir={i % 2 === 0 ? 'right' : 'left'}
-               index={i}
-            />
-         ))}
-         <div className="star-name__title">BUBBLE BLAST</div>
-         <div className="start-menu__top-section">
-            <div className="add-player">
-               <div className="add-player__label">Choose class</div>
-               <div className="player-modes">
-                  {playerModes.map(mode => (
-                     <button
-                        className={
-                           'player-mode-button ' +
-                           (mode === playerMode ? 'selected' : '')
-                        }
-                        key={mode}
-                        onClick={() => selectPlayerMode(mode)}
-                     >
-                        {mapPlayerModeToEmoji(mode)}
-                     </button>
-                  ))}
+      <div className="start-menu__container">
+         <div className="start-menu">
+            {players.map((player, i) => (
+               <FloatingPlayerBubble
+                  key={player.id}
+                  model={player.mode}
+                  color={player.color}
+                  name={player.name}
+                  dir={i % 2 === 0 ? 'right' : 'left'}
+                  index={i}
+               />
+            ))}
+            <div className="star-name__title">BUBBLE BLAST</div>
+
+            <div className="start-menu__top-section">
+               <div className="add-player">
+                  <div className="add-player__label">
+                     Choose class
+                  </div>
+                  <div className="player-modes">
+                     {playerModes.map(mode => (
+                        <button
+                           className={
+                              'player-mode-button ' +
+                              (mode === playerMode ? 'selected' : '')
+                           }
+                           key={mode}
+                           onClick={() => selectPlayerMode(mode)}
+                        >
+                           {mapPlayerModeToEmoji(mode)}
+                        </button>
+                     ))}
+                  </div>
+                  <div className="add-player__label">Add player</div>
+                  <input
+                     ref={nameInput}
+                     className="player-name-input"
+                     placeholder="Press Enter to add"
+                     autoFocus
+                     value={name}
+                     onChange={playerNameChanged}
+                     onKeyDown={e =>
+                        e.key === 'Enter' ? addPlayer() : null
+                     }
+                  ></input>
                </div>
-               <div className="add-player__label">Add player</div>
-               <input
-                  ref={nameInput}
-                  className="player-name-input"
-                  placeholder="Press Enter to add"
-                  autoFocus
-                  value={name}
-                  onChange={playerNameChanged}
-                  onKeyDown={e =>
-                     e.key === 'Enter' ? addPlayer() : null
-                  }
-               ></input>
+               <button
+                  className="start-button"
+                  onClick={startGame}
+                  disabled={players.length < 1}
+               >
+                  Start blasting 👉🔥🔥🚒
+               </button>
             </div>
-            <button
-               className="start-button"
-               onClick={startGame}
-               disabled={players.length < 1}
-            >
-               Start blasting 👉🔥🔥🚒
-            </button>
+
+            <div className="start-menu__player-list">
+               {players
+                  .map(player => (
+                     <PlayerListitem
+                        key={player.name}
+                        player={player}
+                        removePlayer={removePlayer}
+                     />
+                  ))
+                  .reverse()}
+            </div>
          </div>
 
-         <div className="start-menu__player-list">
-            {players
-               .map(player => (
-                  <PlayerListitem
-                     key={player.name}
-                     player={player}
-                     removePlayer={removePlayer}
-                  />
-               ))
-               .reverse()}
-         </div>
+         <Lore />
       </div>
    );
 }

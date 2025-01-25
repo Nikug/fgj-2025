@@ -6,10 +6,14 @@ import { Action, GamePhase, Player, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import { oob, playerOverlap, weaponOverlap } from './notUtils';
-import { getFromPos, getNextPos} from '../aleksi/aleksi';
+import {
+   animeWeaponMove,
+   getFromPos,
+   getNextPos,
+} from '../aleksi/aleksi';
 import { playerTypeToWeaponType } from '../superSecretFile';
 
-const TimeBetweenActions = 1000;
+const TimeBetweenActions = 600;
 
 export const resolver = async () => {
    await sleep(TimeBetweenActions);
@@ -61,6 +65,8 @@ const handleWeapon = async (w: Weapon) => {
          .weapons.find(e => e.id === id);
       const nextPos = getNextPos(weapon!.pos, weapon!.direction);
       await moveWeapon(weapon!, nextPos);
+      animeWeaponMove(weapon!, nextPos);
+      await sleep(310);
       if (
          nextPos.x > 10 ||
          nextPos.y > 10 ||
@@ -81,16 +87,18 @@ const handleWeapon = async (w: Weapon) => {
             kill(target.player!.id);
          });
          console.log('hit player', target.player);
+         removeWeapons(weaponsToRemove);
          break;
       }
       if (target.obs) {
          damageObstacle(target.obs.pos, 1);
          console.log('damaged obstacle', target.obs);
+         removeWeapons(weaponsToRemove);
          break;
       }
       if (target.weapon) {
          weaponsToRemove.push(target.weapon);
-         removeWeapons([target.weapon, weapon!]);
+         removeWeapons(weaponsToRemove);
          break;
       }
    }
@@ -100,6 +108,7 @@ const handleWeapon = async (w: Weapon) => {
 const resolveMovements = async () => {
    let alivePlayerCount = useMasterState.getState().players.length;
    const kill = useMasterState.getState().killPlayer;
+   const removeWeapons = useMasterState.getState().removeWeapons;
 
    // Main loop
    for (
@@ -126,7 +135,7 @@ const resolveMovements = async () => {
 
          const newPos = { ...player.pos };
          const moevement = getMovement(action, player.pos);
-         const weapons = useMasterState.getState().weapons
+         const weapons = useMasterState.getState().weapons;
 
          // DO NOT REMOVE THIS SLEEP OR YOU WILL FUCKED UP
          await sleep(1);
@@ -138,19 +147,25 @@ const resolveMovements = async () => {
             )
          ) {
             animatePlayerMovement(player, moevement);
-            
-         if (weaponOverlap(moevement, weapons)) {
-            await sleep(2000)
-            popPlayer(player);
-         }
+
+            const overlappingWeapon = weaponOverlap(
+               moevement,
+               weapons,
+            );
+            if (overlappingWeapon) {
+               await sleep(2000);
+               popPlayer(player);
+               removeWeapons([overlappingWeapon]);
+            }
          }
 
          // TIME BETWEEN ACTIONS SLEEP
          // UPDATE STATE AFTER ANIMATION
          await sleep(TimeBetweenActions);
-         
 
          switch (action) {
+            case Action.Nothing:
+               break;
             case Action.MoveUp:
                useMasterState.setState(state => {
                   newPos.y -= 1;
@@ -306,9 +321,9 @@ const resolveMovements = async () => {
          }
 
          if (weaponOverlap(moevement, weapons)) {
-            kill(player.id)
-            playerIndex--
-            alivePlayerCount--
+            kill(player.id);
+            playerIndex--;
+            alivePlayerCount--;
             break;
          }
       }
@@ -328,14 +343,14 @@ const resolveMovements = async () => {
    });
 };
 
-const getGridElementMoveFrom = (x: number, y: number) => {
+export const getGridElementMoveFrom = (x: number, y: number) => {
    // Get element to move from
    return document.querySelector(
       `.game-tile[data-x="${x}"][data-y="${y}"]`,
    ) as HTMLElement | null;
 };
 
-const getGridElementMoveTo = (x: number, y: number) => {
+export const getGridElementMoveTo = (x: number, y: number) => {
    // Get element to move to
    return document.querySelector(
       `.game-tile[data-x="${x}"][data-y="${y}"]`,
