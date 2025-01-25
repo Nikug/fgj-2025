@@ -4,9 +4,9 @@ import { shuffleList } from '../random';
 import { sleep } from '../sleep';
 import { Action, GamePhase, Player, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
-import { oob, playerOverlap } from './notUtils';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
-import { getFromPos, getNextPos, getTarget } from '../aleksi/aleksi';
+import { oob, playerOverlap, weaponOverlap } from './notUtils';
+import { getFromPos, getNextPos} from '../aleksi/aleksi';
 
 const TimeBetweenActions = 1000;
 
@@ -82,7 +82,8 @@ const handleWeapon = async (w: Weapon) => {
 };
 
 const resolveMovements = async () => {
-   const alivePlayerCount = useMasterState.getState().players.length;
+   let alivePlayerCount = useMasterState.getState().players.length;
+   const kill = useMasterState.getState().killPlayer;
 
    // Main loop
    for (
@@ -109,6 +110,7 @@ const resolveMovements = async () => {
 
          const newPos = { ...player.pos };
          const moevement = getMovement(action, player.pos);
+         const weapons = useMasterState.getState().weapons
 
          // DO NOT REMOVE THIS SLEEP OR YOU WILL FUCKED UP
          await sleep(1);
@@ -120,11 +122,17 @@ const resolveMovements = async () => {
             )
          ) {
             animatePlayerMovement(player, moevement);
+            
+         if (weaponOverlap(moevement, weapons)) {
+            await sleep(2000)
+            popPlayer(player);
+         }
          }
 
          // TIME BETWEEN ACTIONS SLEEP
          // UPDATE STATE AFTER ANIMATION
          await sleep(TimeBetweenActions);
+         
 
          switch (action) {
             case Action.MoveUp:
@@ -272,10 +280,28 @@ const resolveMovements = async () => {
             default:
                window.alert('what');
          }
+
+         if (weaponOverlap(moevement, weapons)) {
+            kill(player.id)
+            playerIndex--
+            alivePlayerCount--
+            break;
+         }
       }
    }
 
    await sleep(TimeBetweenActions);
+
+   useMasterState.setState(state => {
+      state.gamePhase = GamePhase.Planning;
+      state.players = state.players.map(player => ({
+         ...player,
+         queueueueueuedActions: [],
+      }));
+      state.players = shuffleList(state.players);
+      state.playerOrder = state.players.map(p => p.id);
+      state.playerTurn = state.players[0].id;
+   });
 };
 
 const getGridElementMoveFrom = (x: number, y: number) => {

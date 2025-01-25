@@ -1,8 +1,12 @@
 import { randomInt } from '../random';
-import { Player, V2 } from '../types';
+import { Player, V2, Weapon } from '../types';
 
 export const playerOverlap = (pos: V2, players: Player[]) => {
    return players.some(p => p.pos.x === pos.x && p.pos.y === pos.y);
+};
+
+export const weaponOverlap = (pos: V2, weapons: Weapon[]) => {
+   return weapons.some(w => w.pos.x === pos.x && w.pos.y === pos.y);
 };
 
 export const randomPos = (cols: number, rows: number) => {
