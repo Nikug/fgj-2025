@@ -8,6 +8,7 @@ import { Obstacle } from './Obstacle';
 import { Sahuli } from './aleksi/aleksi';
 import { popPlayer } from './Vilperi';
 import { SelectMoves } from './SelectMoves';
+import { AnyWeapon } from './AnyWeapon';
 
 export const rows = 10;
 export const cols = 10;
@@ -55,9 +56,9 @@ function App() {
                      />
                   ))}
                   {tileWeapons.map(tileWeapon => (
-                     <Sahuli
+                     <AnyWeapon
                         key={tileWeapon.id}
-                        direction={tileWeapon.direction}
+                        weapon={tileWeapon}
                      />
                   ))}
                </div>,

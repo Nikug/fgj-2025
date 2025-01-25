@@ -7,6 +7,7 @@ import { useMasterState } from './MasterState';
 import { oob, playerOverlap } from './notUtils';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import { getFromPos, getNextPos, getTarget } from '../aleksi/aleksi';
+import { playerTypeToWeaponType } from '../superSecretFile';
 
 const TimeBetweenActions = 1000;
 
@@ -192,6 +193,8 @@ const resolveMovements = async () => {
                   id: id(),
                   pos: weaponPosUp,
                   direction: 'btt',
+                  playerId: player.id,
+                  type: playerTypeToWeaponType(player.mode),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponUp];
@@ -216,6 +219,8 @@ const resolveMovements = async () => {
                   id: id(),
                   pos: weaponPosDown,
                   direction: 'ttb',
+                  playerId: player.id,
+                  type: playerTypeToWeaponType(player.mode),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponDown];
@@ -240,6 +245,8 @@ const resolveMovements = async () => {
                   id: id(),
                   pos: weaponPosLeft,
                   direction: 'rtl',
+                  playerId: player.id,
+                  type: playerTypeToWeaponType(player.mode),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponLeft];
@@ -264,6 +271,8 @@ const resolveMovements = async () => {
                   id: id(),
                   pos: weaponPosRight,
                   direction: 'ltr',
+                  playerId: player.id,
+                  type: playerTypeToWeaponType(player.mode),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponRight];
