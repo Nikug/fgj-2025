@@ -134,6 +134,20 @@ export const useMasterState = create<MasterState>()(
       setGamePhase: phase =>
          set(state => {
             state.gamePhase = phase;
+
+            // Minor fixes
+            if (
+               phase === GamePhase.Planning &&
+               state.gamePhase === GamePhase.Action
+            ) {
+               const found = state.playerOrder.filter(id =>
+                  state.players.find(
+                     player => player.id === id && !player.isDead,
+                  ),
+               );
+               state.playerOrder = found;
+               state.playerTurn = state.playerOrder[0] ?? null;
+            }
          }),
       players: [],
       deadPlayers: [],
