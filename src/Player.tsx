@@ -173,20 +173,92 @@ const AIPlayerLogic = async () => {
 
    console.log(`Enemy players found: ${enemyPlayers.length}`);
 
-   // Utility functions
-   const isPositionValid = (pos: V2) =>
-      pos.x >= 0 &&
-      pos.y >= 0 &&
-      pos.x < cols &&
-      pos.y < rows &&
-      !hasObstacle(pos) &&
-      !enemyPlayers.some(
-         p => p.pos.x === pos.x && p.pos.y === pos.y,
-      ) &&
-      !state.weapons.some(
-         w => w.pos.x === pos.x && w.pos.y === pos.y,
-      );
+   const getPositionsOfOwnAttacks = (
+      initialPos: V2,
+      actions: Action[],
+   ): V2[] => {
+      const newPos = { ...initialPos };
+      let attackPosition = null;
+      const attackPositions = [];
 
+      for (const action of actions) {
+         switch (action) {
+            case Action.MoveUp:
+               newPos.y -= 1;
+               break;
+            case Action.MoveDown:
+               newPos.y += 1;
+               break;
+            case Action.MoveLeft:
+               newPos.x -= 1;
+               break;
+            case Action.MoveRight:
+               newPos.x += 1;
+               break;
+            case Action.AttackUp:
+               attackPosition = { ...newPos };
+               attackPosition.y -= 1;
+               attackPositions.push(attackPosition);
+               break;
+            case Action.AttackDown:
+               attackPosition = { ...newPos };
+               attackPosition.y += 1;
+               attackPositions.push(attackPosition);
+               break;
+            case Action.AttackLeft:
+               attackPosition = { ...newPos };
+               attackPosition.x -= 1;
+               attackPositions.push(attackPosition);
+               break;
+            case Action.AttackRight:
+               attackPosition = { ...newPos };
+               attackPosition.x += 1;
+               attackPositions.push(attackPosition);
+               break;
+            default:
+               break;
+         }
+      }
+
+      return attackPositions;
+   };
+
+   // Utility functions
+   const isPositionValid = (pos: V2) => {
+      const ownActions = getPositionsOfOwnAttacks(
+         activePlayer.pos,
+         activePlayer.queueueueueuedActions.concat(actions),
+      );
+      const allActions =
+         activePlayer.queueueueueuedActions.concat(actions);
+      console.log('isPositionValid', {
+         allActions,
+         ownActions,
+         pos,
+      });
+
+      // if (ownActions.length > 0) {
+      //    debugger;
+      //    const aaa = getPositionsOfOwnAttacks(
+      //       activePlayer.pos,
+      //       activePlayer.queueueueueuedActions.concat(actions),
+      //    );
+      // }
+      return (
+         pos.x >= 0 &&
+         pos.y >= 0 &&
+         pos.x < cols &&
+         pos.y < rows &&
+         !hasObstacle(pos) &&
+         !enemyPlayers.some(
+            p => p.pos.x === pos.x && p.pos.y === pos.y,
+         ) &&
+         !state.weapons.some(
+            w => w.pos.x === pos.x && w.pos.y === pos.y,
+         ) &&
+         !ownActions.some(a => a.x === pos.x && a.y === pos.y)
+      );
+   };
    console.log('Checking position validity...');
 
    const getDistance = (pos1: V2, pos2: V2) =>
@@ -277,13 +349,14 @@ const AIPlayerLogic = async () => {
       if (dx === 0 && dy === 1) return 'ttb';
       if (dx === 0 && dy === -1) return 'btt';
 
-      const attackActions = actions.filter(
-         action =>
-            action === Action.AttackLeft ||
-            action === Action.AttackRight ||
-            action === Action.AttackUp ||
-            action === Action.AttackDown,
-      );
+      const attackActions =
+         activePlayer.queueueueueuedActions.filter(
+            action =>
+               action === Action.AttackLeft ||
+               action === Action.AttackRight ||
+               action === Action.AttackUp ||
+               action === Action.AttackDown,
+         );
       if (
          attackActions.length < activePlayer.attacksPerTurn &&
          (actions.length === 4 || Math.random() < 0.2)
