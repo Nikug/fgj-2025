@@ -143,6 +143,8 @@ const resolveMovements = async () => {
          await sleep(TimeBetweenActions);
 
          switch (action) {
+            case Action.Nothing:
+               break;
             case Action.MoveUp:
                useMasterState.setState(state => {
                   newPos.y -= 1;

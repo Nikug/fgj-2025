@@ -45,6 +45,7 @@ export interface MasterState {
    setPlayerOrder: (ids: string[]) => void;
 
    actionsPerTurn: number;
+   actionActionsPerTurn: number;
    weaponMovePerTurn: number;
    moveWeapon: (weapon: Weapon, pos: V2) => Promise<void>;
    runActionPhase: () => Promise<void>;
@@ -98,6 +99,7 @@ export const useMasterState = create<MasterState>()(
          }),
       playerOrder: [],
       actionsPerTurn: 5,
+      actionActionsPerTurn: 1,
       weaponMovePerTurn: 3,
       setPlayerOrder: ids => set(() => ({ playerOrder: ids })),
       gamePhase: GamePhase.Planning,
@@ -137,8 +139,6 @@ export const useMasterState = create<MasterState>()(
             if (!p) return;
 
             state.waitingAction = newWaitingAction;
-
-            console.log('new actions', actions);
 
             p.queueueueueuedActions = [
                ...p.queueueueueuedActions,
