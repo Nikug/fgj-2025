@@ -35,16 +35,17 @@ export const resolver = async () => {
             useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
 
-         const weapons = useMasterState.getState().weapons
-
          const newPos = { ...player.pos };
+         const moevement = getMovement(action, player.pos)
 
          // DO NOT REMOVE THIS SLEEP OR YOU WILL FUCKED UP
          await sleep(1);
-         animatePlayerMovement(
-            player,
-            getMovement(action, player.pos),
-         );
+         if (!useMasterState.getState().hasObstacle(moevement) && !playerOverlap(moevement, useMasterState.getState().players)) {
+            animatePlayerMovement(
+               player,
+               moevement,
+            );
+         }
 
          // TIME BETWEEN ACTIONS SLEEP
          // UPDATE STATE AFTER ANIMATION
@@ -110,7 +111,7 @@ export const resolver = async () => {
          }
       }
    }
-
+   
    await sleep(TimeBetweenActions);
 
    useMasterState.setState(state => {
