@@ -1,0 +1,10 @@
+.star {
+	height: 100%;
+	width: 100%;
+}
+
+.star::before {
+	content: '⛧';
+	color: black;
+	font-size: 10vw;
+}
