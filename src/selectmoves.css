@@ -9,7 +9,7 @@
     container-name: sidebar;
 
     button {
-        padding: 1rem;
+        padding: 0.2rem 1rem;
         font-size: 1.5rem;
         border-radius: 8px;
         height: 100%;
@@ -18,6 +18,16 @@
         border: none;
         cursor: pointer;
         outline: none;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+
+        .move-icon {
+            font-size: 1.8rem;
+            padding: 0.5rem 0;
+            margin-right: 0.2rem;
+        }
 
         &:hover {
             background-color: #303030;

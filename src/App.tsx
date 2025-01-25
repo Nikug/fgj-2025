@@ -32,8 +32,6 @@ function App() {
    const actionActionsPerTurn = useMasterState(
       state => state.actionActionsPerTurn,
    );
-   const killPlayer = useMasterState(state => state.killPlayer);
-   console.log(gamePhase);
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
@@ -86,21 +84,48 @@ function App() {
       return <StartMenu changeScene={toggleScene} />;
    }
 
+   let bigText: string | React.ReactNode = '';
+   let titleText: string | React.ReactNode = '';
+   let smallText: string | React.ReactNode = '';
    const gameOver = players.length <= 1;
-   let instructionText = '';
+   const isPlanning = gamePhase === GamePhase.Planning;
 
    if (players.length === 1) {
-      instructionText = 'Game over! ' + players[0].name + ' won!';
+      bigText = 'Game over! ' + players[0].name + ' won!';
    } else if (players.length === 0) {
-      instructionText = 'Game over! No winners!';
+      bigText = 'Game over! No winners!';
    } else {
       switch (gamePhase) {
          case GamePhase.Planning:
-            instructionText =
-               'Plan your moves. Use the buttons below or use arow keys to move your bubble and b + arrow keys to shoot.';
+            titleText = (
+               <div className="player-turn-instructions">
+                  <span className="name">
+                     {playerTurn()?.name} has
+                  </span>
+                  <div className="actions-left">
+                     <span>
+                        {`${
+                           actionsPerTurn -
+                           (activePlayer()?.queueueueueuedActions
+                              .length ?? 0)
+                        }${' / '}${actionsPerTurn}${' moves left'}`}
+                     </span>
+                     <span>
+                        {`${
+                           actionActionsPerTurn -
+                           (activePlayer()?.queueueueueuedActions.filter(
+                              isAttack,
+                           ).length ?? 0)
+                        }${' / '}${actionActionsPerTurn}${' attacks left'}`}
+                     </span>
+                  </div>
+               </div>
+            );
+            smallText =
+               'ℹ️ Plan your moves. Use the buttons below or use arow keys to move your bubble and space + arrow keys to shoot. You have 5 moves in total and one of them can be an attack. All moves are executed when all players have planned their moves.';
             break;
          case GamePhase.Action:
-            instructionText = 'Watch the action!';
+            bigText = 'Watch the action!';
             break;
       }
    }
@@ -126,34 +151,24 @@ function App() {
                   ))}
                </div>
                <div className="phase-inner">
-                  {gamePhase === GamePhase.Planning && !gameOver && (
-                     <div className="phase-inner__player-name">
-                        <span>{playerTurn()?.name} has</span>
-                        <p>
-                           {`${
-                              actionsPerTurn -
-                              (activePlayer()?.queueueueueuedActions
-                                 .length ?? 0)
-                           }${' / '}${actionsPerTurn}${' moves left'}`}
-                        </p>
-                        <p>
-                           {`${
-                              actionActionsPerTurn -
-                              (activePlayer()?.queueueueueuedActions.filter(
-                                 isAttack,
-                              ).length ?? 0)
-                           }${' / '}${actionActionsPerTurn}${' attacks left'}`}
-                        </p>
+                  {bigText && (
+                     <div className="phase-inner__big-text">
+                        {bigText}
                      </div>
                   )}
-                  <div className="phase-inner__instructions">
-                     {instructionText}
-                  </div>
-                  {playerTurnId &&
-                     gamePhase === GamePhase.Planning &&
-                     !gameOver && (
-                        <SelectMoves playerId={playerTurnId} />
-                     )}
+                  {titleText && (
+                     <div className="phase-inner__player-name">
+                        {titleText}
+                     </div>
+                  )}
+                  {smallText && (
+                     <div className="phase-inner__instructions">
+                        {smallText}
+                     </div>
+                  )}
+                  {playerTurnId && isPlanning && !gameOver && (
+                     <SelectMoves playerId={playerTurnId} />
+                  )}
                </div>
             </div>
             <button
