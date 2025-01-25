@@ -116,6 +116,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                elementId: `player-element-${id()}`,
                isDead: false,
                attacksPerTurn: 1,
+               hasLazor: false,
             },
          ]);
          setPlayerMode(getRandomPlayerMode());
@@ -153,6 +154,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             isDead: false,
             isAI: true,
             attacksPerTurn: 1,
+            hasLazor: false,
          },
       ]);
    };

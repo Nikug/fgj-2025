@@ -277,7 +277,17 @@ const AIPlayerLogic = async () => {
       if (dx === 0 && dy === 1) return 'ttb';
       if (dx === 0 && dy === -1) return 'btt';
 
-      if (actions.length === 4 || Math.random() < 0.2) {
+      const attackActions = actions.filter(
+         action =>
+            action === Action.AttackLeft ||
+            action === Action.AttackRight ||
+            action === Action.AttackUp ||
+            action === Action.AttackDown,
+      );
+      if (
+         attackActions.length < activePlayer.attacksPerTurn &&
+         (actions.length === 4 || Math.random() < 0.2)
+      ) {
          const directions: Direction[] = [
             'ltr',
             'rtl',
