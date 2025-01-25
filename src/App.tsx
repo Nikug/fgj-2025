@@ -7,6 +7,7 @@ import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
 import { Sahuli } from './aleksi/aleksi';
 import { popPlayer } from './Vilperi';
+import { AbsoluteWrapper } from './AbsoluteWrapper';
 
 export const rows = 10;
 export const cols = 10;
@@ -24,17 +25,18 @@ function App() {
    const actionsPerTurn = useMasterState(
       state => state.actionsPerTurn,
    );
+   const killPlayer = useMasterState(state => state.killPlayer);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
-            const hasPlayer = players.find(
+            const tilePlayers = players.filter(
                player =>
                   player.pos.x === col && player.pos.y === row,
             );
             const obstacle = hasObstacle({ x: col, y: row });
-            const hasWeapon = weapons.find(
+            const tileWeapons = weapons.filter(
                weapon =>
                   weapon.pos.x === col && weapon.pos.y === row,
             );
@@ -46,12 +48,18 @@ function App() {
                   data-y={row}
                >
                   {obstacle && <Obstacle />}
-                  {hasPlayer && !obstacle && (
-                     <Player player={hasPlayer} />
-                  )}
-                  {hasWeapon && !obstacle && (
-                     <Sahuli direction={hasWeapon.direction} />
-                  )}
+                  {tilePlayers.map(tilePlayer => (
+                     <Player
+                        key={tilePlayer.id}
+                        player={tilePlayer}
+                     />
+                  ))}
+                  {tileWeapons.map(tileWeapon => (
+                     <Sahuli
+                        key={tileWeapon.id}
+                        direction={tileWeapon.direction}
+                     />
+                  ))}
                </div>,
             );
          }
@@ -82,8 +90,6 @@ function App() {
          instructionText = 'Watch the action!';
          break;
    }
-
-   console.log(playerTurn);
 
    return (
       <div className="container">
@@ -117,6 +123,19 @@ function App() {
                   </div>
                </div>
             </div>
+
+            {players.map((player, i) => (
+               <button
+                  key={player.id}
+                  onClick={() =>
+                     popPlayer(player, () => {
+                        killPlayer(player.id);
+                     })
+                  }
+               >
+                  Kill player {i + 1}
+               </button>
+            ))}
 
             <button
                className="back-to-menu-button"

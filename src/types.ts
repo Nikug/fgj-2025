@@ -26,6 +26,7 @@ export interface Player {
    id: string;
    queueueueueuedActions: Action[];
    elementId: string;
+   isDead: boolean;
 }
 
 export const enum Scene {
