@@ -57,7 +57,9 @@ export const getTarget = (
          break;
    }
    const collidables = filter(predicate, players, obstacles);
-   return collidables.reduce(ab);
+   return collidables.length > 0 ?
+         collidables.reduce(ab)
+      :  undefined;
 };
 
 const getBansqTranslate = (direction: Direction) => {
