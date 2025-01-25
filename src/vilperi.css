@@ -2,6 +2,7 @@
    height: 100%;
    width: 100%;
    border-radius: 50%;
+   position: relative;
 
    /* Bubble-like gradient */
    background: radial-gradient(
@@ -13,15 +14,7 @@
    );
 
    /* Player animation */
-   animation: bubbleIdle 2s ease-out infinite;
    will-change: transform;
-
-   /* Layout settings */
-   display: flex;
-   flex-direction: row;
-   align-items: end;
-   justify-content: end;
-   container-type: inline-size;
 }
 
 /* Small white reflection at the top of the model */
@@ -120,7 +113,57 @@
 .player-monkey {
 }
 
+/* Player Hand */
 .player-hand {
-   font-size: 60cqw;
-   margin: -5cqw;
+   position: absolute;
+   font-size: 50cqw;
+   bottom: 5%;
+   right: 5%;
+   margin: -10cqw;
+
+   /* Hand animation */
+   animation: handIdle 2s ease-in-out infinite;
+   will-change: transform;
+}
+
+@keyframes handIdle {
+   0% {
+      transform: translateY(0%);
+   }
+
+   66% {
+      transform: translateY(10%);
+   }
+
+   100% {
+      transform: translateY(0%);
+   }
+}
+
+.hand-idle-animation-1 {
+   animation-name: handIdle;
+   animation-duration: 2s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+}
+
+.hand-idle-animation-2 {
+   animation-name: handIdle;
+   animation-duration: 2.2s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+}
+
+.hand-idle-animation-3 {
+   animation-name: handIdle;
+   animation-duration: 1.8s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+}
+
+.hand-idle-animation-4 {
+   animation-name: handIdle;
+   animation-duration: 2.3s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
 }
