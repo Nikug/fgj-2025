@@ -38,8 +38,8 @@ export const useMasterState = create<MasterState>()(
                players = players.map(player => ({
                   ...player,
                   pos: {
-                     x: randomInt(0, cols),
-                     y: randomInt(0, rows),
+                     x: randomInt(0, cols - 1),
+                     y: randomInt(0, rows - 1),
                   },
                }));
             }
