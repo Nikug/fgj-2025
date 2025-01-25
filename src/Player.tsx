@@ -2,7 +2,6 @@ import { forwardRef, useEffect } from 'react';
 import {
    Player as PlayerType,
    PlayerModelType,
-   V2,
    Action,
 } from './types';
 import { playSound } from './audio';
@@ -11,31 +10,21 @@ import { useMasterState } from './states/MasterState';
 
 interface Props {
    player: PlayerType;
-   setPosition: (newPos: V2) => void;
-   queueueuAction: (actions: Action[]) => void;
 }
-
-const loopBounds = (width: number, height: number, pos: V2) => {
-   if (pos.x < 0) pos.x = width - 1;
-   if (pos.y < 0) pos.y = height - 1;
-   if (pos.x >= width) pos.x = 0;
-   if (pos.y >= height) pos.y = 0;
-   return pos;
-};
 
 export const Player = forwardRef<HTMLDivElement | null, Props>(
    (props, ref) => {
-      const { player, queueueuAction } = props;
+      const { player } = props;
       const playerTurn = useMasterState(state => state.playerTurn);
+      const qAction = useMasterState(state => state.queueueueAction);
 
       useEffect(() => {
          const handleKeyDown = (e: KeyboardEvent) => {
             if (playerTurn !== player.id) return;
 
-            const { pos, queueueueueuedActions } = player;
+            const { pos } = player;
             const newPos = { ...pos };
-            const newQueueueueueueueueueudActions =
-               queueueueueuedActions.slice();
+            const newQueueueueueueueueueudActions: Action[] = [];
             if (e.key === 'ArrowUp') {
                newPos.y -= 1;
                newQueueueueueueueueueudActions.push(Action.MoveUp);
@@ -59,7 +48,7 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
                newQueueueueueueueueueudActions.push(Action.Attack);
             }
 
-            queueueuAction(newQueueueueueueueueueudActions);
+            qAction(player.id, newQueueueueueueueueueudActions);
          };
 
          addEventListener('keydown', handleKeyDown);

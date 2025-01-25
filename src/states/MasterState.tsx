@@ -78,7 +78,9 @@ export const useMasterState = create<MasterState>()(
             }
          }),
       attaaak: (id, pos) => {
-         console.log("very cool logic for weapon spawning and stuff")
+         console.log(
+            'very cool logic for weapon spawning and stuff',
+         );
       },
       runActionPhase: async () => {
          await resolver();
