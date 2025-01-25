@@ -44,32 +44,32 @@ export function SelectMoves({ playerId }: SelectMovesProps) {
          <div className="select-moves__buttons">
             <ArrowKeyLayout>
                <button onClick={() => handleMove(Action.MoveUp)}>
-                  ⬆️ Move Up
+                  <span className="move-icon">⬆️</span> Move Up
                </button>
                <button onClick={() => handleMove(Action.MoveLeft)}>
-                  ⬅️ Move Left
+                  <span className="move-icon">⬅️</span> Move Left
                </button>
                <button onClick={() => handleMove(Action.MoveDown)}>
-                  ⬇️ Move Down
+                  <span className="move-icon">⬇️</span> Move Down
                </button>
                <button onClick={() => handleMove(Action.MoveRight)}>
-                  ➡️ Move Right
+                  <span className="move-icon">➡️</span> Move Right
                </button>
             </ArrowKeyLayout>
             <ArrowKeyLayout>
                <button onClick={() => handleMove(Action.AttackUp)}>
-                  ✊ Attack up
+                  <span className="move-icon">✊</span> Attack Up
                </button>
                <button onClick={() => handleMove(Action.AttackLeft)}>
-                  🤛 Attack left
+                  <span className="move-icon">🤛</span> Attack Left
                </button>
                <button onClick={() => handleMove(Action.AttackDown)}>
-                  👊 Attack down
+                  <span className="move-icon">👊</span> Attack Down
                </button>
                <button
                   onClick={() => handleMove(Action.AttackRight)}
                >
-                  🤜 Attack right
+                  <span className="move-icon">🤜</span> Attack Right
                </button>
             </ArrowKeyLayout>
          </div>
