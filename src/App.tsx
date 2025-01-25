@@ -20,6 +20,7 @@ function App() {
    const players = useMasterState(state => state.players);
    const deadPlayers = useMasterState(state => state.deadPlayers);
    const weapons = useMasterState(state => state.weapons);
+   const powers = useMasterState(state => state.powers);
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
    const playerTurnId = useMasterState(state => state.playerTurn);
@@ -47,6 +48,10 @@ function App() {
                weapon =>
                   weapon.pos.x === col && weapon.pos.y === row,
             );
+            const tilePowers = powers.filter(
+               power =>
+                  power.pos.x === col && power.pos.y === row,
+            );
             grid.push(
                <div
                   className="game-tile"
@@ -66,6 +71,9 @@ function App() {
                         key={tileWeapon.id}
                         weapon={tileWeapon}
                      />
+                  ))}
+                  {tilePowers.map(tilePower => (
+                     <div key={tilePower.id}>{tilePower.type}</div> //TODO: add poweeeeeeer
                   ))}
                </div>,
             );

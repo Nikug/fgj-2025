@@ -16,6 +16,17 @@ export const enum Action {
    Nothing,
 }
 
+export const enum PowerUp {
+   PlusOne,
+   Lazor,
+}
+
+export interface UnlimitedPoweeer {
+   id: string,
+   type: PowerUp;
+   pos: V2;
+}
+
 export interface Weapon {
    id: string;
    pos: V2;
@@ -32,6 +43,7 @@ export interface Player {
    id: string;
    queueueueueuedActions: Action[];
    elementId: string;
+   hasLazor: boolean;
    isDead: boolean;
    isAI?: boolean;
    attacksPerTurn: number;
@@ -66,4 +78,5 @@ export const enum WeaponType {
    Sahuli,
    Bansq,
    Star,
+   Lazor,
 }
