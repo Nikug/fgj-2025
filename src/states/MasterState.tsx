@@ -15,6 +15,7 @@ export interface MasterState {
    players: Player[];
    setPlayers: (players: Player[]) => void;
    movePlayer: (id: string, pos: V2) => void;
+   attaaak: (id: string, pos: V2) => void;
    queueueueAction: (id: string, actions: Action[]) => void;
 
    playerTurn: string | null;
@@ -76,7 +77,9 @@ export const useMasterState = create<MasterState>()(
                p.pos = pos;
             }
          }),
-
+      attaaak: (id, pos) => {
+         console.log("very cool logic for weapon spawning and stuff")
+      },
       runActionPhase: async () => {
          await resolver();
       },

@@ -1,4 +1,5 @@
 import { cols, rows } from '../App';
+import { id } from '../id';
 import { shuffleList } from '../random';
 import { sleep } from '../sleep';
 import { Action, GamePhase } from '../types';
@@ -62,6 +63,12 @@ export const resolver = async () => {
                   if (newPos.x >= cols) newPos.x = cols - 1;
                   state.players[playerIndex].pos = newPos;
                });
+               break;
+            case Action.Attack:
+               console.log(player.id + " attaaaaaaaaak");
+               useMasterState.setState(state => {
+                  state.attaaak(player.id, player.pos)
+               })
                break;
             default:
                window.alert('what');
