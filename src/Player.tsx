@@ -148,7 +148,6 @@ const AIPlayerLogic = async () => {
 
    const {
       players,
-      obstacles,
       hasObstacle,
       queueueueAction,
       actionsPerTurn,

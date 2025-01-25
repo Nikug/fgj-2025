@@ -6,11 +6,7 @@ import { Action, GamePhase, Player, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import { oob, playerOverlap, weaponOverlap } from './notUtils';
-import {
-   animeWeaponMove,
-   getFromPos,
-   getNextPos,
-} from '../aleksi/aleksi';
+import { animeWeaponMove, getNextPos } from '../aleksi/aleksi';
 import { playerTypeToWeaponType } from '../superSecretFile';
 
 const TimeBetweenActions = 600;
@@ -37,32 +33,34 @@ export const resolver = async () => {
 
 const resolveProjectiles = async () => {
    let weapons = useMasterState.getState().weapons;
+   const checkedWeapons: Weapon[] = [];
    while (weapons.length > 0) {
       const nextWeapon = weapons[0];
-      const weaponsToRemove = await handleWeapon(nextWeapon);
+      await handleWeapon(nextWeapon);
+      checkedWeapons.push(nextWeapon);
 
-      weapons = weapons.filter(
-         w => !weaponsToRemove.find(e => e.id == w.id),
-      );
+      weapons = useMasterState
+         .getState()
+         .weapons.filter(
+            w => !checkedWeapons.find(e => e.id == w.id),
+         );
    }
 };
 
 const handleWeapon = async (w: Weapon) => {
-   const obstacles = useMasterState.getState().obstacles;
-   const players = useMasterState.getState().players;
+   const moveWeapon = useMasterState.getState().moveWeapon;
    const weaponDistance =
       useMasterState.getState().weaponMovePerTurn;
-   const damageObstacle = useMasterState.getState().damageObstacle;
-   const kill = useMasterState.getState().killPlayer;
-   const moveWeapon = useMasterState.getState().moveWeapon;
-   const removeWeapons = useMasterState.getState().removeWeapons;
-   const allWeapons = useMasterState.getState().weapons;
+   const handleWeaponPos = useMasterState.getState().checkWeaponPos;
    const id = w.id;
-   let weaponsToRemove = [w];
+   handleWeaponPos(w);
    for (let i = 0; i < weaponDistance; i++) {
       const weapon = useMasterState
          .getState()
          .weapons.find(e => e.id === id);
+      if (!weapon) {
+         return;
+      }
       const nextPos = getNextPos(weapon!.pos, weapon!.direction);
       await moveWeapon(weapon!, nextPos);
       animeWeaponMove(weapon!, nextPos);
@@ -75,34 +73,8 @@ const handleWeapon = async (w: Weapon) => {
       ) {
          break;
       }
-      const target = getFromPos(
-         nextPos,
-         obstacles,
-         players,
-         allWeapons,
-      );
-
-      if (target.player) {
-         popPlayer(target.player, () => {
-            kill(target.player!.id);
-         });
-         console.log('hit player', target.player);
-         removeWeapons(weaponsToRemove);
-         break;
-      }
-      if (target.obs) {
-         damageObstacle(target.obs.pos, 1);
-         console.log('damaged obstacle', target.obs);
-         removeWeapons(weaponsToRemove);
-         break;
-      }
-      if (target.weapon) {
-         weaponsToRemove.push(target.weapon);
-         removeWeapons(weaponsToRemove);
-         break;
-      }
+      handleWeaponPos(weapon!);
    }
-   return weaponsToRemove;
 };
 
 const resolveMovements = async () => {
@@ -289,6 +261,7 @@ const resolveMovements = async () => {
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponLeft];
                });
+
                break;
             case Action.AttackRight:
                const weaponPosRight: V2 = {

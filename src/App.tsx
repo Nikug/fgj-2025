@@ -5,7 +5,6 @@ import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
-import { popPlayer } from './Vilperi';
 import { SelectMoves } from './SelectMoves';
 import { AnyWeapon } from './AnyWeapon';
 import { isAttack } from './superSecretFile';
@@ -30,7 +29,6 @@ function App() {
    const actionActionsPerTurn = useMasterState(
       state => state.actionActionsPerTurn,
    );
-   const killPlayer = useMasterState(state => state.killPlayer);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];

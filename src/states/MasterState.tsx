@@ -16,6 +16,8 @@ import { playerOverlap, randomPos } from './notUtils';
 import { obstacleList } from '../map';
 import { playSound, startGameMusic, stopGameMusic } from '../audio';
 import { isAttack } from '../superSecretFile';
+import { getFromPos } from '../aleksi/aleksi';
+import { popPlayer } from '../Vilperi';
 
 export interface MasterState {
    scene: Scene;
@@ -57,6 +59,7 @@ export interface MasterState {
    waitingAction: boolean;
    setWaitingAction: (wait: boolean) => void;
    removeWeapons: (weapons: Weapon[]) => void;
+   checkWeaponPos: (weapon: Weapon) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -150,7 +153,10 @@ export const useMasterState = create<MasterState>()(
                p.queueueueueuedActions.some(isAttack);
 
             let newAction = actions[0];
-            if (isAttackAction && alreadyDoneAttack) {
+            if (
+               (isAttackAction && alreadyDoneAttack) ||
+               newAction == null
+            ) {
                newAction = Action.Nothing;
             }
 
@@ -188,6 +194,40 @@ export const useMasterState = create<MasterState>()(
             });
             resolve();
          });
+      },
+      checkWeaponPos: w => {
+         const obstacles = get().obstacles;
+         const players = get().players;
+         const damageObstacle = get().damageObstacle;
+         const kill = get().killPlayer;
+         const removeWeapons = get().removeWeapons;
+         const allWeapons = get().weapons;
+
+         const target = getFromPos(
+            w,
+            obstacles,
+            players,
+            allWeapons,
+         );
+
+         if (target.player) {
+            popPlayer(target.player, () => {
+               kill(target.player!.id);
+            });
+            console.log('hit player', target.player);
+            removeWeapons([w]);
+            return;
+         }
+         if (target.obs) {
+            damageObstacle(target.obs.pos, 1);
+            console.log('damaged obstacle', target.obs);
+            removeWeapons([w]);
+            return;
+         }
+         if (target.weapon) {
+            removeWeapons([w, target.weapon]);
+            return;
+         }
       },
 
       obstacles: obstacleList(),
