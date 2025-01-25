@@ -198,7 +198,10 @@ export const useMasterState = create<MasterState>()(
             const newPlayers: Player[] = [];
             for (const player of state.players) {
                if (player.id === id) {
-                  state.deadPlayers.push(player);
+                  state.deadPlayers.push({
+                     ...player,
+                     isDead: true,
+                  });
                } else {
                   newPlayers.push(player);
                }

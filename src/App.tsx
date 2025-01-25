@@ -17,6 +17,7 @@ function App() {
    const scene = useMasterState(state => state.scene);
    const setScene = useMasterState(state => state.setScene);
    const players = useMasterState(state => state.players);
+   const deadPlayers = useMasterState(state => state.deadPlayers);
    const weapons = useMasterState(state => state.weapons);
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
@@ -104,7 +105,7 @@ function App() {
          <div className="sidebar">
             <div className="phase">
                <div className="players">
-                  {players.map(player => (
+                  {players.concat(deadPlayers ?? []).map(player => (
                      <Avatar
                         key={player.id}
                         player={player}
@@ -136,20 +137,6 @@ function App() {
                      )}
                </div>
             </div>
-
-            {players.map((player, i) => (
-               <button
-                  key={player.id}
-                  onClick={() =>
-                     popPlayer(player, () => {
-                        killPlayer(player.id);
-                     })
-                  }
-               >
-                  Kill player {i + 1}
-               </button>
-            ))}
-
             <button
                className="back-to-menu-button"
                onClick={toggleScene}
