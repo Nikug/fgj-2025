@@ -24,6 +24,7 @@ function App() {
    const actionsPerTurn = useMasterState(
       state => state.actionsPerTurn,
    );
+   const killPlayer = useMasterState(state => state.killPlayer);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -115,6 +116,19 @@ function App() {
                   </div>
                </div>
             </div>
+
+            {players.map((player, i) => (
+               <button
+                  key={player.id}
+                  onClick={() =>
+                     popPlayer(player, () => {
+                        killPlayer(player.id);
+                     })
+                  }
+               >
+                  Kill player {i + 1}
+               </button>
+            ))}
 
             <button
                className="back-to-menu-button"
