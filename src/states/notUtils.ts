@@ -1,5 +1,5 @@
 import { randomInt } from '../random';
-import { Player, V2, Weapon } from '../types';
+import { Player, PowerUp, V2, Weapon } from '../types';
 
 export const playerOverlap = (pos: V2, players: Player[]) => {
    return players.some(p => p.pos.x === pos.x && p.pos.y === pos.y);
@@ -19,3 +19,11 @@ export const randomPos = (cols: number, rows: number) => {
 export const oob = (pos: V2, cols: number, rows: number) => {
    return pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows;
 };
+
+const poverUppsies = [
+   PowerUp.Lazor,
+   PowerUp.PlusOne
+];
+
+export const getRandomPoveeeeer = () =>
+   poverUppsies[Math.floor(Math.random() * poverUppsies.length)];

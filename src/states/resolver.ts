@@ -5,7 +5,7 @@ import { sleep } from '../sleep';
 import { Action, GamePhase, Player, PowerUp, UnlimitedPoweeer, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
-import { oob, playerOverlap, randomPos, weaponOverlap } from './notUtils';
+import { getRandomPoveeeeer, oob, playerOverlap, randomPos, weaponOverlap } from './notUtils';
 import { animeWeaponMove, getNextPos } from '../aleksi/aleksi';
 import { playerTypeToWeaponType } from '../superSecretFile';
 import { playSound } from '../audio';
@@ -323,7 +323,7 @@ const resolveMovements = async () => {
    useMasterState.setState(state => {
       const newPower: UnlimitedPoweeer = {
          id: id(),
-         type: PowerUp.PlusOne,
+         type: getRandomPoveeeeer(),
          pos: randomPos(cols, rows)
       }
       state.gamePhase = GamePhase.Planning;
