@@ -7,7 +7,7 @@ type AvatarProps = {
 };
 
 export function Avatar({ player }: AvatarProps) {
-   const { name, mode } = player;
+   const { name, mode, queueueueueuedActions } = player;
 
    return (
       <div>
@@ -16,6 +16,7 @@ export function Avatar({ player }: AvatarProps) {
                {mapPlayerModeToEmoji(mode)}
             </div>
             <div className="avatar__name">{name}</div>
+            <div>{queueueueueuedActions}</div>
          </div>
       </div>
    );
