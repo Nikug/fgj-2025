@@ -5,7 +5,11 @@ import {
    useState,
 } from 'react';
 import App from './App';
-import { Player as PlayerType, PlayerModelType } from './types';
+import {
+   Player as PlayerType,
+   PlayerModelType,
+   PowerUp,
+} from './types';
 import { pastellivärit } from './startmenu/StartMenu';
 import { Aleksi } from './aleksi/aleksi';
 import { id } from './id';
@@ -57,13 +61,8 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
    },
 );
 
-export enum PowerUpModels {
-   PlusOne,
-   Laser,
-}
-
 interface PowerUpModelProps {
-   model: PowerUpModels;
+   model: PowerUp;
 }
 
 export const PowerUpModel = forwardRef<
@@ -73,8 +72,8 @@ export const PowerUpModel = forwardRef<
    const { model } = props;
 
    const content = {
-      [PowerUpModels.PlusOne]: '+1',
-      [PowerUpModels.Laser]: '🔫',
+      [PowerUp.PlusOne]: '+1',
+      [PowerUp.Lazor]: '🔫',
    }[model];
 
    return (
@@ -157,13 +156,13 @@ export const getPlayerClassNames = (
    }`;
 };
 
-export const getPowerUpClassNames = (model: PowerUpModels) => {
+export const getPowerUpClassNames = (model: PowerUp) => {
    let modelClassName;
    switch (model) {
-      case PowerUpModels.PlusOne:
+      case PowerUp.PlusOne:
          modelClassName = 'power-up-plus-one';
          break;
-      case PowerUpModels.Laser:
+      case PowerUp.Lazor:
          modelClassName = 'power-up-laser';
          break;
    }
@@ -299,24 +298,24 @@ export const Vilperi = () => {
          </VilperiRow>
          <VilperiRow>
             <VilperiBox size="small">
-               <PowerUpModel model={PowerUpModels.PlusOne} />
+               <PowerUpModel model={PowerUp.PlusOne} />
             </VilperiBox>
             <VilperiBox size="medium">
-               <PowerUpModel model={PowerUpModels.PlusOne} />
+               <PowerUpModel model={PowerUp.PlusOne} />
             </VilperiBox>
             <VilperiBox size="large">
-               <PowerUpModel model={PowerUpModels.PlusOne} />
+               <PowerUpModel model={PowerUp.PlusOne} />
             </VilperiBox>
          </VilperiRow>
          <VilperiRow>
             <VilperiBox size="small">
-               <PowerUpModel model={PowerUpModels.Laser} />
+               <PowerUpModel model={PowerUp.Lazor} />
             </VilperiBox>
             <VilperiBox size="medium">
-               <PowerUpModel model={PowerUpModels.Laser} />
+               <PowerUpModel model={PowerUp.Lazor} />
             </VilperiBox>
             <VilperiBox size="large">
-               <PowerUpModel model={PowerUpModels.Laser} />
+               <PowerUpModel model={PowerUp.Lazor} />
             </VilperiBox>
          </VilperiRow>
          <VilperiGrid />
