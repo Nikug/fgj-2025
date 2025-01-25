@@ -63,16 +63,10 @@ function App() {
 
    return (
       <div className="container">
-         <div style={{ padding: '1rem' }}>
-            <button onClick={toggleScene}>
-               Back to start screen
-            </button>
-         </div>
-         {gamePhase === GamePhase.Planning && (
-            <>
+         <div className="sidebar">
+            {gamePhase === GamePhase.Planning && (
                <div className="phase">
                   <div className="players">
-                     Players:
                      {players.map(player => (
                         <Avatar key={player.id} player={player} />
                      ))}
@@ -83,8 +77,12 @@ function App() {
                   </div>
                   <div className="placeholder">placeholder</div>
                </div>
-            </>
-         )}
+            )}
+
+            <button onClick={toggleScene}>
+               Back to start screen
+            </button>
+         </div>
          <div className="game-container">
             <div
                className="game-grid"
