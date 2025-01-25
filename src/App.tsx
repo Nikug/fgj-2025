@@ -177,19 +177,6 @@ function App() {
                      />
                   ))}
                </div>
-
-               <button
-                  onClick={() => {
-                     const player = activePlayer();
-
-                     if (!player) {
-                        return;
-                     }
-                     addAttack(player);
-                  }}
-               >
-                  Give me an extra attack
-               </button>
                <div className="phase-inner">
                   {bigText && (
                      <div className="phase-inner__big-text">
