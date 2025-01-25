@@ -80,16 +80,23 @@ function App() {
       return <StartMenu changeScene={toggleScene} />;
    }
 
+   const gameOver = players.length <= 1;
    let instructionText = '';
 
-   switch (gamePhase) {
-      case GamePhase.Planning:
-         instructionText =
-            'Plan your moves. Use the buttons below or use arow keys to move your bubble and b + arrow keys to shoot.';
-         break;
-      case GamePhase.Action:
-         instructionText = 'Watch the action!';
-         break;
+   if (players.length === 1) {
+      instructionText = 'Game over! ' + players[0].name + ' won!';
+   } else if (players.length === 0) {
+      instructionText = 'Game over! No winners!';
+   } else {
+      switch (gamePhase) {
+         case GamePhase.Planning:
+            instructionText =
+               'Plan your moves. Use the buttons below or use arow keys to move your bubble and b + arrow keys to shoot.';
+            break;
+         case GamePhase.Action:
+            instructionText = 'Watch the action!';
+            break;
+      }
    }
 
    return (
@@ -106,7 +113,7 @@ function App() {
                   ))}
                </div>
                <div className="phase-inner">
-                  {gamePhase === GamePhase.Planning && (
+                  {gamePhase === GamePhase.Planning && !gameOver && (
                      <div className="phase-inner__player-name">
                         <span>{playerTurn()?.name}</span>
                         <span>
@@ -123,7 +130,8 @@ function App() {
                      {instructionText}
                   </div>
                   {playerTurnId &&
-                     gamePhase === GamePhase.Planning && (
+                     gamePhase === GamePhase.Planning &&
+                     !gameOver && (
                         <SelectMoves playerId={playerTurnId} />
                      )}
                </div>
