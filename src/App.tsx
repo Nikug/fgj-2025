@@ -16,9 +16,10 @@ function App() {
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
    const hasObstacle = useMasterState(state => state.hasObstacle);
-   const obstacles = useMasterState(state => state.obstacles);
-
-   console.log(obstacles);
+   const activePlayer = useMasterState(state => state.activePlayer);
+   const actionsPerTurn = useMasterState(
+      state => state.actionsPerTurn,
+   );
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -67,8 +68,15 @@ function App() {
                   <div className="phase-inner">
                      <p>It is planning my dudes</p>
                      <p>Turn: {playerTurn()?.name}</p>
+                     <p>
+                        Movement:{' '}
+                        {
+                           activePlayer()?.queueueueueuedActions
+                              .length
+                        }
+                        /{actionsPerTurn}
+                     </p>
                   </div>
-                  <div className="placeholder">placeholder</div>
                </div>
             )}
 

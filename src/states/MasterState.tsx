@@ -31,6 +31,7 @@ export interface MasterState {
    createAttaaak: (pos: V2, direction: Direction) => void;
 
    playerTurn: string | null;
+   activePlayer: () => Player | null;
    setPlayerTurn: (id: string) => void;
    getPlayerTurn: () => Player | null;
 
@@ -78,6 +79,8 @@ export const useMasterState = create<MasterState>()(
       setGamePhase: phase => set(() => ({ phase })),
       players: [],
       playerTurn: null,
+      activePlayer: () =>
+         get().players.find(p => p.id === get().playerTurn) ?? null,
       setPlayerTurn: id => set(() => ({ playerTurn: id })),
       getPlayerTurn: () => {
          const players = get().players;
