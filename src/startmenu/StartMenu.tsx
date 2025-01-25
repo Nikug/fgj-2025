@@ -100,17 +100,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
          <div className="star-name__title">BUBBLE BLAST</div>
          <div className="start-menu__top-section">
             <div className="add-player">
-               <div className="add-player__label">Add players</div>
-               <input
-                  className="player-name-input"
-                  placeholder="Press Enter to add"
-                  autoFocus
-                  value={name}
-                  onChange={playerNameChanged}
-                  onKeyDown={e =>
-                     e.key === 'Enter' ? addPlayer() : null
-                  }
-               ></input>
+               <div className="add-player__label">Choose class</div>
                <div className="player-modes">
                   {playerModes.map(mode => (
                      <button
@@ -125,6 +115,17 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                      </button>
                   ))}
                </div>
+               <div className="add-player__label">Add players</div>
+               <input
+                  className="player-name-input"
+                  placeholder="Press Enter to add"
+                  autoFocus
+                  value={name}
+                  onChange={playerNameChanged}
+                  onKeyDown={e =>
+                     e.key === 'Enter' ? addPlayer() : null
+                  }
+               ></input>
             </div>
             <button
                className="start-button"
