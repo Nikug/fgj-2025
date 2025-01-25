@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import './startmenu.css';
 import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
@@ -36,6 +36,7 @@ type StartMenuProps = {
 };
 
 export function StartMenu({ changeScene }: StartMenuProps) {
+   const nameInput = useRef<any>(null);
    const [colors] = useState(
       pastellivärit.sort(() => Math.random() - 0.5),
    );
@@ -60,6 +61,11 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    ) => {
       const name = event.target.value;
       setName(name);
+   };
+
+   const selectPlayerMode = (mode: PlayerModelType) => {
+      setPlayerMode(mode);
+      nameInput.current?.focus();
    };
 
    const addPlayer = () => {
@@ -109,14 +115,15 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                            (mode === playerMode ? 'selected' : '')
                         }
                         key={mode}
-                        onClick={() => setPlayerMode(mode)}
+                        onClick={() => selectPlayerMode(mode)}
                      >
                         {mapPlayerModeToEmoji(mode)}
                      </button>
                   ))}
                </div>
-               <div className="add-player__label">Add players</div>
+               <div className="add-player__label">Add player</div>
                <input
+                  ref={nameInput}
                   className="player-name-input"
                   placeholder="Press Enter to add"
                   autoFocus

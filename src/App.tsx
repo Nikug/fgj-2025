@@ -64,7 +64,9 @@ function App() {
    return (
       <div className="container">
          <div style={{ padding: '1rem' }}>
-            <button onClick={toggleScene}>toggle scene</button>
+            <button onClick={toggleScene}>
+               Back to start screen
+            </button>
          </div>
          {gamePhase === GamePhase.Planning && (
             <>
