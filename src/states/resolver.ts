@@ -7,6 +7,7 @@ import { useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import { oob, playerOverlap, weaponOverlap } from './notUtils';
 import { getFromPos, getNextPos} from '../aleksi/aleksi';
+import { playerTypeToWeaponType } from '../superSecretFile';
 
 const TimeBetweenActions = 1000;
 
@@ -31,9 +32,14 @@ export const resolver = async () => {
 };
 
 const resolveProjectiles = async () => {
-   const weapons = useMasterState.getState().weapons;
-   for (const weapon of weapons) {
-      await handleWeapon(weapon);
+   let weapons = useMasterState.getState().weapons;
+   while (weapons.length > 0) {
+      const nextWeapon = weapons[0];
+      const weaponsToRemove = await handleWeapon(nextWeapon);
+
+      weapons = weapons.filter(
+         w => !weaponsToRemove.find(e => e.id == w.id),
+      );
    }
 };
 
@@ -44,9 +50,11 @@ const handleWeapon = async (w: Weapon) => {
       useMasterState.getState().weaponMovePerTurn;
    const damageObstacle = useMasterState.getState().damageObstacle;
    const kill = useMasterState.getState().killPlayer;
-   const killAnime = useMasterState.getState().killPlayer;
    const moveWeapon = useMasterState.getState().moveWeapon;
+   const removeWeapons = useMasterState.getState().removeWeapons;
+   const allWeapons = useMasterState.getState().weapons;
    const id = w.id;
+   let weaponsToRemove = [w];
    for (let i = 0; i < weaponDistance; i++) {
       const weapon = useMasterState
          .getState()
@@ -59,13 +67,15 @@ const handleWeapon = async (w: Weapon) => {
          nextPos.x < 0 ||
          nextPos.y < 0
       ) {
-         console.log('hit wall');
          break;
       }
-      const target = getFromPos(nextPos, obstacles, players);
+      const target = getFromPos(
+         nextPos,
+         obstacles,
+         players,
+         allWeapons,
+      );
 
-      console.log(nextPos);
-      console.log(target);
       if (target.player) {
          popPlayer(target.player, () => {
             kill(target.player!.id);
@@ -78,7 +88,13 @@ const handleWeapon = async (w: Weapon) => {
          console.log('damaged obstacle', target.obs);
          break;
       }
+      if (target.weapon) {
+         weaponsToRemove.push(target.weapon);
+         removeWeapons([target.weapon, weapon!]);
+         break;
+      }
    }
+   return weaponsToRemove;
 };
 
 const resolveMovements = async () => {
@@ -200,6 +216,8 @@ const resolveMovements = async () => {
                   id: id(),
                   pos: weaponPosUp,
                   direction: 'btt',
+                  playerId: player.id,
+                  type: playerTypeToWeaponType(player.mode),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponUp];
@@ -224,6 +242,8 @@ const resolveMovements = async () => {
                   id: id(),
                   pos: weaponPosDown,
                   direction: 'ttb',
+                  playerId: player.id,
+                  type: playerTypeToWeaponType(player.mode),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponDown];
@@ -248,6 +268,8 @@ const resolveMovements = async () => {
                   id: id(),
                   pos: weaponPosLeft,
                   direction: 'rtl',
+                  playerId: player.id,
+                  type: playerTypeToWeaponType(player.mode),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponLeft];
@@ -272,6 +294,8 @@ const resolveMovements = async () => {
                   id: id(),
                   pos: weaponPosRight,
                   direction: 'ltr',
+                  playerId: player.id,
+                  type: playerTypeToWeaponType(player.mode),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponRight];

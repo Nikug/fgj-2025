@@ -1,87 +1,89 @@
 .proj-container {
-	height: 100%;
-	max-height: 100%;
-	max-width: 100%;
-	width: 100%;
-	container-type: inline-size;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  width: 100%;
+  container-type: inline-size;
 }
 
 .taikuloinen {
-	color: black;
-	font-size: 100cqw;
-	margin-top: -15cqw;
-	margin-left: -1cqw;
-	animation: dartulating 0.4s linear infinite;
+  color: black;
+  position: fixed;
+  font-size: 100cqw;
+  margin-top: -15cqw;
+  margin-left: -1cqw;
+  animation: dartulating 0.4s linear infinite;
 }
 
 .star {
-	color: black;
-	font-size: 130cqw;
-	margin-top: -55cqw;
-	margin-left: -1cqw;
-	animation: rotating 0.8s linear infinite;
+  color: black;
+  position: fixed;
+  font-size: 130cqw;
+  margin-top: -55cqw;
+  margin-left: -1cqw;
+  animation: rotating 0.8s linear infinite;
 }
 
 .bansq {
-	color: black;
-	font-size: 80cqw;
-	margin-left: 10cqw;
-	animation: dartulating 0.8s linear infinite;
+  color: black;
+  font-size: 80cqw;
+  position: fixed;
+  margin-left: 10cqw;
+  animation: dartulating 0.8s linear infinite;
 }
 
 .sahuli {
-
-	position: fixed;
-	color: black;
-	font-size: 80cqw;
-	margin-left: 10cqw;
-	animation: sahulating 0.3s linear infinite;
+  position: fixed;
+  color: black;
+  font-size: 80cqw;
+  margin-left: 10cqw;
+  animation: sahulating 0.3s linear infinite;
 }
 
 @keyframes dartulating {
-	0% {
-		transform: var(--tikka-translate) rotate(calc(var(--tikka-deg) - 0deg));
-	}
+  0% {
+    transform: var(--tikka-translate) rotate(calc(var(--tikka-deg) - 0deg));
+  }
 
-	25% {
-		transform: translate(0, 0) rotate(calc(var(--tikka-deg) - 10deg));
+  25% {
+    transform: translate(0, 0) rotate(calc(var(--tikka-deg) - 10deg));
 
-	}
+  }
 
-	50% {
-		transform: var(--tikka-translate-mid) rotate(calc(var(--tikka-deg) + 0deg));
-	}
+  50% {
+    transform: var(--tikka-translate-mid) rotate(calc(var(--tikka-deg) + 0deg));
+  }
 
-	75% {
-		transform: translate(0, 0) rotate(calc(var(--tikka-deg) + 10deg));
+  75% {
+    transform: translate(0, 0) rotate(calc(var(--tikka-deg) + 10deg));
 
-	}
+  }
 
-	100% {
-		transform: var(--tikka-translate) rotate(calc(var(--tikka-deg) - 0deg));
-	}
+  100% {
+    transform: var(--tikka-translate) rotate(calc(var(--tikka-deg) - 0deg));
+  }
 }
 
 @keyframes sahulating {
-	0% {
-		transform: rotate(calc(var(--sahuli-deg) - 20deg));
-	}
+  0% {
+    transform: rotate(calc(var(--sahuli-deg) - 20deg));
+  }
 
-	50% {
-		transform: rotate(calc(var(--sahuli-deg) + 20deg));
-	}
+  50% {
+    transform: rotate(calc(var(--sahuli-deg) + 20deg));
+  }
 
-	100% {
-		transform: rotate(calc(var(--sahuli-deg) - 20deg));
-	}
+  100% {
+    transform: rotate(calc(var(--sahuli-deg) - 20deg));
+  }
 }
 
 @keyframes rotating {
-	from {
-		transform: rotate(0deg);
-	}
+  from {
+    transform: rotate(0deg);
+  }
 
-	to {
-		transform: rotate(360deg);
-	}
+  to {
+    transform: rotate(360deg);
+  }
 }

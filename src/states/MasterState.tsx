@@ -56,6 +56,7 @@ export interface MasterState {
    killPlayer: (id: string) => void;
    waitingAction: boolean;
    setWaitingAction: (wait: boolean) => void;
+   removeWeapons: (weapons: Weapon[]) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -121,6 +122,13 @@ export const useMasterState = create<MasterState>()(
       runActionPhase: async () => {
          await resolver();
       },
+      removeWeapons: weapons => {
+         set(state => {
+            state.weapons = state.weapons.filter(
+               w => !weapons.find(e => e.id != w.id),
+            );
+         });
+      },
       queueueueAction: (id, actions, newWaitingAction) => {
          if (get().gamePhase !== GamePhase.Planning) return;
          set(state => {
@@ -169,7 +177,7 @@ export const useMasterState = create<MasterState>()(
          ),
       damageObstacle: (pos: V2, damage: number) =>
          set(state => {
-            state.obstacles = [];
+            const remainingObstacles: Obstacle[] = [];
             state.obstacles.forEach(obstacle => {
                if (
                   obstacle.pos.x === pos.x &&
@@ -177,10 +185,13 @@ export const useMasterState = create<MasterState>()(
                ) {
                   obstacle.health -= damage;
                   if (obstacle.health > 0) {
-                     state.obstacles.push(obstacle);
+                     remainingObstacles.push(obstacle);
                   }
-               } else state.obstacles.push(obstacle);
+               } else {
+                  remainingObstacles.push(obstacle);
+               }
             });
+            state.obstacles = remainingObstacles;
          }),
       killPlayer: id =>
          set(state => {

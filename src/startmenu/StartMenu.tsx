@@ -6,6 +6,8 @@ import { id } from '../id';
 import { PlayerModelType } from '../types';
 import menuSoundtrack from './../assets/whats_cooking_there.mp3';
 import { playSound } from '../audio';
+import { FloatingPlayerBubble } from '../Vilperi2';
+import '../vilperi2.css';
 
 const menuAudio = new Audio(menuSoundtrack);
 
@@ -164,6 +166,16 @@ export function StartMenu({ changeScene }: StartMenuProps) {
 
    return (
       <div className="start-menu">
+         {players.map((player, i) => (
+            <FloatingPlayerBubble
+               key={player.id}
+               model={player.mode}
+               color={player.color}
+               name={player.name}
+               dir={i % 2 === 0 ? 'right' : 'left'}
+               index={i}
+            />
+         ))}
          <div className="star-name__title">BUBBLE BLAST</div>
          <div className="start-menu__top-section">
             <div className="add-player">
