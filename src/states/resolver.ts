@@ -13,7 +13,11 @@ export const resolver = async () => {
    await sleep(TimeBetweenActions);
 
    useMasterState.setState(state => shuffleList(state.players));
-
+   await resolveMovements();
+   await resolveProjectiles();
+};
+const resolveProjectiles = async () => {};
+const resolveMovements = async () => {
    const alivePlayerCount = useMasterState.getState().players.length;
 
    // Main loop
