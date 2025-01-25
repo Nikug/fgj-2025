@@ -9,7 +9,6 @@ import { Player as PlayerType, PlayerModelType } from './types';
 import { pastellivärit } from './startmenu/StartMenu';
 import { Aleksi } from './aleksi/aleksi';
 import { id } from './id';
-import { Player } from './Player';
 import { playSound } from './audio';
 
 interface Props {
@@ -38,10 +37,9 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                height: '100%',
                containerType: 'inline-size',
                borderRadius: '4px',
-               outline:
-                  highlight ?
-                     '5px solid rgb(255, 0, 255)'
-                  :  undefined,
+               outline: highlight
+                  ? '5px solid rgb(255, 0, 255)'
+                  : undefined,
             }}
             ref={ref}
             id={id}
@@ -58,6 +56,49 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
       );
    },
 );
+
+export enum PowerUpModels {
+   PlusOne,
+   Laser,
+}
+
+interface PowerUpModelProps {
+   model: PowerUpModels;
+}
+
+export const PowerUpModel = forwardRef<
+   HTMLDivElement | null,
+   PowerUpModelProps
+>((props, ref) => {
+   const { model } = props;
+
+   const content = {
+      [PowerUpModels.PlusOne]: '+1',
+      [PowerUpModels.Laser]: '🔫',
+   }[model];
+
+   return (
+      <div
+         style={{
+            position: 'relative', // Ensure relative positioning for hand placement
+            display: 'flex',
+            width: '100%',
+            height: '100%',
+            containerType: 'inline-size',
+            justifyContent: 'center',
+            alignItems: 'center',
+         }}
+      >
+         <div
+            ref={ref}
+            className={getPowerUpClassNames(model)}
+         ></div>
+         <div className="power-up-icon bubble-idle-animation-1">
+            <p className="power-up-icon-inner">{content}</p>
+         </div>
+      </div>
+   );
+});
 
 interface PlayerHandsProps {
    model: PlayerModelType;
@@ -114,6 +155,20 @@ export const getPlayerClassNames = (
    return `player ${modelClassName} ${animationClassName} ${
       floating ? 'player-floating' : ''
    }`;
+};
+
+export const getPowerUpClassNames = (model: PowerUpModels) => {
+   let modelClassName;
+   switch (model) {
+      case PowerUpModels.PlusOne:
+         modelClassName = 'power-up-plus-one';
+         break;
+      case PowerUpModels.Laser:
+         modelClassName = 'power-up-laser';
+         break;
+   }
+
+   return `power-up bubble-idle-animation-1 ${modelClassName}`;
 };
 
 export const Router = () => {
@@ -242,20 +297,29 @@ export const Vilperi = () => {
                />
             </VilperiBox>
          </VilperiRow>
+         <VilperiRow>
+            <VilperiBox size="small">
+               <PowerUpModel model={PowerUpModels.PlusOne} />
+            </VilperiBox>
+            <VilperiBox size="medium">
+               <PowerUpModel model={PowerUpModels.PlusOne} />
+            </VilperiBox>
+            <VilperiBox size="large">
+               <PowerUpModel model={PowerUpModels.PlusOne} />
+            </VilperiBox>
+         </VilperiRow>
+         <VilperiRow>
+            <VilperiBox size="small">
+               <PowerUpModel model={PowerUpModels.Laser} />
+            </VilperiBox>
+            <VilperiBox size="medium">
+               <PowerUpModel model={PowerUpModels.Laser} />
+            </VilperiBox>
+            <VilperiBox size="large">
+               <PowerUpModel model={PowerUpModels.Laser} />
+            </VilperiBox>
+         </VilperiRow>
          <VilperiGrid />
-
-         <VilperiBox size="large">
-            {!playerPopped && <Player player={player} />}
-            <div style={{ padding: '2em' }}>
-               <button
-                  onClick={() =>
-                     popPlayer(player, () => setPlayerPopped(true))
-                  }
-               >
-                  Pop player
-               </button>
-            </div>
-         </VilperiBox>
       </div>
    );
 };
