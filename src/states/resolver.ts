@@ -2,10 +2,10 @@ import { cols, rows } from '../App';
 import { id } from '../id';
 import { shuffleList } from '../random';
 import { sleep } from '../sleep';
-import { Action, GamePhase, Player, V2, Weapon } from '../types';
+import { Action, GamePhase, Player, PowerUp, UnlimitedPoweeer, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
-import { oob, playerOverlap, weaponOverlap } from './notUtils';
+import { oob, playerOverlap, randomPos, weaponOverlap } from './notUtils';
 import { animeWeaponMove, getNextPos } from '../aleksi/aleksi';
 import { playerTypeToWeaponType } from '../superSecretFile';
 import { playSound } from '../audio';
@@ -104,8 +104,10 @@ const resolveMovements = async () => {
          const player =
             useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
+         const powers = useMasterState.getState().powers
 
          console.log('player actions', player.queueueueueuedActions);
+         console.log('powers', powers)
 
          const newPos = { ...player.pos };
          const moevement = getMovement(action, player.pos);
@@ -319,11 +321,17 @@ const resolveMovements = async () => {
    await sleep(TimeBetweenActions);
 
    useMasterState.setState(state => {
+      const newPower: UnlimitedPoweeer = {
+         id: id(),
+         type: PowerUp.PlusOne,
+         pos: randomPos(cols, rows)
+      }
       state.gamePhase = GamePhase.Planning;
       state.players = state.players.map(player => ({
          ...player,
          queueueueueuedActions: [],
       }));
+      state.powers = [...state.powers, newPower]
       state.players = shuffleList(state.players);
       state.playerOrder = state.players.map(p => p.id);
       state.playerTurn = state.players[0].id;

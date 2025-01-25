@@ -22,6 +22,7 @@ export const enum PowerUp {
 }
 
 export interface UnlimitedPoweeer {
+   id: string,
    type: PowerUp;
    pos: V2;
 }
