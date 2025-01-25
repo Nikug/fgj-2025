@@ -87,11 +87,13 @@ const handleWeapon = async (w: Weapon) => {
             kill(target.player!.id);
          });
          console.log('hit player', target.player);
+         removeWeapons(weaponsToRemove);
          break;
       }
       if (target.obs) {
          damageObstacle(target.obs.pos, 1);
          console.log('damaged obstacle', target.obs);
+         removeWeapons(weaponsToRemove);
          break;
       }
       if (target.weapon) {
@@ -106,6 +108,7 @@ const handleWeapon = async (w: Weapon) => {
 const resolveMovements = async () => {
    let alivePlayerCount = useMasterState.getState().players.length;
    const kill = useMasterState.getState().killPlayer;
+   const removeWeapons = useMasterState.getState().removeWeapons;
 
    // Main loop
    for (
@@ -145,9 +148,14 @@ const resolveMovements = async () => {
          ) {
             animatePlayerMovement(player, moevement);
 
-            if (weaponOverlap(moevement, weapons)) {
+            const overlappingWeapon = weaponOverlap(
+               moevement,
+               weapons,
+            );
+            if (overlappingWeapon) {
                await sleep(2000);
                popPlayer(player);
+               removeWeapons([overlappingWeapon]);
             }
          }
 
