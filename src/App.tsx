@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { StartMenu } from './startmenu/StartMenu';
 import { useMasterState } from './states/MasterState';
 import './App.css';
@@ -10,7 +9,8 @@ export const rows = 10;
 export const cols = 10;
 
 function App() {
-   const [scene, setScene] = useState<Scene>(Scene.StartMenu);
+   const scene = useMasterState(state => state.scene);
+   const setScene = useMasterState(state => state.setScene);
    const players = useMasterState(state => state.players);
    const movePlayer = useMasterState(state => state.movePlayer);
    const queueueuAction = useMasterState(
