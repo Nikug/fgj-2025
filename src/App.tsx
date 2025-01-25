@@ -5,10 +5,10 @@ import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
-import { Sahuli } from './aleksi/aleksi';
 import { popPlayer } from './Vilperi';
 import { SelectMoves } from './SelectMoves';
 import { AnyWeapon } from './AnyWeapon';
+import { isAttack } from './superSecretFile';
 
 export const rows = 10;
 export const cols = 10;
@@ -26,6 +26,9 @@ function App() {
    const activePlayer = useMasterState(state => state.activePlayer);
    const actionsPerTurn = useMasterState(
       state => state.actionsPerTurn,
+   );
+   const actionActionsPerTurn = useMasterState(
+      state => state.actionActionsPerTurn,
    );
    const killPlayer = useMasterState(state => state.killPlayer);
 
@@ -116,15 +119,17 @@ function App() {
                <div className="phase-inner">
                   {gamePhase === GamePhase.Planning && !gameOver && (
                      <div className="phase-inner__player-name">
-                        <span>{playerTurn()?.name}</span>
-                        <span>
-                           {` has 
-                           ${
+                        <span>{playerTurn()?.name} has</span>
+                        <p>
+                           {`${
                               actionsPerTurn -
                               (activePlayer()?.queueueueueuedActions
                                  .length ?? 0)
                            }${' / '}${actionsPerTurn}${' moves left'}`}
-                        </span>
+                        </p>
+                        <p>
+                           {`${actionActionsPerTurn - (activePlayer()?.queueueueueuedActions.filter(isAttack).length ?? 0)}${' / '}${actionActionsPerTurn}${' attacks left'}`}
+                        </p>
                      </div>
                   )}
                   <div className="phase-inner__instructions">
