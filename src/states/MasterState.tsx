@@ -150,7 +150,10 @@ export const useMasterState = create<MasterState>()(
                p.queueueueueuedActions.some(isAttack);
 
             let newAction = actions[0];
-            if (isAttackAction && alreadyDoneAttack) {
+            if (
+               (isAttackAction && alreadyDoneAttack) ||
+               newAction == null
+            ) {
                newAction = Action.Nothing;
             }
 
