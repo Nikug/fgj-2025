@@ -1,10 +1,16 @@
-import { forwardRef, PropsWithChildren, useRef } from 'react';
+import {
+   forwardRef,
+   PropsWithChildren,
+   useRef,
+   useState,
+} from 'react';
 import App from './App';
-import { PlayerModelType } from './types';
+import { Player as PlayerType, PlayerModelType } from './types';
 import { pastellivärit } from './startmenu/StartMenu';
 import { Aleksi } from './aleksi/aleksi';
 import { id } from './id';
 import { sleep } from './sleep';
+import { Player } from './Player';
 
 interface Props {
    model: PlayerModelType;
@@ -67,7 +73,10 @@ const PlayerHands = (props: PlayerHandsProps) => {
    }
 };
 
-const getPlayerClassNames = (model: PlayerModelType) => {
+const getPlayerClassNames = (
+   model: PlayerModelType,
+   animation: string = 'idle',
+) => {
    let modelClassName;
    switch (model) {
       case PlayerModelType.Monkey:
@@ -84,15 +93,21 @@ const getPlayerClassNames = (model: PlayerModelType) => {
          break;
    }
 
-   const randomAnimation = Math.ceil(Math.random() * 4);
-   let animation = `bubble-idle-animation-${randomAnimation}`;
+   let animationClassName;
+   switch (animation) {
+      case 'idle':
+         const randomAnimation = Math.ceil(Math.random() * 4);
+         animationClassName = `bubble-idle-animation-${randomAnimation}`;
+         break;
+      case 'pop':
+         animationClassName = `bubble-pop-animation`;
+         break;
+   }
 
-   return `player ${modelClassName} ${animation}`;
+   return `player ${modelClassName} ${animationClassName}`;
 };
 
 export const Router = () => {
-   console.log(location.pathname);
-
    if (location.pathname === '/vilperi') {
       return <Vilperi />;
    } else if (location.pathname == '/aleksi') {
@@ -103,6 +118,18 @@ export const Router = () => {
 };
 
 export const Vilperi = () => {
+   const player = {
+      name: 'Jaska',
+      mode: PlayerModelType.Monkey,
+      color: pastellivärit[5],
+      pos: { x: 0, y: 0 },
+      id: id(),
+      queueueueueuedActions: [],
+      elementId: `player-element-${id()}`,
+   };
+
+   const [playerPopped, setPlayerPopped] = useState(false);
+
    return (
       <div
          style={{
@@ -206,6 +233,19 @@ export const Vilperi = () => {
             </VilperiBox>
          </VilperiRow>
          <VilperiGrid />
+
+         <VilperiBox size="large">
+            {!playerPopped && <Player player={player} />}
+            <div style={{ padding: '2em' }}>
+               <button
+                  onClick={() =>
+                     popPlayer(player, () => setPlayerPopped(true))
+                  }
+               >
+                  Pop player
+               </button>
+            </div>
+         </VilperiBox>
       </div>
    );
 };
@@ -250,6 +290,47 @@ export const moveFromElementToElement = (
 
    elementToMove.addEventListener(
       'transitionend',
+      handleTransitionEnd,
+   );
+};
+
+/**
+ * Plays player pop animation and then returns to idle
+ * Can be removed after animation with afterPopFunc
+ * @param playerElement
+ * @param afterPopFunc
+ * @param animationDuration
+ *
+ */
+export const popPlayer = (
+   player: PlayerType,
+   afterPopFunc?: () => void,
+) => {
+   const playerElement = document.getElementById(player.elementId);
+   if (!playerElement) {
+      console.error(
+         'Could not play pop animation. Player element not found.',
+      );
+      return;
+   }
+   playerElement.className = getPlayerClassNames(player.mode, 'pop');
+
+   // Clean up after the animation
+   const handleTransitionEnd = () => {
+      playerElement.className = getPlayerClassNames(
+         player.mode,
+         'idle',
+      );
+
+      playerElement.removeEventListener(
+         'animationend',
+         handleTransitionEnd,
+      );
+      afterPopFunc && afterPopFunc();
+   };
+
+   playerElement.addEventListener(
+      'animationend',
       handleTransitionEnd,
    );
 };
