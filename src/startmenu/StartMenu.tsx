@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './startmenu.css';
 import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
@@ -67,6 +67,29 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       setPlayerMode(mode);
       nameInput.current?.focus();
    };
+
+   useEffect(() => {
+      // add two players for testing
+      setPlayers([
+         {
+            name: 'Jaska',
+            mode: PlayerModelType.Monkey,
+            color: colors[i],
+            pos: { x: 0, y: 0 },
+            id: id(),
+            queueueueueuedActions: [],
+         },
+         {
+            name: 'Kalle',
+            mode: PlayerModelType.Ninja,
+            color: colors[i + 1],
+            pos: { x: 0, y: 0 },
+            id: id(),
+            queueueueueuedActions: [],
+         },
+      ]);
+      setI(i + 2);
+   }, []);
 
    const addPlayer = () => {
       const nameExists = players.find(
