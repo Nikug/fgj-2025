@@ -25,14 +25,6 @@ interface TaikuloinenProps {
    id: string;
 }
 
-const filter = (
-   f: (e: Player | Obstacle) => boolean,
-   players: Player[],
-   obstacles: Obstacle[],
-) => {
-   return [...players.filter(f), ...obstacles.filter(f)];
-};
-
 export const getFromPos = (
    pos: V2,
    obstacles: Obstacle[],
