@@ -4,6 +4,8 @@ import waewae from './assets/waewae_waewae.mp3';
 import move from './assets/move.mp3';
 import attack from './assets/attack.mp3';
 import perkele from './assets/processed_perkele5.wav';
+import hit from './assets/hit.mp3';
+import projectile from './assets/projectile.mp3';
 
 const gameMusicAudio = new Audio(gameMusic);
 
@@ -19,6 +21,10 @@ const getSound = (name: string) => {
          return attack;
       case 'perkele':
          return perkele;
+      case 'hit':
+         return hit;
+      case 'projectile':
+         return projectile;
       default:
          return null;
    }

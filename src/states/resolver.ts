@@ -63,6 +63,7 @@ const handleWeapon = async (w: Weapon) => {
          return;
       }
       const nextPos = getNextPos(weapon!.pos, weapon!.direction);
+      playSound('projectile');
       await moveWeapon(weapon!, nextPos);
       animeWeaponMove(weapon!, nextPos);
       await sleep(310);

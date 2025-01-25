@@ -211,6 +211,7 @@ export const useMasterState = create<MasterState>()(
          );
 
          if (target.player) {
+            playSound('hit');
             popPlayer(target.player, () => {
                kill(target.player!.id);
             });
@@ -219,12 +220,14 @@ export const useMasterState = create<MasterState>()(
             return;
          }
          if (target.obs) {
+            playSound('hit');
             damageObstacle(target.obs.pos, 1);
             console.log('damaged obstacle', target.obs);
             removeWeapons([w]);
             return;
          }
          if (target.weapon) {
+            playSound('hit');
             removeWeapons([w, target.weapon]);
             return;
          }
