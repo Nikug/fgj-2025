@@ -33,6 +33,9 @@ export const resolver = async () => {
 
    useMasterState.setState(state => shuffleList(state.players));
    await resolveMovements();
+   useMasterState.setState(
+      state => (state.gamePhase = GamePhase.ActionAction),
+   );
    await resolveProjectiles();
 
    // Reset state back to planning
