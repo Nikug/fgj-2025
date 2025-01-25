@@ -158,7 +158,7 @@
 
 .bubble-pop-animation {
    animation-name: bubblePop;
-   animation-duration: 0.2s;
+   animation-duration: 0.5s;
    animation-timing-function: ease-out;
 }
 
@@ -168,7 +168,7 @@
    }
 
    100% {
-      transform: scaleX(2) scaleY(2);
+      transform: scaleX(1.3) scaleY(1.3);
    }
 }
 
@@ -178,9 +178,9 @@
 
    /* this sets the position and size of the pseudo-element */
    position: relative;
-   top: 2.5cqw;
-   left: calc(50% - 2.5cqw);
-   width: 5cqw;
+   top: 1cqw;
+   left: calc(50% - 1cqw);
+   width: 2cqw;
 
    height: 2px;
    background: black;
