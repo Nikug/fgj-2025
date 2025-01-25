@@ -98,6 +98,8 @@ export const useMasterState = create<MasterState>()(
                gamePhase: GamePhase.Planning,
                playerTurn: playerOrder[0] ?? null,
                weapons: [],
+               deadPlayers: [],
+               obstacles: obstacleList(),
             };
          }),
       playerOrder: [],
