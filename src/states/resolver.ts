@@ -96,10 +96,10 @@ const handleWeapon = async (w: Weapon) => {
       }
       if (target.weapon) {
          weaponsToRemove.push(target.weapon);
-         removeWeapons([target.weapon, weapon!]);
          break;
       }
    }
+   removeWeapons(weaponsToRemove);
    return weaponsToRemove;
 };
 

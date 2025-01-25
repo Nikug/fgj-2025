@@ -130,7 +130,7 @@ export const useMasterState = create<MasterState>()(
       removeWeapons: weapons => {
          set(state => {
             state.weapons = state.weapons.filter(
-               w => !weapons.find(e => e.id != w.id),
+               w => !weapons.find(e => e.id == w.id),
             );
          });
       },
