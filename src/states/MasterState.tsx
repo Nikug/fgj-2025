@@ -14,7 +14,7 @@ import { cols, rows } from '../App';
 import { resolver } from './resolver';
 import { playerOverlap, randomPos } from './notUtils';
 import { obstacleList } from '../map';
-import { startGameMusic, stopGameMusic } from '../audio';
+import { playSound, startGameMusic, stopGameMusic } from '../audio';
 import { isAttack } from '../superSecretFile';
 
 export interface MasterState {
@@ -98,6 +98,8 @@ export const useMasterState = create<MasterState>()(
                gamePhase: GamePhase.Planning,
                playerTurn: playerOrder[0] ?? null,
                weapons: [],
+               deadPlayers: [],
+               obstacles: obstacleList(),
             };
          }),
       playerOrder: [],
@@ -150,6 +152,12 @@ export const useMasterState = create<MasterState>()(
             let newAction = actions[0];
             if (isAttackAction && alreadyDoneAttack) {
                newAction = Action.Nothing;
+            }
+
+            if (isAttackAction) {
+               playSound('attack');
+            } else {
+               playSound('move');
             }
 
             p.queueueueueuedActions = [
