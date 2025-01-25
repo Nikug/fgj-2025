@@ -12,10 +12,6 @@ function App() {
    const scene = useMasterState(state => state.scene);
    const setScene = useMasterState(state => state.setScene);
    const players = useMasterState(state => state.players);
-   const movePlayer = useMasterState(state => state.movePlayer);
-   const queueueuAction = useMasterState(
-      state => state.queueueueAction,
-   );
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
 
@@ -29,17 +25,7 @@ function App() {
             );
             grid.push(
                <div className="game-tile" key={`${row} ${col}`}>
-                  {hasPlayer && (
-                     <Player
-                        player={hasPlayer}
-                        setPosition={pos =>
-                           movePlayer(hasPlayer.id, pos)
-                        }
-                        queueueuAction={actions =>
-                           queueueuAction(hasPlayer.id, actions)
-                        }
-                     />
-                  )}
+                  {hasPlayer && <Player player={hasPlayer} />}
                </div>,
             );
          }

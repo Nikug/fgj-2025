@@ -1,9 +1,9 @@
 import { cols, rows } from '../App';
-import { id } from '../id';
 import { shuffleList } from '../random';
 import { sleep } from '../sleep';
 import { Action, GamePhase } from '../types';
 import { useMasterState } from './MasterState';
+import { playerOverlap } from './notUtils';
 
 const TimeBetweenActions = 500;
 
@@ -40,28 +40,36 @@ export const resolver = async () => {
                useMasterState.setState(state => {
                   newPos.y -= 1;
                   if (newPos.y < 0) newPos.y = 0;
-                  state.players[playerIndex].pos = newPos;
+                  if (!playerOverlap(newPos, state.players)) {
+                     state.players[playerIndex].pos = newPos;
+                  }
                });
                break;
             case Action.MoveDown:
                useMasterState.setState(state => {
                   newPos.y += 1;
                   if (newPos.y >= rows) newPos.y = rows - 1;
-                  state.players[playerIndex].pos = newPos;
+                  if (!playerOverlap(newPos, state.players)) {
+                     state.players[playerIndex].pos = newPos;
+                  }
                });
                break;
             case Action.MoveLeft:
                useMasterState.setState(state => {
                   newPos.x -= 1;
                   if (newPos.x < 0) newPos.x = 0;
-                  state.players[playerIndex].pos = newPos;
+                  if (!playerOverlap(newPos, state.players)) {
+                     state.players[playerIndex].pos = newPos;
+                  }
                });
                break;
             case Action.MoveRight:
                useMasterState.setState(state => {
                   newPos.x += 1;
                   if (newPos.x >= cols) newPos.x = cols - 1;
-                  state.players[playerIndex].pos = newPos;
+                  if (!playerOverlap(newPos, state.players)) {
+                     state.players[playerIndex].pos = newPos;
+                  }
                });
                break;
             case Action.Attack:
@@ -85,5 +93,8 @@ export const resolver = async () => {
          ...player,
          queueueueueuedActions: [],
       }));
+      state.players = shuffleList(state.players);
+      state.playerOrder = state.players.map(p => p.id);
+      state.playerTurn = state.players[0].id;
    });
 };
