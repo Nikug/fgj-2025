@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { forwardRef, useEffect } from 'react';
 import {
    Player as PlayerType,
    PlayerModelType,
@@ -23,51 +23,56 @@ const loopBounds = (width: number, height: number, pos: V2) => {
    return pos;
 };
 
-export const Player = (props: Props) => {
-   const { player, queueueuAction } = props;
-   const playerTurn = useMasterState(state => state.playerTurn);
+export const Player = forwardRef<HTMLDivElement | null, Props>(
+   (props, ref) => {
+      const { player, queueueuAction } = props;
+      const playerTurn = useMasterState(state => state.playerTurn);
 
-   useEffect(() => {
-      const handleKeyDown = (e: KeyboardEvent) => {
-         if (playerTurn !== player.id) return;
+      useEffect(() => {
+         const handleKeyDown = (e: KeyboardEvent) => {
+            if (playerTurn !== player.id) return;
 
-         const { pos, queueueueueuedActions } = player;
-         const newPos = { ...pos };
-         const newQueueueueueueueueueudActions =
-            queueueueueuedActions.slice();
-         if (e.key === 'ArrowUp') {
-            newPos.y -= 1;
-            newQueueueueueueueueueudActions.push(Action.MoveUp);
-         }
-         if (e.key === 'ArrowDown') {
-            newPos.y += 1;
-            newQueueueueueueueueueudActions.push(Action.MoveDown);
-         }
-         if (e.key === 'ArrowLeft') {
-            newPos.x -= 1;
-            newQueueueueueueueueueudActions.push(Action.MoveLeft);
-         }
-         if (e.key === 'ArrowRight') {
-            newPos.x += 1;
-            newQueueueueueueueueueudActions.push(Action.MoveRight);
-         }
-         if (e.key === ' ') playSound('bonk');
-         if (e.key === 'b') {
-            newQueueueueueueueueueudActions.push(Action.Attack);
-         }
+            const { pos, queueueueueuedActions } = player;
+            const newPos = { ...pos };
+            const newQueueueueueueueueueudActions =
+               queueueueueuedActions.slice();
+            if (e.key === 'ArrowUp') {
+               newPos.y -= 1;
+               newQueueueueueueueueueudActions.push(Action.MoveUp);
+            }
+            if (e.key === 'ArrowDown') {
+               newPos.y += 1;
+               newQueueueueueueueueueudActions.push(Action.MoveDown);
+            }
+            if (e.key === 'ArrowLeft') {
+               newPos.x -= 1;
+               newQueueueueueueueueueudActions.push(Action.MoveLeft);
+            }
+            if (e.key === 'ArrowRight') {
+               newPos.x += 1;
+               newQueueueueueueueueueudActions.push(
+                  Action.MoveRight,
+               );
+            }
+            if (e.key === ' ') playSound('bonk');
+            if (e.key === 'b') {
+               newQueueueueueueueueueudActions.push(Action.Attack);
+            }
 
-         queueueuAction(newQueueueueueueueueueudActions);
-      };
+            queueueuAction(newQueueueueueueueueueudActions);
+         };
 
-      addEventListener('keydown', handleKeyDown);
+         addEventListener('keydown', handleKeyDown);
 
-      return () => removeEventListener('keydown', handleKeyDown);
-   }, [player.pos, playerTurn]);
+         return () => removeEventListener('keydown', handleKeyDown);
+      }, [player.pos, playerTurn]);
 
-   return (
-      <PlayerModel
-         model={PlayerModelType.Monkey}
-         color={player.color}
-      />
-   );
-};
+      return (
+         <PlayerModel
+            ref={ref}
+            model={PlayerModelType.Monkey}
+            color={player.color}
+         />
+      );
+   },
+);
