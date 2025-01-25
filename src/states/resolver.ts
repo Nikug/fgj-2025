@@ -16,6 +16,18 @@ export const resolver = async () => {
    useMasterState.setState(state => shuffleList(state.players));
    await resolveMovements();
    await resolveProjectiles();
+
+   // Reset state back to planning
+   useMasterState.setState(state => {
+      state.gamePhase = GamePhase.Planning;
+      state.players = state.players.map(player => ({
+         ...player,
+         queueueueueuedActions: [],
+      }));
+      state.players = shuffleList(state.players);
+      state.playerOrder = state.players.map(p => p.id);
+      state.playerTurn = state.players[0].id;
+   });
 };
 
 const resolveProjectiles = async () => {
@@ -254,17 +266,6 @@ const resolveMovements = async () => {
    }
 
    await sleep(TimeBetweenActions);
-
-   useMasterState.setState(state => {
-      state.gamePhase = GamePhase.ActionAction;
-      state.players = state.players.map(player => ({
-         ...player,
-         queueueueueuedActions: [],
-      }));
-      state.players = shuffleList(state.players);
-      state.playerOrder = state.players.map(p => p.id);
-      state.playerTurn = state.players[0].id;
-   });
 };
 
 const getGridElementMoveFrom = (x: number, y: number) => {
