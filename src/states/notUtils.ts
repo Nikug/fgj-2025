@@ -11,3 +11,7 @@ export const randomPos = (cols: number, rows: number) => {
             y: randomInt(0, rows - 1),
          }
 }
+
+export const oob = (pos: V2, cols: number, rows: number) => {
+   return pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows;
+}
