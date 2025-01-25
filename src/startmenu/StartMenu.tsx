@@ -99,8 +99,10 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       <div className="start-menu">
          <div className="star-name__title">BUBBLE BLAST</div>
          <div className="add-player">
-            <p>Lisää pelaaja</p>
+            <div className="add-player__label">Add players</div>
             <input
+               className="player-name-input"
+               placeholder="Press Enter to add"
                autoFocus
                value={name}
                onChange={playerNameChanged}
@@ -123,7 +125,9 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                ))}
             </div>
          </div>
-         <button onClick={changeScene}>toggle scene</button>
+         <button className="start-button" onClick={changeScene}>
+            Start blasting 👉🔥🔥🚒
+         </button>
 
          <div className="start-menu__player-list">
             {players
