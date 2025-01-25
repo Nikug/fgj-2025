@@ -5,8 +5,8 @@ import { sleep } from '../sleep';
 import { Action, GamePhase, Player, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { oob, playerOverlap } from './notUtils';
-import { moveFromElementToElement } from '../Vilperi';
-import { getTarget } from '../aleksi/aleksi';
+import { moveFromElementToElement, popPlayer } from '../Vilperi';
+import { getFromPos, getNextPos, getTarget } from '../aleksi/aleksi';
 
 const TimeBetweenActions = 1000;
 
@@ -16,18 +16,71 @@ export const resolver = async () => {
    useMasterState.setState(state => shuffleList(state.players));
    await resolveMovements();
    await resolveProjectiles();
+
+   // Reset state back to planning
+   useMasterState.setState(state => {
+      state.gamePhase = GamePhase.Planning;
+      state.players = state.players.map(player => ({
+         ...player,
+         queueueueueuedActions: [],
+      }));
+      state.players = shuffleList(state.players);
+      state.playerOrder = state.players.map(p => p.id);
+      state.playerTurn = state.players[0].id;
+   });
 };
+
 const resolveProjectiles = async () => {
    const weapons = useMasterState.getState().weapons;
+   for (const weapon of weapons) {
+      await handleWeapon(weapon);
+   }
+};
+
+const handleWeapon = async (w: Weapon) => {
    const obstacles = useMasterState.getState().obstacles;
    const players = useMasterState.getState().players;
-   for (const { pos, direction } of weapons) {
-      const target = getTarget(pos, direction, obstacles, players);
-      if (target) {
-         console.log(target);
+   const weaponDistance =
+      useMasterState.getState().weaponMovePerTurn;
+   const damageObstacle = useMasterState.getState().damageObstacle;
+   const kill = useMasterState.getState().killPlayer;
+   const killAnime = useMasterState.getState().killPlayer;
+   const moveWeapon = useMasterState.getState().moveWeapon;
+   const id = w.id;
+   for (let i = 0; i < weaponDistance; i++) {
+      const weapon = useMasterState
+         .getState()
+         .weapons.find(e => e.id === id);
+      const nextPos = getNextPos(weapon!.pos, weapon!.direction);
+      await moveWeapon(weapon!, nextPos);
+      if (
+         nextPos.x > 10 ||
+         nextPos.y > 10 ||
+         nextPos.x < 0 ||
+         nextPos.y < 0
+      ) {
+         console.log('hit wall');
+         break;
+      }
+      const target = getFromPos(nextPos, obstacles, players);
+
+      console.log(nextPos);
+      console.log(target);
+      if (target.player) {
+         popPlayer(target.player, () => {
+            kill(target.player!.id);
+         });
+         console.log('hit player', target.player);
+         break;
+      }
+      if (target.obs) {
+         damageObstacle(target.obs.pos, 1);
+         console.log('damaged obstacle', target.obs);
+         break;
       }
    }
 };
+
 const resolveMovements = async () => {
    const alivePlayerCount = useMasterState.getState().players.length;
 
@@ -51,6 +104,8 @@ const resolveMovements = async () => {
          const player =
             useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
+
+         console.log('player actions', player.queueueueueuedActions);
 
          const newPos = { ...player.pos };
          const moevement = getMovement(action, player.pos);
@@ -221,17 +276,6 @@ const resolveMovements = async () => {
    }
 
    await sleep(TimeBetweenActions);
-
-   useMasterState.setState(state => {
-      state.gamePhase = GamePhase.ActionAction;
-      state.players = state.players.map(player => ({
-         ...player,
-         queueueueueuedActions: [],
-      }));
-      // state.players = shuffleList(state.players);
-      // state.playerOrder = state.players.map(p => p.id);
-      // state.playerTurn = state.players[0].id;
-   });
 };
 
 const getGridElementMoveFrom = (x: number, y: number) => {

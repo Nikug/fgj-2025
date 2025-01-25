@@ -1,6 +1,8 @@
 import bonk from './assets/bonk.mp3';
 import gameMusic from './assets/FGJ 2025.mp3';
 import waewae from './assets/waewae_waewae.mp3';
+import move from './assets/move.mp3';
+import attack from './assets/attack.mp3';
 
 const gameMusicAudio = new Audio(gameMusic);
 
@@ -10,6 +12,10 @@ const getSound = (name: string) => {
          return bonk;
       case 'wää':
          return waewae;
+      case 'move':
+         return move;
+      case 'attack':
+         return attack;
       default:
          return null;
    }

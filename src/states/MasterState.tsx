@@ -28,7 +28,11 @@ export interface MasterState {
    players: Player[];
    deadPlayers: Player[];
    setPlayers: (players: Player[]) => void;
-   queueueueAction: (id: string, actions: Action[]) => void;
+   queueueueAction: (
+      id: string,
+      actions: Action[],
+      newWaitingAction: boolean,
+   ) => void;
 
    weapons: Weapon[];
 
@@ -42,6 +46,7 @@ export interface MasterState {
 
    actionsPerTurn: number;
    weaponMovePerTurn: number;
+   moveWeapon: (weapon: Weapon, pos: V2) => Promise<void>;
    runActionPhase: () => Promise<void>;
 
    obstacles: Obstacle[];
@@ -108,17 +113,24 @@ export const useMasterState = create<MasterState>()(
          return players.find(e => e.id === turn) ?? null;
       },
       setPlayers: players =>
-         set(() => ({ players, playerTurn: players[0].id })),
+         set(() => ({
+            players,
+            playerTurn: players[0]?.id ?? null,
+         })),
       weapons: [],
       runActionPhase: async () => {
          await resolver();
       },
-      queueueueAction: (id, actions) => {
-         if (get().gamePhase === GamePhase.Action) return;
+      queueueueAction: (id, actions, newWaitingAction) => {
+         if (get().gamePhase !== GamePhase.Planning) return;
          set(state => {
             const p = state.players.find((e: any) => e.id == id);
 
             if (!p) return;
+
+            state.waitingAction = newWaitingAction;
+
+            console.log('new actions', actions);
 
             p.queueueueueuedActions = [
                ...p.queueueueueuedActions,
@@ -140,6 +152,16 @@ export const useMasterState = create<MasterState>()(
             get().runActionPhase();
          }
       },
+      moveWeapon: async (w, pos) => {
+         return new Promise(resolve => {
+            set(state => {
+               console.log('hahaa', pos);
+               state.weapons.find(e => e.id == w.id)!.pos = pos;
+            });
+            resolve();
+         });
+      },
+
       obstacles: obstacleList(),
       hasObstacle: (pos: V2) =>
          get().obstacles.some(

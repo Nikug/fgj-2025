@@ -111,6 +111,7 @@
 
    &.selected {
       background-color: lightgreen;
+
       &:hover {
          cursor: pointer;
          background-color: green;

@@ -3,9 +3,11 @@ import {
    Player as PlayerType,
    PlayerModelType,
    Action,
+   GamePhase,
 } from './types';
 import { PlayerModel } from './Vilperi';
 import { useMasterState } from './states/MasterState';
+import { playSound } from './audio';
 
 interface Props {
    player: PlayerType;
@@ -22,27 +24,34 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
       const setWaitingAction = useMasterState(
          state => state.setWaitingAction,
       );
+      const allowKeyboard =
+         useMasterState(state => state.gamePhase) ===
+         GamePhase.Planning;
 
       const isOwnTurn = player.id === playerTurn;
 
       useEffect(() => {
          const handleKeyDown = (e: KeyboardEvent) => {
             if (playerTurn !== player.id) return;
+            if (!allowKeyboard) return;
 
             const { pos } = player;
             const newPos = { ...pos };
             const newQueueueueueueueueueudActions: Action[] = [];
+            let newWaitingAction = waitingAction;
             if (e.key === 'ArrowUp') {
                if (waitingAction) {
                   newQueueueueueueueueueudActions.push(
                      Action.AttackUp,
                   );
-                  setWaitingAction(false);
+                  newWaitingAction = false;
+                  playSound('attack');
                } else {
                   newPos.y -= 1;
                   newQueueueueueueueueueudActions.push(
                      Action.MoveUp,
                   );
+                  playSound('move');
                }
             }
             if (e.key === 'ArrowDown') {
@@ -50,12 +59,14 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
                   newQueueueueueueueueueudActions.push(
                      Action.AttackDown,
                   );
-                  setWaitingAction(false);
+                  newWaitingAction = false;
+                  playSound('attack');
                } else {
                   newPos.y += 1;
                   newQueueueueueueueueueudActions.push(
                      Action.MoveDown,
                   );
+                  playSound('move');
                }
             }
             if (e.key === 'ArrowLeft') {
@@ -63,12 +74,14 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
                   newQueueueueueueueueueudActions.push(
                      Action.AttackLeft,
                   );
-                  setWaitingAction(false);
+                  newWaitingAction = false;
+                  playSound('attack');
                } else {
                   newPos.x -= 1;
                   newQueueueueueueueueueudActions.push(
                      Action.MoveLeft,
                   );
+                  playSound('move');
                }
             }
             if (e.key === 'ArrowRight') {
@@ -76,31 +89,39 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
                   newQueueueueueueueueueudActions.push(
                      Action.AttackRight,
                   );
-                  setWaitingAction(false);
+                  newWaitingAction = false;
+                  playSound('attack');
                } else {
                   newPos.x += 1;
                   newQueueueueueueueueueudActions.push(
                      Action.MoveRight,
                   );
+                  playSound('move');
                }
             }
-            if (e.key === ' ') {
+            if (e.key === ' ' || e.key === 'b' || e.key == 'B') {
+               e.preventDefault();
+               e.stopPropagation();
                setWaitingAction(true);
+            } else {
+               qAction(
+                  player.id,
+                  newQueueueueueueueueueudActions,
+                  newWaitingAction,
+               );
             }
-
-            qAction(player.id, newQueueueueueueueueueudActions);
          };
 
          addEventListener('keydown', handleKeyDown);
 
          return () => removeEventListener('keydown', handleKeyDown);
-      }, [player.pos, playerTurn]);
+      }, [player.pos, playerTurn, waitingAction, allowKeyboard]);
 
       return (
          <PlayerModel
             ref={ref}
             id={player.elementId}
-            model={PlayerModelType.Monkey}
+            model={player.mode}
             color={player.color}
             highlight={isOwnTurn}
          />
