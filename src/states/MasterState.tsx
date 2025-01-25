@@ -21,6 +21,8 @@ interface MasterState {
 
    playerOrder: string[];
    setPlayerOrder: (ids: string[]) => void;
+
+   actionsPerTurn: number;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -42,6 +44,7 @@ export const useMasterState = create<MasterState>()(
             };
          }),
       playerOrder: [],
+      actionsPerTurn: 5,
       setPlayerOrder: ids => set(() => ({ playerOrder: ids })),
       gamePhase: GamePhase.Planning,
       setGamePhase: phase => set(() => ({ phase })),
@@ -66,8 +69,24 @@ export const useMasterState = create<MasterState>()(
       queueueueAction: (id, actions) =>
          set(state => {
             const p = state.players.find((e: any) => e.id == id);
-            if (p) {
-               p.queueueueueuedActions = actions;
+
+            if (!p) return;
+
+            console.log(actions);
+
+            p.queueueueueuedActions = [
+               ...p.queueueueueuedActions,
+               ...actions,
+            ];
+            if (
+               p.queueueueueuedActions.length >= state.actionsPerTurn
+            ) {
+               const currentIndex = state.playerOrder.indexOf(
+                  state.playerTurn ?? state.playerOrder[0],
+               );
+               const nextTurn = state.playerOrder[currentIndex + 1];
+               if (nextTurn) state.playerTurn = nextTurn;
+               else state.gamePhase = GamePhase.Action;
             }
          }),
    })),

@@ -1,8 +1,13 @@
 import { useEffect } from 'react';
-import { Player as PlayerType, PlayerModelType, V2, Action } from './types';
-import { cols, rows } from './App';
+import {
+   Player as PlayerType,
+   PlayerModelType,
+   V2,
+   Action,
+} from './types';
 import { playSound } from './audio';
 import { PlayerModel } from './Vilperi';
+import { useMasterState } from './states/MasterState';
 
 interface Props {
    player: PlayerType;
@@ -19,13 +24,17 @@ const loopBounds = (width: number, height: number, pos: V2) => {
 };
 
 export const Player = (props: Props) => {
-   const { player, setPosition, queueueuAction } = props;
+   const { player, queueueuAction } = props;
+   const playerTurn = useMasterState(state => state.playerTurn);
 
    useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
-         const {pos, queueueueueuedActions} = player;
-         const newPos = {...pos}
-         const newQueueueueueueueueueudActions = queueueueueuedActions.slice()
+         if (playerTurn !== player.id) return;
+
+         const { pos, queueueueueuedActions } = player;
+         const newPos = { ...pos };
+         const newQueueueueueueueueueudActions =
+            queueueueueuedActions.slice();
          if (e.key === 'ArrowUp') {
             newPos.y -= 1;
             newQueueueueueueueueueudActions.push(Action.MoveUp);
@@ -48,14 +57,12 @@ export const Player = (props: Props) => {
          }
 
          queueueuAction(newQueueueueueueueueueudActions);
-         const looped = loopBounds(cols, rows, newPos);
-         setPosition(looped);
       };
 
       addEventListener('keydown', handleKeyDown);
 
       return () => removeEventListener('keydown', handleKeyDown);
-   }, [player.pos, setPosition]);
+   }, [player.pos, playerTurn]);
 
    return (
       <PlayerModel
