@@ -5,15 +5,15 @@ export interface V2 {
 
 export type Direction = 'ltr' | 'rtl' | 'ttb' | 'btt';
 export const enum Action {
-   MoveUp,
-   MoveDown,
-   MoveLeft,
-   MoveRight,
-   AttackUp,
-   AttackDown,
-   AttackLeft,
-   AttackRight,
-   Nothing,
+   MoveUp, // 0
+   MoveDown, // 1
+   MoveLeft, // 2
+   MoveRight, // 3
+   AttackUp, // 4
+   AttackDown, // 5
+   AttackLeft, // 6
+   AttackRight, // 7
+   Nothing, // 8
 }
 
 export const enum PowerUp {
