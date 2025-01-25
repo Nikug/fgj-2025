@@ -13,7 +13,7 @@ import {
    WeaponType,
 } from '../types';
 import {} from '../types';
-import { useMasterState } from './MasterState';
+import { MasterState, useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import {
    getRandomPoveeeeer,
@@ -171,6 +171,7 @@ const resolveMovements = async () => {
                   ) {
                      state.players[playerIndex].pos = newPos;
                   }
+                  checkPowerUpFromPos(player.id, newPos, state);
                });
                playSound('move');
                break;
@@ -184,6 +185,7 @@ const resolveMovements = async () => {
                   ) {
                      state.players[playerIndex].pos = newPos;
                   }
+                  checkPowerUpFromPos(player.id, newPos, state);
                });
                playSound('move');
                break;
@@ -197,6 +199,7 @@ const resolveMovements = async () => {
                   ) {
                      state.players[playerIndex].pos = newPos;
                   }
+                  checkPowerUpFromPos(player.id, newPos, state);
                });
                playSound('move');
                break;
@@ -210,6 +213,7 @@ const resolveMovements = async () => {
                   ) {
                      state.players[playerIndex].pos = newPos;
                   }
+                  checkPowerUpFromPos(player.id, newPos, state);
                });
                playSound('move');
                break;
@@ -399,6 +403,24 @@ const animatePlayerMovement = (
    }
 };
 
+const checkPowerUpFromPos = (
+   id: string,
+   pos: V2,
+   state: MasterState,
+) => {
+   const power = state.powers.find(
+      e => e.pos.x === pos.x && e.pos.y === pos.y,
+   );
+   if (power) {
+      if (power.type == PowerUp.Lazor) {
+         const p = state.players.find(e => e.id === id);
+         if (p) {
+            const i = state.players.indexOf(p);
+            state.players[i].hasLazor = true;
+         }
+      }
+   }
+};
 const getMovement = (
    action: Action,
    position: { x: number; y: number },
