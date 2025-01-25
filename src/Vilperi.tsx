@@ -16,11 +16,12 @@ interface Props {
    model: PlayerModelType;
    color?: string;
    id: string;
+   highlight?: boolean;
 }
 
 export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
    (props: Props, ref) => {
-      const { model, color, id } = props;
+      const { model, color, id, highlight } = props;
 
       const cssVars = {
          '--player-color': color,
@@ -36,6 +37,11 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                width: '100%',
                height: '100%',
                containerType: 'inline-size',
+               borderRadius: '4px',
+               outline:
+                  highlight ?
+                     '5px solid rgb(255, 0, 255)'
+                  :  undefined,
             }}
             ref={ref}
             id={id}
