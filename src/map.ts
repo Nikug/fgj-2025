@@ -14,12 +14,13 @@ export const obstacles = [
 ];
 
 export const obstacleList = (): Obstacle[] => {
+   const results: Obstacle[] = [];
    for (let y = 0; y < obstacles.length; y++) {
       for (let x = 0; x < obstacles[y].length; x++) {
          if (obstacles[y][x] === 'b') {
-            return [{ pos: { x: x, y: y }, health: 1 }];
+            results.push({ pos: { x: x, y: y }, health: 1 });
          }
       }
    }
-   return [];
+   return results;
 };

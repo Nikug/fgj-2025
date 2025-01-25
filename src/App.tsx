@@ -4,6 +4,7 @@ import './App.css';
 import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
+import { Obstacle } from './Obstacle';
 
 export const rows = 10;
 export const cols = 10;
@@ -14,6 +15,10 @@ function App() {
    const players = useMasterState(state => state.players);
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
+   const hasObstacle = useMasterState(state => state.hasObstacle);
+   const obstacles = useMasterState(state => state.obstacles);
+
+   console.log(obstacles);
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -23,9 +28,13 @@ function App() {
                player =>
                   player.pos.x === col && player.pos.y === row,
             );
+            const obstacle = hasObstacle({ x: col, y: row });
             grid.push(
                <div className="game-tile" key={`${row} ${col}`}>
-                  {hasPlayer && <Player player={hasPlayer} />}
+                  {obstacle && <Obstacle />}
+                  {hasPlayer && !obstacle && (
+                     <Player player={hasPlayer} />
+                  )}
                </div>,
             );
          }

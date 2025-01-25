@@ -3,7 +3,7 @@
   height: calc(100vh);
   overflow: hidden;
   background-image: url(https://images3.alphacoders.com/109/thumb-1920-109805.jpg);
-  background-size:cover;
+  background-size: cover;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -42,6 +42,12 @@
   width: 100%;
 
   border: 3px solid #ffffff57;
+}
+
+.obstacle {
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff57;
 }
 
 .game-tile:hover {
