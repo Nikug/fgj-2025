@@ -99,32 +99,32 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       };
    }, []);
 
-   useEffect(() => {
-      // add two players for testing
-      setPlayers([
-         {
-            name: 'Jaska',
-            mode: PlayerModelType.Monkey,
-            color: colors[i],
-            pos: { x: 0, y: 0 },
-            id: id(),
-            queueueueueuedActions: [],
-            elementId: `player-element-${id()}`,
-            isDead: false,
-         },
-         {
-            name: 'Kalle',
-            mode: PlayerModelType.Ninja,
-            color: colors[i + 1],
-            pos: { x: 0, y: 0 },
-            id: id(),
-            queueueueueuedActions: [],
-            elementId: `player-element-${id()}`,
-            isDead: false,
-         },
-      ]);
-      setI(i + 2);
-   }, []);
+   // useEffect(() => {
+   //    // add two players for testing
+   //    setPlayers([
+   //       {
+   //          name: 'Jaska',
+   //          mode: PlayerModelType.Monkey,
+   //          color: colors[i],
+   //          pos: { x: 0, y: 0 },
+   //          id: id(),
+   //          queueueueueuedActions: [],
+   //          elementId: `player-element-${id()}`,
+   //          isDead: false,
+   //       },
+   //       {
+   //          name: 'Kalle',
+   //          mode: PlayerModelType.Ninja,
+   //          color: colors[i + 1],
+   //          pos: { x: 0, y: 0 },
+   //          id: id(),
+   //          queueueueueuedActions: [],
+   //          elementId: `player-element-${id()}`,
+   //          isDead: false,
+   //       },
+   //    ]);
+   //    setI(i + 2);
+   // }, []);
 
    const addPlayer = () => {
       const nameExists = players.find(
