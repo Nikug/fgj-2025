@@ -16,24 +16,15 @@ export function PlayerListitem({
          className="player-list-item"
          style={{ backgroundColor: `rgb(${player.color})` }}
       >
-         <div
-            style={{
-               display: 'flex',
-               flexDirection: 'row',
-            }}
+         <div>{mapPlayerModeToEmoji(player.mode)}</div>
+         <div>{player.name}</div>
+         {player.isAI && <p className="player-list-label">AI</p>}
+         <button
+            onClick={() => removePlayer(player.name)}
+            className="player-list-item__remove"
          >
-            <div>{mapPlayerModeToEmoji(player.mode)}</div>
-            <div>{player.name}</div>
-            <button
-               onClick={() => removePlayer(player.name)}
-               className="player-list-item__remove"
-            >
-               ❌
-            </button>
-         </div>
-         <div>
-            <p className="player-list-label">Is AI</p>
-         </div>
+            ❌
+         </button>
       </div>
    );
 }

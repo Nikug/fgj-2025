@@ -1,5 +1,6 @@
 import { Player } from './types';
 import './avatar.css';
+import './startmenu/startmenu.css';
 import { mapPlayerModeToEmoji } from './startmenu/StartMenu';
 
 type AvatarProps = {
@@ -20,6 +21,7 @@ export function Avatar({ player, active }: AvatarProps) {
             {isDead ? '☠️' : mapPlayerModeToEmoji(mode)}
          </div>
          <div className="avatar__name">{name}</div>
+         {player.isAI && <p className="player-list-label">AI</p>}
          <div>{queueueueueuedActions.length}</div>
       </div>
    );
