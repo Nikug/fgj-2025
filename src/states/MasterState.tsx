@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { GamePhase, Player, V2, Action, Scene } from '../types';
 import { immer } from 'zustand/middleware/immer';
-import { shuffleList } from '../random';
+import { randomInt, shuffleList } from '../random';
+import { cols, rows } from '../App';
 
 interface MasterState {
    scene: Scene;
@@ -34,12 +35,20 @@ export const useMasterState = create<MasterState>()(
             let players: Player[] = [];
             if (scene === Scene.Game) {
                players = shuffleList(state.players);
+               players = players.map(player => ({
+                  ...player,
+                  pos: {
+                     x: randomInt(0, cols),
+                     y: randomInt(0, rows),
+                  },
+               }));
             }
             playerOrder = players.map(e => e.id);
             return {
                scene,
                playerOrder,
                players,
+               gamePhase: GamePhase.Planning,
                playerTurn: playerOrder[0] ?? null,
             };
          }),
