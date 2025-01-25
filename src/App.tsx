@@ -7,7 +7,6 @@ import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
 import { Sahuli } from './aleksi/aleksi';
 import { popPlayer } from './Vilperi';
-import { AbsoluteWrapper } from './AbsoluteWrapper';
 
 export const rows = 10;
 export const cols = 10;

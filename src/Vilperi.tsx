@@ -61,7 +61,7 @@ interface PlayerHandsProps {
    model: PlayerModelType;
 }
 
-const PlayerHands = (props: PlayerHandsProps) => {
+export const PlayerHands = (props: PlayerHandsProps) => {
    const { model } = props;
    const randomAnimation = Math.ceil(Math.random() * 4);
    let animation = `hand-idle-animation-${randomAnimation}`;
@@ -77,9 +77,10 @@ const PlayerHands = (props: PlayerHandsProps) => {
    }
 };
 
-const getPlayerClassNames = (
+export const getPlayerClassNames = (
    model: PlayerModelType,
    animation: string = 'idle',
+   floating: boolean = false,
 ) => {
    let modelClassName;
    switch (model) {
@@ -108,7 +109,9 @@ const getPlayerClassNames = (
          break;
    }
 
-   return `player ${modelClassName} ${animationClassName}`;
+   return `player ${modelClassName} ${animationClassName} ${
+      floating ? 'player-floating' : ''
+   }`;
 };
 
 export const Router = () => {
