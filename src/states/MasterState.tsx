@@ -1,9 +1,19 @@
 import { create } from 'zustand';
-import { GamePhase, Player, V2, Action, Scene, Weapon, Direction } from '../types';
+import {
+   GamePhase,
+   Player,
+   V2,
+   Action,
+   Scene,
+   Weapon,
+   Direction,
+   Obstacle,
+} from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { randomInt, shuffleList } from '../random';
 import { cols, rows } from '../App';
 import { resolver } from './resolver';
+import { obstacleList, obstacles } from '../map';
 
 export interface MasterState {
    scene: Scene;
@@ -16,7 +26,7 @@ export interface MasterState {
    setPlayers: (players: Player[]) => void;
    movePlayer: (id: string, pos: V2) => void;
    queueueueAction: (id: string, actions: Action[]) => void;
-   
+
    weapons: Weapon[];
    createAttaaak: (pos: V2, direction: Direction) => void;
 
@@ -29,6 +39,10 @@ export interface MasterState {
 
    actionsPerTurn: number;
    runActionPhase: () => Promise<void>;
+
+   obstacles: Obstacle[];
+   hasObstacle: (pos: V2) => boolean;
+   damageObstacle: (pos: V2, damage: number) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -81,7 +95,9 @@ export const useMasterState = create<MasterState>()(
          }),
       weapons: [],
       createAttaaak: (playerPos, direction) => {
-         console.log("very cool logic for weapon spawning and stuff")
+         console.log(
+            'very cool logic for weapon spawning and stuff',
+         );
       },
       runActionPhase: async () => {
          await resolver();
@@ -113,5 +129,25 @@ export const useMasterState = create<MasterState>()(
             get().runActionPhase();
          }
       },
+      obstacles: obstacleList(),
+      hasObstacle: (pos: V2) =>
+         get().obstacles.some(
+            ob => ob.pos.x === pos.x && ob.pos.y === pos.y,
+         ),
+      damageObstacle: (pos: V2, damage: number) =>
+         set(state => {
+            state.obstacles = [];
+            state.obstacles.forEach(obstacle => {
+               if (
+                  obstacle.pos.x === pos.x &&
+                  obstacle.pos.y === pos.y
+               ) {
+                  obstacle.health -= damage;
+                  if (obstacle.health > 0) {
+                     state.obstacles.push(obstacle);
+                  }
+               } else state.obstacles.push(obstacle);
+            });
+         }),
    })),
 );

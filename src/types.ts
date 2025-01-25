@@ -43,3 +43,8 @@ export const enum GamePhase {
    Planning,
    Action,
 }
+
+export type Obstacle = {
+   pos: V2;
+   health: number;
+};
