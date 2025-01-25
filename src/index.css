@@ -41,6 +41,10 @@ button {
   color: white;
   cursor: pointer;
   transition: border-color 0.25s;
+  
+  &:focus {
+    outline: 5px solid rgb(255, 0, 255);
+  }
 }
 
 button:hover {

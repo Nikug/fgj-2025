@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMasterState } from './states/MasterState';
 import { Action } from './types';
+import './selectmoves.css';
 
 type ArrowKeyLayoutProps = {
    children: [
@@ -13,15 +14,7 @@ type ArrowKeyLayoutProps = {
 
 function ArrowKeyLayout({ children }: ArrowKeyLayoutProps) {
    return (
-      // use grid layout to make the buttons align in a cross shape
-      <div
-         style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-            gridTemplateRows: '1fr 1fr 1fr',
-            gap: '0.5rem',
-         }}
-      >
+      <div className="arrow-key-layout">
          <div />
          {children[0]}
          <div />
@@ -47,9 +40,8 @@ export function SelectMoves({ playerId }: SelectMovesProps) {
    };
 
    return (
-      <div>
-         <div>Select moves</div>
-         <div>
+      <div className="select-moves">
+         <div className="select-moves__buttons">
             <ArrowKeyLayout>
                <button onClick={() => handleMove(Action.MoveUp)}>
                   Move Up
