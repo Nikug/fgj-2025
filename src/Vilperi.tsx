@@ -37,10 +37,9 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                height: '100%',
                containerType: 'inline-size',
                borderRadius: '4px',
-               outline:
-                  highlight ?
-                     '5px solid rgb(255, 0, 255)'
-                  :  undefined,
+               outline: highlight
+                  ? '5px solid rgb(255, 0, 255)'
+                  : undefined,
             }}
             ref={ref}
             id={id}
@@ -131,6 +130,7 @@ export const Vilperi = () => {
       id: id(),
       queueueueueuedActions: [],
       elementId: `player-element-${id()}`,
+      isDead: false,
    };
 
    const [playerPopped, setPlayerPopped] = useState(false);
