@@ -115,29 +115,39 @@ function App() {
                   ))}
                </div>
                <div className="phase-inner">
-                  {gamePhase === GamePhase.Planning && !gameOver && (
+                  {(gameOver || gamePhase === GamePhase.Action) && (
                      <div className="phase-inner__player-name">
-                        <span>{playerTurn()?.name} has</span>
-                        <p>
-                           {`${
-                              actionsPerTurn -
-                              (activePlayer()?.queueueueueuedActions
-                                 .length ?? 0)
-                           }${' / '}${actionsPerTurn}${' moves left'}`}
-                        </p>
-                        <p>
-                           {`${
-                              actionActionsPerTurn -
-                              (activePlayer()?.queueueueueuedActions.filter(
-                                 isAttack,
-                              ).length ?? 0)
-                           }${' / '}${actionActionsPerTurn}${' attacks left'}`}
-                        </p>
+                        {instructionText}
                      </div>
                   )}
-                  <div className="phase-inner__instructions">
-                     {instructionText}
-                  </div>
+                  {gamePhase === GamePhase.Planning &&
+                     !gameOver &&
+                     playerTurn()?.name && (
+                        <div className="phase-inner__player-name">
+                           <span>{playerTurn()?.name} has</span>
+                           <p>
+                              {`${
+                                 actionsPerTurn -
+                                 (activePlayer()
+                                    ?.queueueueueuedActions.length ??
+                                    0)
+                              }${' / '}${actionsPerTurn}${' moves left'}`}
+                           </p>
+                           <p>
+                              {`${
+                                 actionActionsPerTurn -
+                                 (activePlayer()?.queueueueueuedActions.filter(
+                                    isAttack,
+                                 ).length ?? 0)
+                              }${' / '}${actionActionsPerTurn}${' attacks left'}`}
+                           </p>
+                        </div>
+                     )}
+                  {!gameOver && gamePhase !== GamePhase.Action && (
+                     <div className="phase-inner__instructions">
+                        {instructionText}
+                     </div>
+                  )}
                   {playerTurnId &&
                      gamePhase === GamePhase.Planning &&
                      !gameOver && (
