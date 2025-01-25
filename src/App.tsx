@@ -65,9 +65,18 @@ function App() {
                )),
             );
 
+            children.push(
+               ...tilePowers.map(tilePower => (
+                  <PowerUpModel
+                     key={tilePower.id}
+                     model={tilePower.type}
+                  />
+               )),
+            );
+
             grid.push(
                <div
-                  className="game-tile"
+                  className={`game-tile ${children.length > 1 ? 'game-tile-multiple' : ''}`}
                   key={`${row} ${col}`}
                   data-x={col}
                   data-y={row}
@@ -79,14 +88,7 @@ function App() {
                >
                   {/* {`x: ${col}, y: ${row}`} */}
                   {obstacle && <Obstacle />}
-                  {}
-                  {}
-                  {tilePowers.map(tilePower => (
-                     <PowerUpModel
-                        key={tilePower.id}
-                        model={tilePower.type}
-                     />
-                  ))}
+                  {!obstacle && children}
                </div>,
             );
          }
