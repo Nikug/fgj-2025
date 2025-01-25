@@ -6,10 +6,7 @@ import { id } from '../id';
 import { PlayerModelType } from '../types';
 import menuSoundtrack from './../assets/whats_cooking_there.mp3';
 import { playSound } from '../audio';
-import {
-   FloatingPlayerBubble,
-   PlayerTurnBackdrop,
-} from '../Vilperi2';
+import { FloatingPlayerBubble } from '../Vilperi2';
 import '../vilperi2.css';
 import { Lore } from '../Lore';
 
