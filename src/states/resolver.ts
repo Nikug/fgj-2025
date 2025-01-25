@@ -192,7 +192,7 @@ const resolveMovements = async () => {
                });
                playSound('move');
                break;
-            case Action.AttackUp:
+            case Action.AttackUp: {
                const weaponPosUp: V2 = {
                   x: player.pos.x,
                   y: player.pos.y - 1,
@@ -217,7 +217,8 @@ const resolveMovements = async () => {
                });
                playSound('attack');
                break;
-            case Action.AttackDown:
+            }
+            case Action.AttackDown: {
                const weaponPosDown: V2 = {
                   x: player.pos.x,
                   y: player.pos.y + 1,
@@ -244,7 +245,8 @@ const resolveMovements = async () => {
                });
                playSound('attack');
                break;
-            case Action.AttackLeft:
+            }
+            case Action.AttackLeft: {
                const weaponPosLeft: V2 = {
                   x: player.pos.x - 1,
                   y: player.pos.y,
@@ -272,7 +274,8 @@ const resolveMovements = async () => {
 
                playSound('attack');
                break;
-            case Action.AttackRight:
+            }
+            case Action.AttackRight: {
                const weaponPosRight: V2 = {
                   x: player.pos.x + 1,
                   y: player.pos.y,
@@ -299,6 +302,7 @@ const resolveMovements = async () => {
                });
                playSound('attack');
                break;
+            }
             default:
                window.alert('what');
          }
