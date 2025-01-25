@@ -51,6 +51,22 @@ function App() {
             const tilePowers = powers.filter(
                power => power.pos.x === col && power.pos.y === row,
             );
+
+            const children: React.ReactNode[] = [];
+            children.push(
+               ...tilePlayers.map(tilePlayer => (
+                  <Player key={tilePlayer.id} player={tilePlayer} />
+               )),
+            );
+            children.push(
+               ...tileWeapons.map(tileWeapon => (
+                  <AnyWeapon
+                     key={tileWeapon.id}
+                     weapon={tileWeapon}
+                  />
+               )),
+            );
+
             grid.push(
                <div
                   className="game-tile"
@@ -65,18 +81,8 @@ function App() {
                >
                   {/* {`x: ${col}, y: ${row}`} */}
                   {obstacle && <Obstacle />}
-                  {tilePlayers.map(tilePlayer => (
-                     <Player
-                        key={tilePlayer.id}
-                        player={tilePlayer}
-                     />
-                  ))}
-                  {tileWeapons.map(tileWeapon => (
-                     <AnyWeapon
-                        key={tileWeapon.id}
-                        weapon={tileWeapon}
-                     />
-                  ))}
+                  {}
+                  {}
                   {tilePowers.map(tilePower => (
                      <div key={tilePower.id}>{tilePower.type}</div> //TODO: add poweeeeeeer
                   ))}
