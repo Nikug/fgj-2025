@@ -97,19 +97,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
 
    return (
       <div className="start-menu">
-         <div className="star-name__title">BUBBLE BABBLE</div>
-         <button onClick={changeScene}>toggle scene</button>
-
-         <div className="start-menu__player-list">
-            {players.map(player => (
-               <PlayerListitem
-                  key={player.name}
-                  player={player}
-                  removePlayer={removePlayer}
-               />
-            ))}
-         </div>
-
+         <div className="star-name__title">BUBBLE BLAST</div>
          <div className="add-player">
             <p>Lisää pelaaja</p>
             <input
@@ -134,6 +122,19 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                   </button>
                ))}
             </div>
+         </div>
+         <button onClick={changeScene}>toggle scene</button>
+
+         <div className="start-menu__player-list">
+            {players
+               .map(player => (
+                  <PlayerListitem
+                     key={player.name}
+                     player={player}
+                     removePlayer={removePlayer}
+                  />
+               ))
+               .reverse()}
          </div>
       </div>
    );
