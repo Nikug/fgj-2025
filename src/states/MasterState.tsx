@@ -4,6 +4,8 @@ import { immer } from 'zustand/middleware/immer';
 import { randomInt, shuffleList } from '../random';
 import { cols, rows } from '../App';
 import { resolver } from './resolver';
+import { id } from '../id';
+import { playerOverlap } from './notUtils';
 
 export interface MasterState {
    scene: Scene;
@@ -14,11 +16,10 @@ export interface MasterState {
 
    players: Player[];
    setPlayers: (players: Player[]) => void;
-   movePlayer: (id: string, pos: V2) => void;
    queueueueAction: (id: string, actions: Action[]) => void;
    
    weapons: Weapon[];
-   createAttaaak: (pos: V2, direction: Direction) => void;
+   createAttaaak: (playerPos: V2, direction: Direction) => void;
 
    playerTurn: string | null;
    setPlayerTurn: (id: string) => void;
@@ -72,16 +73,9 @@ export const useMasterState = create<MasterState>()(
       },
       setPlayers: players =>
          set(() => ({ players, playerTurn: players[0].id })),
-      movePlayer: (id, pos) =>
-         set(state => {
-            const p = state.players.find((e: any) => e.id == id);
-            if (p) {
-               p.pos = pos;
-            }
-         }),
       weapons: [],
       createAttaaak: (playerPos, direction) => {
-         console.log("very cool logic for weapon spawning and stuff")
+         
       },
       runActionPhase: async () => {
          await resolver();

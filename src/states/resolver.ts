@@ -1,7 +1,8 @@
 import { cols, rows } from '../App';
+import { id } from '../id';
 import { shuffleList } from '../random';
 import { sleep } from '../sleep';
-import { Action, GamePhase } from '../types';
+import { Action, GamePhase, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { playerOverlap } from './notUtils';
 
@@ -33,8 +34,10 @@ export const resolver = async () => {
             useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
 
+         const weapons = useMasterState.getState().weapons
+
          const newPos = { ...player.pos };
-         console.log('Action', action);
+         console.log(weapons);
          switch (action) {
             case Action.MoveUp:
                useMasterState.setState(state => {
@@ -73,8 +76,9 @@ export const resolver = async () => {
                });
                break;
             case Action.Attack:
+               const newWeapon: Weapon = {id: id(), pos: {x: player.pos.x + 1, y: player.pos.y}, direction: 'ltr'};
                useMasterState.setState(state => {
-                  state.createAttaaak(player.pos, 'ltr')
+                  state.weapons = [...state.weapons, newWeapon]
                })
                break;
             default:

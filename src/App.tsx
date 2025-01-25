@@ -4,6 +4,7 @@ import './App.css';
 import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
+import { Sahuli } from './aleksi/aleksi';
 
 export const rows = 10;
 export const cols = 10;
@@ -12,6 +13,7 @@ function App() {
    const scene = useMasterState(state => state.scene);
    const setScene = useMasterState(state => state.setScene);
    const players = useMasterState(state => state.players);
+   const weapons = useMasterState(state => state.weapons)
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
 
@@ -23,9 +25,14 @@ function App() {
                player =>
                   player.pos.x === col && player.pos.y === row,
             );
+            const hasWeapon = weapons.find(
+               weapon =>
+                  weapon.pos.x === col && weapon.pos.y === row,
+            )
             grid.push(
                <div className="game-tile" key={`${row} ${col}`}>
                   {hasPlayer && <Player player={hasPlayer} />}
+                  {hasWeapon && <Sahuli direction={hasWeapon.direction}/>}
                </div>,
             );
          }
