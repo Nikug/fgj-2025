@@ -146,12 +146,8 @@ const AIPlayerLogic = async () => {
       `AI is taking its turn: Player ID ${activePlayer.id}`,
    );
 
-   const {
-      players,
-      hasObstacle,
-      queueueueAction,
-      actionsPerTurn,
-   } = state;
+   const { players, hasObstacle, queueueueAction, actionsPerTurn } =
+      state;
 
    const enemyPlayers = players.filter(
       player => player.id !== activePlayer.id,
@@ -193,9 +189,9 @@ const AIPlayerLogic = async () => {
             console.log(
                `Distance to enemy ${enemy.id}: ${distance}`,
             );
-            return distance < closest.distance ?
-                  { player: enemy, distance }
-               :  closest;
+            return distance < closest.distance
+               ? { player: enemy, distance }
+               : closest;
          },
          { player: null, distance: Infinity },
       ).player;
@@ -212,6 +208,23 @@ const AIPlayerLogic = async () => {
       const dy = enemyPos.y - activePlayer.pos.y;
 
       console.log(`Attempting to attack: dx=${dx}, dy=${dy}`);
+
+      if (actions.length === 4 || Math.random() < 0.2) {
+         const directions: Direction[] = [
+            'ltr',
+            'rtl',
+            'ttb',
+            'btt',
+         ];
+         const randomDirection =
+            directions[
+               Math.floor(Math.random() * directions.length)
+            ];
+         console.log(
+            `Random attack direction chosen: ${randomDirection}`,
+         );
+         return randomDirection;
+      }
 
       if (dx === 1 && dy === 0) return 'ltr';
       if (dx === -1 && dy === 0) return 'rtl';
@@ -285,6 +298,67 @@ const AIPlayerLogic = async () => {
                console.log('Invalid vertical move position.');
             }
          }
+
+         // Try all directions to find a valid move
+         const directions: Direction[] = [
+            'ltr',
+            'rtl',
+            'ttb',
+            'btt',
+         ];
+         for (const dir of directions) {
+            const newPos = {
+               x:
+                  activePlayer.pos.x +
+                  (dir === 'ltr' ? 1 : dir === 'rtl' ? -1 : 0),
+               y:
+                  activePlayer.pos.y +
+                  (dir === 'ttb' ? 1 : dir === 'btt' ? -1 : 0),
+            };
+            if (isPositionValid(newPos)) {
+               return dir;
+            }
+         }
+
+         // Try to find a direction with an obstacle and move there
+         const moveToObstacle = (): Direction | null => {
+            const directions: Direction[] = [
+               'ltr',
+               'rtl',
+               'ttb',
+               'btt',
+            ];
+            for (const dir of directions) {
+               const newPos = {
+                  x:
+                     activePlayer.pos.x +
+                     (dir === 'ltr' ? 1 : dir === 'rtl' ? -1 : 0),
+                  y:
+                     activePlayer.pos.y +
+                     (dir === 'ttb' ? 1 : dir === 'btt' ? -1 : 0),
+               };
+               if (hasObstacle(newPos)) {
+                  return dir;
+               }
+            }
+            return null;
+         };
+
+         const obstacleDirection = moveToObstacle();
+         if (obstacleDirection) {
+            const vammaDirection = {
+               rtl: Action.MoveLeft,
+               ltr: Action.MoveRight,
+               btt: Action.MoveUp,
+               ttb: Action.MoveDown,
+            }[obstacleDirection];
+            actions.push(vammaDirection);
+            actionsUsed++;
+            console.log(
+               `AI moves towards obstacle in direction: ${obstacleDirection}`,
+            );
+         }
+
          return null;
       };
 
