@@ -4,7 +4,7 @@ import { immer } from 'zustand/middleware/immer';
 import { randomInt, shuffleList } from '../random';
 import { cols, rows } from '../App';
 
-interface MasterState {
+export interface MasterState {
    scene: Scene;
    setScene: (scene: Scene) => void;
 
