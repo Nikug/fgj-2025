@@ -19,13 +19,13 @@ const getBansqTranslate = (direction: Direction) => {
    switch (direction) {
       case 'rtl':
          return {
-            '--tikka-translate-mid': 'translate(0,-10%)',
-            '--tikka-translate': 'translate(0, 10%)',
+            '--tikka-translate-mid': 'translate(0,10%)',
+            '--tikka-translate': 'translate(0, -10%)',
          };
       case 'ltr':
          return {
-            '--tikka-translate-mid': 'translate(0,10%)',
-            '--tikka-translate': 'translate(0, -10%)',
+            '--tikka-translate-mid': 'translate(0,-10%)',
+            '--tikka-translate': 'translate(0, 10%)',
          };
       case 'ttb':
          return {
@@ -34,8 +34,8 @@ const getBansqTranslate = (direction: Direction) => {
          };
       case 'btt':
          return {
-            '--tikka-translate-mid': 'translate(-5%, 0)',
-            '--tikka-translate': 'translate(5%, 0)',
+            '--tikka-translate-mid': 'translate(-10%, 0)',
+            '--tikka-translate': 'translate(10%, 0)',
          };
    }
 };
@@ -75,9 +75,9 @@ interface SahuliProps {
 const getDeg = (dir: Direction, adjustment: number) => {
    switch (dir) {
       case 'rtl':
-         return `${180 + adjustment}deg`;
-      case 'ltr':
          return `${adjustment}deg`;
+      case 'ltr':
+         return `${180 + adjustment}deg`;
       case 'ttb':
          return `${-90 + adjustment}deg`;
       case 'btt':
@@ -85,12 +85,12 @@ const getDeg = (dir: Direction, adjustment: number) => {
    }
 };
 export const Sahuli = (props: SahuliProps) => {
-   const deg = getDeg(props.direction, 40);
+   const deg = getDeg(props.direction, -45);
    const styles = {
       '--sahuli-deg': deg,
    } as React.CSSProperties;
    const contStyles = {
-      transform: props.direction == 'rtl' ? 'scaleY(-1)' : 'none',
+      transform: props.direction == 'ltr' ? 'scaleY(-1)' : 'none',
    } as React.CSSProperties;
    return (
       <div className="proj-container" style={contStyles}>
