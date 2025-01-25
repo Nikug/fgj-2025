@@ -16,6 +16,7 @@ import { resolver } from './resolver';
 import { id } from '../id';
 import { playerOverlap, randomPos } from './notUtils';
 import { obstacleList } from '../map';
+import { startGameMusic, stopGameMusic } from '../audio';
 
 export interface MasterState {
    scene: Scene;
@@ -59,16 +60,24 @@ export const useMasterState = create<MasterState>()(
             if (scene === Scene.Game) {
                players = shuffleList(state.players);
                players = players.map(player => {
-                  let newPos: V2 = randomPos(cols, rows)
-                  while (state.hasObstacle(newPos) || playerOverlap(newPos, state.players)) {
-                     newPos = randomPos(cols, rows)
+                  let newPos: V2 = randomPos(cols, rows);
+                  while (
+                     state.hasObstacle(newPos) ||
+                     playerOverlap(newPos, state.players)
+                  ) {
+                     newPos = randomPos(cols, rows);
                   }
 
-                  return ({
-                  ...player,
-                  pos: newPos,
-               })});
+                  return {
+                     ...player,
+                     pos: newPos,
+                  };
+               });
+               startGameMusic();
+            } else {
+               stopGameMusic();
             }
+
             playerOrder = players.map(e => e.id);
             return {
                scene,
