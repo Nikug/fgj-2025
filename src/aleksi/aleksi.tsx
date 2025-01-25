@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { Direction, Obstacle, Player, V2 } from '../types';
+import { Direction, Obstacle, Player, V2, Weapon } from '../types';
 
 export const Star = () => {
    return (
@@ -27,12 +27,16 @@ export const getFromPos = (
    pos: V2,
    obstacles: Obstacle[],
    players: Player[],
+   weapons: Weapon[],
 ) => {
    return {
       player: players.find(
          e => e.pos.y == pos.y && e.pos.x == pos.x,
       ),
       obs: obstacles.find(e => e.pos.y == pos.y && e.pos.x == pos.x),
+      weapon: weapons.find(
+         e => e.pos.y == pos.y && e.pos.x == pos.x,
+      ),
    };
 };
 

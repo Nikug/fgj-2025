@@ -166,11 +166,16 @@ export function StartMenu({ changeScene }: StartMenuProps) {
 
    return (
       <div className="start-menu">
-         <FloatingPlayerBubble
-            model={PlayerModelType.Monkey}
-            color={colors[1]}
-            name="Jaska"
-         />
+         {players.map((player, i) => (
+            <FloatingPlayerBubble
+               key={player.id}
+               model={player.mode}
+               color={player.color}
+               name={player.name}
+               dir={i % 2 === 0 ? 'right' : 'left'}
+               index={i}
+            />
+         ))}
          <div className="star-name__title">BUBBLE BLAST</div>
          <div className="start-menu__top-section">
             <div className="add-player">
