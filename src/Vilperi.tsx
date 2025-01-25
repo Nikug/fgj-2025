@@ -9,7 +9,6 @@ import { Player as PlayerType, PlayerModelType } from './types';
 import { pastellivärit } from './startmenu/StartMenu';
 import { Aleksi } from './aleksi/aleksi';
 import { id } from './id';
-import { sleep } from './sleep';
 import { Player } from './Player';
 
 interface Props {
@@ -100,7 +99,7 @@ const getPlayerClassNames = (
          animationClassName = `bubble-idle-animation-${randomAnimation}`;
          break;
       case 'pop':
-         animationClassName = `bubble-pop-animation`;
+         animationClassName = `bubble-pop-animation pop-1`;
          break;
    }
 
@@ -322,6 +321,13 @@ export const popPlayer = (
          'idle',
       );
 
+      // Remove lines
+      Array.from(document.querySelectorAll('.pop-line')).forEach(
+         child => {
+            child.remove();
+         },
+      );
+
       playerElement.removeEventListener(
          'animationend',
          handleTransitionEnd,
@@ -329,9 +335,30 @@ export const popPlayer = (
       afterPopFunc && afterPopFunc();
    };
 
+   const handleTransitionPop = (event: AnimationEvent) => {
+      // Add pop-lines after burst
+      if (event.animationName !== 'bubblePop') {
+         return;
+      }
+
+      playerElement.style.display = 'none';
+
+      [...Array(8).keys()].map(i => {
+         const popLine = document.createElement('div', {});
+         popLine.className = `pop-line pop-line-${i}`;
+         playerElement.parentElement?.appendChild(popLine);
+         if (i === 0) {
+            popLine.addEventListener(
+               'animationend',
+               handleTransitionEnd,
+            );
+         }
+      });
+   };
+
    playerElement.addEventListener(
       'animationend',
-      handleTransitionEnd,
+      handleTransitionPop,
    );
 };
 
