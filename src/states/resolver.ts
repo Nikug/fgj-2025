@@ -42,7 +42,11 @@ export const resolver = async () => {
             player,
             getMovement(action, player.pos),
          );
+
+         // TIME BETWEEN ACTIONS SLEEP
+         // UPDATE STATE AFTER ANIMATION
          await sleep(TimeBetweenActions);
+
          switch (action) {
             case Action.MoveUp:
                useMasterState.setState(state => {
