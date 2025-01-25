@@ -18,6 +18,7 @@ export function PlayerListitem({
       >
          <div>{mapPlayerModeToEmoji(player.mode)}</div>
          <div>{player.name}</div>
+         {player.isAI && <p className="player-list-label">AI</p>}
          <button
             onClick={() => removePlayer(player.name)}
             className="player-list-item__remove"
