@@ -4,6 +4,7 @@ import './App.css';
 import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
+import { Obstacle } from './Obstacle';
 
 export const rows = 10;
 export const cols = 10;
@@ -14,6 +15,11 @@ function App() {
    const players = useMasterState(state => state.players);
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
+   const hasObstacle = useMasterState(state => state.hasObstacle);
+   const activePlayer = useMasterState(state => state.activePlayer);
+   const actionsPerTurn = useMasterState(
+      state => state.actionsPerTurn,
+   );
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -23,6 +29,7 @@ function App() {
                player =>
                   player.pos.x === col && player.pos.y === row,
             );
+            const obstacle = hasObstacle({ x: col, y: row });
             grid.push(
                <div
                   className="game-tile"
@@ -30,7 +37,10 @@ function App() {
                   data-x={col}
                   data-y={row}
                >
-                  {hasPlayer && <Player player={hasPlayer} />}
+                  {obstacle && <Obstacle />}
+                  {hasPlayer && !obstacle && (
+                     <Player player={hasPlayer} />
+                  )}
                </div>,
             );
          }
@@ -63,8 +73,15 @@ function App() {
                   <div className="phase-inner">
                      <p>It is planning my dudes</p>
                      <p>Turn: {playerTurn()?.name}</p>
+                     <p>
+                        Movement:{' '}
+                        {
+                           activePlayer()?.queueueueueuedActions
+                              .length
+                        }
+                        /{actionsPerTurn}
+                     </p>
                   </div>
-                  <div className="placeholder">placeholder</div>
                </div>
             )}
 

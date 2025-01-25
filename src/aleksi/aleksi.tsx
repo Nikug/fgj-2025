@@ -11,39 +11,81 @@ export const Star = () => {
 interface BansqProps {
    direction: Direction;
 }
+interface TaikuloinenProps {
+   direction: Direction;
+}
+
+const getBansqTranslate = (direction: Direction) => {
+   switch (direction) {
+      case 'rtl':
+         return {
+            '--tikka-translate-mid': 'translate(0,-10%)',
+            '--tikka-translate': 'translate(0, 10%)',
+         };
+      case 'ltr':
+         return {
+            '--tikka-translate-mid': 'translate(0,10%)',
+            '--tikka-translate': 'translate(0, -10%)',
+         };
+      case 'ttb':
+         return {
+            '--tikka-translate-mid': 'translate(10%, 0)',
+            '--tikka-translate': 'translate(-10%, 0)',
+         };
+      case 'btt':
+         return {
+            '--tikka-translate-mid': 'translate(-5%, 0)',
+            '--tikka-translate': 'translate(5%, 0)',
+         };
+   }
+};
 
 export const Bansq = (props: BansqProps) => {
+   const deg = getDeg(props.direction, 0);
+   const styles = {
+      '--tikka-deg': deg,
+      ...getBansqTranslate(props.direction),
+   } as React.CSSProperties;
    return (
       <div className="proj-container">
-         <div className="bansq">🍌</div>
+         <div className="bansq" style={styles}>
+            ↢
+         </div>
       </div>
    );
 };
 
-export const Taikuloinen = () => {
+export const Taikuloinen = (props: TaikuloinenProps) => {
+   const deg = getDeg(props.direction, 90);
+   const styles = {
+      '--tikka-deg': deg,
+      ...getBansqTranslate(props.direction),
+   } as React.CSSProperties;
    return (
       <div className="proj-container">
-         <div className="bansq">🍌</div>
+         <div className="taikuloinen" style={styles}>
+            🔥
+         </div>
       </div>
    );
 };
 interface SahuliProps {
    direction: Direction;
 }
-const getDeg = (dir: Direction) => {
+const getDeg = (dir: Direction, adjustment: number) => {
    switch (dir) {
       case 'rtl':
-         return '220deg';
+         return `${180 + adjustment}deg`;
       case 'ltr':
-         return '40deg';
+         return `${adjustment}deg`;
       case 'ttb':
-         return '-50deg';
+         return `${-90 + adjustment}deg`;
       case 'btt':
-         return '130deg';
+         return `${90 + adjustment}deg`;
    }
 };
 export const Sahuli = (props: SahuliProps) => {
-   const deg = getDeg(props.direction);
+   const deg = getDeg(props.direction, 40);
    const styles = {
       '--sahuli-deg': deg,
    } as React.CSSProperties;
@@ -113,6 +155,35 @@ export const Aleksi = () => {
       >
          <AleksiRow>
             <AleksiBox size="medium">
+               <Taikuloinen direction="rtl" />
+            </AleksiBox>
+            <AleksiBox size="medium">
+               <Taikuloinen direction="ltr" />
+            </AleksiBox>
+            <AleksiBox size="medium">
+               <Taikuloinen direction="ttb" />
+            </AleksiBox>
+            <AleksiBox size="medium">
+               <Taikuloinen direction="btt" />
+            </AleksiBox>
+         </AleksiRow>
+         <AleksiRow>
+            <AleksiBox size="medium">
+               <Bansq direction="rtl" />
+            </AleksiBox>
+            <AleksiBox size="medium">
+               <Bansq direction="ltr" />
+            </AleksiBox>
+            <AleksiBox size="medium">
+               <Bansq direction="ttb" />
+            </AleksiBox>
+            <AleksiBox size="medium">
+               <Bansq direction="btt" />
+            </AleksiBox>
+         </AleksiRow>
+
+         <AleksiRow>
+            <AleksiBox size="medium">
                <Sahuli direction="rtl" />
             </AleksiBox>
             <AleksiBox size="medium">
@@ -134,18 +205,6 @@ export const Aleksi = () => {
             </AleksiBox>
             <AleksiBox size="large">
                <Star />
-            </AleksiBox>
-         </AleksiRow>
-
-         <AleksiRow>
-            <AleksiBox size="small">
-               <Bansq />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Bansq />
-            </AleksiBox>
-            <AleksiBox size="large">
-               <Bansq />
             </AleksiBox>
          </AleksiRow>
       </div>
