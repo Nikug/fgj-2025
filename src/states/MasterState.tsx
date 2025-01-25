@@ -28,7 +28,11 @@ export interface MasterState {
    players: Player[];
    deadPlayers: Player[];
    setPlayers: (players: Player[]) => void;
-   queueueueAction: (id: string, actions: Action[]) => void;
+   queueueueAction: (
+      id: string,
+      actions: Action[],
+      newWaitingAction: boolean,
+   ) => void;
 
    weapons: Weapon[];
 
@@ -113,12 +117,16 @@ export const useMasterState = create<MasterState>()(
       runActionPhase: async () => {
          await resolver();
       },
-      queueueueAction: (id, actions) => {
-         if (get().gamePhase === GamePhase.Action) return;
+      queueueueAction: (id, actions, newWaitingAction) => {
+         if (get().gamePhase !== GamePhase.Planning) return;
          set(state => {
             const p = state.players.find((e: any) => e.id == id);
 
             if (!p) return;
+
+            state.waitingAction = newWaitingAction;
+
+            console.log('new actions', actions);
 
             p.queueueueueuedActions = [
                ...p.queueueueueuedActions,

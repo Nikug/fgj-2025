@@ -52,6 +52,8 @@ const resolveMovements = async () => {
             useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
 
+         console.log('player actions', player.queueueueueuedActions);
+
          const newPos = { ...player.pos };
          const moevement = getMovement(action, player.pos);
 
