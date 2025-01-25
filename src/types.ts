@@ -19,6 +19,8 @@ export interface Weapon {
    id: string;
    pos: V2;
    direction: Direction;
+   playerId: string;
+   type: WeaponType;
 }
 
 export interface Player {
@@ -54,3 +56,10 @@ export type Obstacle = {
    pos: V2;
    health: number;
 };
+
+export const enum WeaponType {
+   Taikuloinen,
+   Sahuli,
+   Bansq,
+   Star,
+}
