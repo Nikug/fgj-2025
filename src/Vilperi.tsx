@@ -41,8 +41,9 @@ export const PlayerModel = memo((props: Props) => {
             height: '100%',
             containerType: 'inline-size',
             borderRadius: '4px',
-            outline:
-               highlight ? '5px solid rgb(255, 0, 255)' : undefined,
+            outline: highlight
+               ? '5px solid rgb(255, 0, 255)'
+               : undefined,
          }}
          id={id}
       >
@@ -57,10 +58,9 @@ export const PlayerModel = memo((props: Props) => {
                height: '100%',
                containerType: 'inline-size',
                borderRadius: '4px',
-               outline:
-                  highlight ?
-                     '5px solid rgb(255, 0, 255)'
-                  :  undefined,
+               outline: highlight
+                  ? '5px solid rgb(255, 0, 255)'
+                  : undefined,
             }}
             id={id}
          >
