@@ -98,36 +98,42 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    return (
       <div className="start-menu">
          <div className="star-name__title">BUBBLE BLAST</div>
-         <div className="add-player">
-            <div className="add-player__label">Add players</div>
-            <input
-               className="player-name-input"
-               placeholder="Press Enter to add"
-               autoFocus
-               value={name}
-               onChange={playerNameChanged}
-               onKeyDown={e =>
-                  e.key === 'Enter' ? addPlayer() : null
-               }
-            ></input>
-            <div className="player-modes">
-               {playerModes.map(mode => (
-                  <button
-                     className={
-                        'player-mode-button ' +
-                        (mode === playerMode ? 'selected' : '')
-                     }
-                     key={mode}
-                     onClick={() => setPlayerMode(mode)}
-                  >
-                     {mapPlayerModeToEmoji(mode)}
-                  </button>
-               ))}
+         <div className="start-menu__top-section">
+            <div className="add-player">
+               <div className="add-player__label">Add players</div>
+               <input
+                  className="player-name-input"
+                  placeholder="Press Enter to add"
+                  autoFocus
+                  value={name}
+                  onChange={playerNameChanged}
+                  onKeyDown={e =>
+                     e.key === 'Enter' ? addPlayer() : null
+                  }
+               ></input>
+               <div className="player-modes">
+                  {playerModes.map(mode => (
+                     <button
+                        className={
+                           'player-mode-button ' +
+                           (mode === playerMode ? 'selected' : '')
+                        }
+                        key={mode}
+                        onClick={() => setPlayerMode(mode)}
+                     >
+                        {mapPlayerModeToEmoji(mode)}
+                     </button>
+                  ))}
+               </div>
             </div>
+            <button
+               className="start-button"
+               onClick={changeScene}
+               disabled={players.length < 1}
+            >
+               Start blasting 👉🔥🔥🚒
+            </button>
          </div>
-         <button className="start-button" onClick={changeScene}>
-            Start blasting 👉🔥🔥🚒
-         </button>
 
          <div className="start-menu__player-list">
             {players

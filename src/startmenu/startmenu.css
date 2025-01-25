@@ -16,6 +16,15 @@
 
 }
 
+.start-menu__top-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
 .start-menu__player-list {
     display: flex;
     flex-direction: row;
@@ -60,6 +69,7 @@
 
 .add-player__label {
     font-size: 1.5rem;
+    align-self: flex-start;
 }
 
 .player-name-input {
@@ -107,8 +117,15 @@
     font-size: 2rem;
     cursor: pointer;
     border: 4px solid white;
+    flex-grow: 0;
 
     &:hover {
         background-color: darkorchid;
+    }
+
+    &:disabled {
+        background-color: lightgray;
+        color: gray;
+        cursor: not-allowed;
     }
 }
