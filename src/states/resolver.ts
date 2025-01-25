@@ -14,10 +14,12 @@ export const resolver = async () => {
 
    useMasterState.setState(state => shuffleList(state.players));
 
+   const alivePlayerCount = useMasterState.getState().players.length;
+
    // Main loop
    for (
       let playerIndex = 0;
-      playerIndex < useMasterState.getState().players.length;
+      playerIndex < alivePlayerCount;
       playerIndex++
    ) {
       useMasterState.setState(state => {
@@ -36,15 +38,18 @@ export const resolver = async () => {
          const action = player.queueueueueuedActions[actionIndex];
 
          const newPos = { ...player.pos };
-         const moevement = getMovement(action, player.pos)
+         const moevement = getMovement(action, player.pos);
 
          // DO NOT REMOVE THIS SLEEP OR YOU WILL FUCKED UP
          await sleep(1);
-         if (!useMasterState.getState().hasObstacle(moevement) && !playerOverlap(moevement, useMasterState.getState().players)) {
-            animatePlayerMovement(
-               player,
+         if (
+            !useMasterState.getState().hasObstacle(moevement) &&
+            !playerOverlap(
                moevement,
-            );
+               useMasterState.getState().players,
+            )
+         ) {
+            animatePlayerMovement(player, moevement);
          }
 
          // TIME BETWEEN ACTIONS SLEEP
@@ -101,17 +106,21 @@ export const resolver = async () => {
                });
                break;
             case Action.Attack:
-               const newWeapon: Weapon = {id: id(), pos: {x: player.pos.x + 1, y: player.pos.y}, direction: 'ltr'};
+               const newWeapon: Weapon = {
+                  id: id(),
+                  pos: { x: player.pos.x + 1, y: player.pos.y },
+                  direction: 'ltr',
+               };
                useMasterState.setState(state => {
-                  state.weapons = [...state.weapons, newWeapon]
-               })
+                  state.weapons = [...state.weapons, newWeapon];
+               });
                break;
             default:
                window.alert('what');
          }
       }
    }
-   
+
    await sleep(TimeBetweenActions);
 
    useMasterState.setState(state => {

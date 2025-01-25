@@ -13,9 +13,7 @@ import { immer } from 'zustand/middleware/immer';
 import { randomInt, shuffleList } from '../random';
 import { cols, rows } from '../App';
 import { resolver } from './resolver';
-import { obstacleList, obstacles } from '../map';
-import { id } from '../id';
-import { playerOverlap } from './notUtils';
+import { obstacleList } from '../map';
 
 export interface MasterState {
    scene: Scene;
@@ -25,6 +23,7 @@ export interface MasterState {
    setGamePhase: (phase: GamePhase) => void;
 
    players: Player[];
+   deadPlayers: Player[];
    setPlayers: (players: Player[]) => void;
    queueueueAction: (id: string, actions: Action[]) => void;
 
@@ -45,6 +44,8 @@ export interface MasterState {
    obstacles: Obstacle[];
    hasObstacle: (pos: V2) => boolean;
    damageObstacle: (pos: V2, damage: number) => void;
+
+   killPlayer: (id: string) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -79,6 +80,7 @@ export const useMasterState = create<MasterState>()(
       gamePhase: GamePhase.Planning,
       setGamePhase: phase => set(() => ({ phase })),
       players: [],
+      deadPlayers: [],
       playerTurn: null,
       activePlayer: () =>
          get().players.find(p => p.id === get().playerTurn) ?? null,
@@ -91,9 +93,7 @@ export const useMasterState = create<MasterState>()(
       setPlayers: players =>
          set(() => ({ players, playerTurn: players[0].id })),
       weapons: [],
-      createAttaaak: (playerPos, direction) => {
-         
-      },
+      createAttaaak: (playerPos, direction) => {},
       runActionPhase: async () => {
          await resolver();
       },
@@ -143,6 +143,18 @@ export const useMasterState = create<MasterState>()(
                   }
                } else state.obstacles.push(obstacle);
             });
+         }),
+      killPlayer: id =>
+         set(state => {
+            const newPlayers: Player[] = [];
+            for (const player of state.players) {
+               if (player.id === id) {
+                  state.deadPlayers.push(player);
+               } else {
+                  newPlayers.push(player);
+               }
+            }
+            state.players = newPlayers;
          }),
    })),
 );
