@@ -1,0 +1,55 @@
+.floating-player-container {
+   position: absolute;
+   top: 50px;
+   left: 0;
+   container-type: inline-size;
+   display: flex;
+   justify-content: center;
+   animation: translate 30s infinite linear;
+   width: 2vw;
+}
+
+.player-floating {
+   height: 100%;
+   width: 100%;
+   border-radius: 50%;
+
+   /* Bubble-like gradient */
+   background: radial-gradient(
+      circle at 50% 55%,
+      rgba(var(--player-color), 0.9),
+      rgba(var(--player-color), 0.9) 40%,
+      rgba(var(--player-color), 0.8) 60%,
+      rgba(var(--player-color), 0.4)
+   );
+
+   /* Player animation */
+   will-change: transform;
+   animation: upDown 3s ease-in-out 1s infinite alternate;
+}
+
+.name-tag {
+   position: absolute;
+   line-height: 1;
+   top: 4em;
+   margin: 2px;
+   padding: 6px;
+   border: 1px solid black;
+   border-radius: 12px;
+   background-color: rgb(var(--player-color));
+   color: black;
+   font-size: 16px;
+   font-weight: bold;
+   animation: upDown 3s ease-in-out 1s infinite alternate;
+}
+
+@keyframes upDown {
+   to {
+      transform: translateY(100px); /* Ensure full 100px movement */
+   }
+}
+@keyframes translate {
+   to {
+      transform: translateX(100vw);
+   }
+}

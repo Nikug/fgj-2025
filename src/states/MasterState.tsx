@@ -113,7 +113,10 @@ export const useMasterState = create<MasterState>()(
          return players.find(e => e.id === turn) ?? null;
       },
       setPlayers: players =>
-         set(() => ({ players, playerTurn: players[0].id })),
+         set(() => ({
+            players,
+            playerTurn: players[0]?.id ?? null,
+         })),
       weapons: [],
       runActionPhase: async () => {
          await resolver();
@@ -150,7 +153,13 @@ export const useMasterState = create<MasterState>()(
          }
       },
       moveWeapon: async (w, pos) => {
-         return new Promise(resolve => resolve());
+         return new Promise(resolve => {
+            set(state => {
+               console.log('hahaa', pos);
+               state.weapons.find(e => e.id == w.id)!.pos = pos;
+            });
+            resolve();
+         });
       },
 
       obstacles: obstacleList(),
