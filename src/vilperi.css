@@ -2,23 +2,57 @@
    height: 100%;
    width: 100%;
    border-radius: 50%;
+   position: relative;
 
-   /* Approved gradient */
+   /* Bubble-like gradient */
    background: radial-gradient(
-      circle,
-      rgba(var(--player-color), 0.4) 30%,
-      rgb(var(--player-color)) 120%
-   );
-
-   /* Alternate gradient
-   background: radial-gradient(
-      circle,
-      rgba(var(--player-color), 0.6) 20%,
+      circle at 50% 55%,
+      rgba(var(--player-color), 0.9),
+      rgba(var(--player-color), 0.9) 40%,
       rgba(var(--player-color), 0.8) 60%,
-      rgb(var(--player-color)) 70%
+      rgba(var(--player-color), 0.4)
    );
-   */
+
+   animation: bubbleIdle 2s ease-out infinite;
    will-change: transform;
+}
+
+/* Small white reflection at the top of the model */
+.player::before {
+   content: '';
+   position: absolute;
+   top: 5%;
+   left: 10%;
+   width: 80%;
+   height: 80%;
+   border-radius: 50%;
+   background: radial-gradient(
+      circle at 50% 80%,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0) 74%,
+      white 80%,
+      white 84%,
+      rgba(255, 255, 255, 0) 100%
+   );
+   z-index: 2;
+}
+
+/* Extra shine at the top of the bubble*/
+.player::after {
+   content: '';
+   position: absolute;
+   top: 1%;
+   left: 5%;
+   width: 90%;
+   height: 90%;
+   border-radius: 50%;
+   background: radial-gradient(
+      circle at top,
+      white,
+      rgba(255, 255, 255, 0) 58%
+   );
+   filter: blur(5px);
+   z-index: 2;
 }
 
 .bubble-idle-animation-1 {
