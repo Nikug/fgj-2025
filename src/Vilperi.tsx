@@ -230,14 +230,14 @@ export const moveFromElementToElement = async (
       elementToMove.style.top = `${toPos.top}px`; // Finalize position
       elementToMove.style.left = `${toPos.left}px`;
       elementToMove.removeEventListener(
-         'transitionend',
+         'transitioned',
          handleTransitionEnd,
       );
       setCurrentElement();
    };
 
    elementToMove.addEventListener(
-      'transitionend',
+      'transitionen',
       handleTransitionEnd,
    );
 };
