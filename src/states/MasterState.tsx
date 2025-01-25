@@ -66,6 +66,7 @@ export const useMasterState = create<MasterState>()(
          set(state => {
             let playerOrder: string[] = [];
             let players: Player[] = [];
+
             if (scene === Scene.Game) {
                players = shuffleList(state.players);
                players = players.map(player => {
@@ -88,12 +89,15 @@ export const useMasterState = create<MasterState>()(
             }
 
             playerOrder = players.map(e => e.id);
+
+            // Reset state
             return {
                scene,
                playerOrder,
                players,
                gamePhase: GamePhase.Planning,
                playerTurn: playerOrder[0] ?? null,
+               weapons: [],
             };
          }),
       playerOrder: [],
