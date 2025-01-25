@@ -6,7 +6,10 @@ import { id } from '../id';
 import { PlayerModelType } from '../types';
 import menuSoundtrack from './../assets/whats_cooking_there.mp3';
 import { playSound } from '../audio';
-import { FloatingPlayerBubble } from '../Vilperi2';
+import {
+   FloatingPlayerBubble,
+   PlayerTurnBackdrop,
+} from '../Vilperi2';
 import '../vilperi2.css';
 import { Lore } from '../Lore';
 
@@ -98,6 +101,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       };
    }, []);
 
+   /*
    useEffect(() => {
       // add two players for testing
       setPlayers([
@@ -126,6 +130,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       ]);
       setI(i + 2);
    }, []);
+   */
 
    const addPlayer = () => {
       const nameExists = players.find(
@@ -165,6 +170,23 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    const startGame = () => {
       playSound('wää', 0.3);
       changeScene();
+   };
+
+   const addAIPlayer = () => {
+      setPlayers([
+         ...players,
+         {
+            name: generateAIName(),
+            mode: PlayerModelType.Ninja,
+            color: colors[i + 1],
+            pos: { x: 0, y: 0 },
+            id: id(),
+            queueueueueuedActions: [],
+            elementId: `player-element-${id()}`,
+            isDead: false,
+            isAI: true,
+         },
+      ]);
    };
 
    return (
@@ -213,6 +235,9 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                         e.key === 'Enter' ? addPlayer() : null
                      }
                   ></input>
+                  <button onClick={addAIPlayer}>
+                     Add AI player
+                  </button>
                </div>
                <button
                   className="start-button"
@@ -240,3 +265,37 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       </div>
    );
 }
+
+const generateAIName = () => {
+   const adjectives = [
+      'Swift',
+      'Sneaky',
+      'Fierce',
+      'Shadow',
+      'Mighty',
+      'Cunning',
+      'Silent',
+      'Bold',
+      'Rapid',
+      'Witty',
+   ];
+   const gamerNames = [
+      'Ninja',
+      'Assassin',
+      'Slayer',
+      'Hunter',
+      'Warrior',
+      'Brawler',
+      'Sniper',
+      'Master',
+      'Phantom',
+      'Baiter',
+   ];
+
+   const randomAdjective =
+      adjectives[Math.floor(Math.random() * adjectives.length)];
+   const randomGamerName =
+      gamerNames[Math.floor(Math.random() * gamerNames.length)];
+
+   return `${randomAdjective} ${randomGamerName}`;
+};

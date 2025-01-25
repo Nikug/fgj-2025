@@ -52,6 +52,7 @@ export const enum GamePhase {
    Planning,
    Action,
    ActionAction,
+   NextTurn,
 }
 
 export type Obstacle = {

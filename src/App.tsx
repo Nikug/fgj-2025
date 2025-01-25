@@ -5,10 +5,10 @@ import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
-import { popPlayer } from './Vilperi';
 import { SelectMoves } from './SelectMoves';
 import { AnyWeapon } from './AnyWeapon';
 import { isAttack } from './superSecretFile';
+import { PlayerTurnBackdrop } from './Vilperi2';
 
 export const rows = 10;
 export const cols = 10;
@@ -24,6 +24,8 @@ function App() {
    const playerTurnId = useMasterState(state => state.playerTurn);
    const hasObstacle = useMasterState(state => state.hasObstacle);
    const activePlayer = useMasterState(state => state.activePlayer);
+
+   const setGamePhase = useMasterState(state => state.setGamePhase);
    const actionsPerTurn = useMasterState(
       state => state.actionsPerTurn,
    );
@@ -31,7 +33,7 @@ function App() {
       state => state.actionActionsPerTurn,
    );
    const killPlayer = useMasterState(state => state.killPlayer);
-
+   console.log(gamePhase);
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
@@ -105,6 +107,13 @@ function App() {
 
    return (
       <div className="container">
+         <PlayerTurnBackdrop
+            playerName={activePlayer()?.name ?? 'Unknown Player'}
+            active={gamePhase === GamePhase.NextTurn}
+            nextTurn={() => {
+               setGamePhase(GamePhase.Planning);
+            }}
+         />
          <div className="sidebar">
             <div className="phase">
                <div className="players">

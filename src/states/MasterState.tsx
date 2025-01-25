@@ -108,7 +108,10 @@ export const useMasterState = create<MasterState>()(
       weaponMovePerTurn: 3,
       setPlayerOrder: ids => set(() => ({ playerOrder: ids })),
       gamePhase: GamePhase.Planning,
-      setGamePhase: phase => set(() => ({ phase })),
+      setGamePhase: phase =>
+         set(state => {
+            state.gamePhase = phase;
+         }),
       players: [],
       deadPlayers: [],
       playerTurn: null,
@@ -171,8 +174,12 @@ export const useMasterState = create<MasterState>()(
                   state.playerTurn ?? state.playerOrder[0],
                );
                const nextTurn = state.playerOrder[currentIndex + 1];
-               if (nextTurn) state.playerTurn = nextTurn;
-               else state.gamePhase = GamePhase.Action;
+               if (nextTurn) {
+                  state.playerTurn = nextTurn;
+                  state.gamePhase = GamePhase.NextTurn;
+               } else {
+                  state.gamePhase = GamePhase.Action;
+               }
             }
          });
 
