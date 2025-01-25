@@ -49,9 +49,34 @@ function App() {
             const tilePowers = powers.filter(
                power => power.pos.x === col && power.pos.y === row,
             );
+
+            const children: React.ReactNode[] = [];
+            children.push(
+               ...tilePlayers.map(tilePlayer => (
+                  <Player key={tilePlayer.id} player={tilePlayer} />
+               )),
+            );
+            children.push(
+               ...tileWeapons.map(tileWeapon => (
+                  <AnyWeapon
+                     key={tileWeapon.id}
+                     weapon={tileWeapon}
+                  />
+               )),
+            );
+
+            children.push(
+               ...tilePowers.map(tilePower => (
+                  <PowerUpModel
+                     key={tilePower.id}
+                     model={tilePower.type}
+                  />
+               )),
+            );
+
             grid.push(
                <div
-                  className="game-tile"
+                  className={`game-tile ${children.length > 1 ? 'game-tile-multiple' : ''}`}
                   key={`${row} ${col}`}
                   data-x={col}
                   data-y={row}
@@ -63,24 +88,7 @@ function App() {
                >
                   {/* {`x: ${col}, y: ${row}`} */}
                   {obstacle && <Obstacle />}
-                  {tilePlayers.map(tilePlayer => (
-                     <Player
-                        key={tilePlayer.id}
-                        player={tilePlayer}
-                     />
-                  ))}
-                  {tileWeapons.map(tileWeapon => (
-                     <AnyWeapon
-                        key={tileWeapon.id}
-                        weapon={tileWeapon}
-                     />
-                  ))}
-                  {tilePowers.map(tilePower => (
-                     <PowerUpModel
-                        key={tilePower.id}
-                        model={tilePower.type}
-                     />
-                  ))}
+                  {!obstacle && children}
                </div>,
             );
          }
