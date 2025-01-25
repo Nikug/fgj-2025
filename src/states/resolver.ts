@@ -9,15 +9,15 @@ const TimeBetweenActions = 500;
 export const resolver = async () => {
    await sleep(TimeBetweenActions);
 
-   const players = shuffleList(useMasterState.getState().players);
+   useMasterState.setState(state => shuffleList(state.players));
 
    // Main loop
    for (
       let playerIndex = 0;
-      playerIndex < players.length;
+      playerIndex < useMasterState.getState().players.length;
       playerIndex++
    ) {
-      const player = players[playerIndex];
+      const player = useMasterState.getState().players[playerIndex];
       useMasterState.setState(state => {
          state.playerTurn = player.id;
       });
