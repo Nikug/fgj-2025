@@ -95,7 +95,7 @@ function App() {
       switch (gamePhase) {
          case GamePhase.Planning:
             instructionText =
-               'Plan your moves. Use the buttons below or use arow keys to move your bubble and b + arrow keys to shoot.';
+               'Plan your moves. Use the buttons below or use arow keys to move your bubble and space + arrow keys to shoot.';
             break;
          case GamePhase.Action:
             instructionText = 'Watch the action!';
