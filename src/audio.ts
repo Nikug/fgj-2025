@@ -3,6 +3,7 @@ import gameMusic from './assets/FGJ 2025.mp3';
 import waewae from './assets/waewae_waewae.mp3';
 import move from './assets/move.mp3';
 import attack from './assets/attack.mp3';
+import perkele from './assets/processed_perkele5.wav';
 
 const gameMusicAudio = new Audio(gameMusic);
 
@@ -16,6 +17,8 @@ const getSound = (name: string) => {
          return move;
       case 'attack':
          return attack;
+      case 'perkele':
+         return perkele;
       default:
          return null;
    }

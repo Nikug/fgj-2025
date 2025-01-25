@@ -128,6 +128,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    }, []);
 
    const addPlayer = () => {
+      playSound('perkele');
       const nameExists = players.find(
          player => player.name === name,
       );
