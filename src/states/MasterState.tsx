@@ -1,9 +1,11 @@
 import { create } from 'zustand';
 import { GamePhase, Player, V2, Action, Scene } from '../types';
 import { immer } from 'zustand/middleware/immer';
-import { shuffleList } from '../random';
+import { randomInt, shuffleList } from '../random';
+import { cols, rows } from '../App';
+import { resolver } from './resolver';
 
-interface MasterState {
+export interface MasterState {
    scene: Scene;
    setScene: (scene: Scene) => void;
 
@@ -34,12 +36,20 @@ export const useMasterState = create<MasterState>()(
             let players: Player[] = [];
             if (scene === Scene.Game) {
                players = shuffleList(state.players);
+               players = players.map(player => ({
+                  ...player,
+                  pos: {
+                     x: randomInt(0, cols - 1),
+                     y: randomInt(0, rows - 1),
+                  },
+               }));
             }
             playerOrder = players.map(e => e.id);
             return {
                scene,
                playerOrder,
                players,
+               gamePhase: GamePhase.Planning,
                playerTurn: playerOrder[0] ?? null,
             };
          }),
@@ -68,6 +78,8 @@ export const useMasterState = create<MasterState>()(
          }),
       queueueueAction: (id, actions) =>
          set(state => {
+            if (state.gamePhase === GamePhase.Action) return state;
+
             const p = state.players.find((e: any) => e.id == id);
 
             if (!p) return;
@@ -86,7 +98,12 @@ export const useMasterState = create<MasterState>()(
                );
                const nextTurn = state.playerOrder[currentIndex + 1];
                if (nextTurn) state.playerTurn = nextTurn;
-               else state.gamePhase = GamePhase.Action;
+               else {
+                  state.gamePhase = GamePhase.Action;
+
+                  // Resolve action phase lol
+                  resolver();
+               }
             }
          }),
    })),

@@ -7,6 +7,7 @@ import {
 import App from './App';
 import { PlayerModelType } from './types';
 import { pastellivärit } from './startmenu/StartMenu';
+import { Aleksi } from './aleksi/aleksi';
 
 interface Props {
    model: PlayerModelType;
@@ -95,6 +96,8 @@ export const Router = () => {
 
    if (location.pathname === '/vilperi') {
       return <Vilperi />;
+   } else if (location.pathname == '/aleksi') {
+      return <Aleksi />;
    } else {
       return <App />;
    }
@@ -408,7 +411,7 @@ const VilperiGrid = () => {
    );
 };
 
-const VilperiRow = (props: PropsWithChildren) => {
+export const VilperiRow = (props: PropsWithChildren) => {
    return (
       <div
          style={{
@@ -428,7 +431,7 @@ interface VilperiBoxProps extends PropsWithChildren {
    size: 'small' | 'medium' | 'large';
 }
 
-const VilperiBox = (props: VilperiBoxProps) => {
+export const VilperiBox = (props: VilperiBoxProps) => {
    const { size, children } = props;
 
    const modelSize = {

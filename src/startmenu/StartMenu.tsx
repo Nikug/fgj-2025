@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import './startmenu.css';
 import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
@@ -36,6 +36,7 @@ type StartMenuProps = {
 };
 
 export function StartMenu({ changeScene }: StartMenuProps) {
+   const nameInput = useRef<any>(null);
    const [colors] = useState(
       pastellivärit.sort(() => Math.random() - 0.5),
    );
@@ -60,6 +61,11 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    ) => {
       const name = event.target.value;
       setName(name);
+   };
+
+   const selectPlayerMode = (mode: PlayerModelType) => {
+      setPlayerMode(mode);
+      nameInput.current?.focus();
    };
 
    const addPlayer = () => {
@@ -98,32 +104,44 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    return (
       <div className="start-menu">
          <div className="star-name__title">BUBBLE BLAST</div>
-         <div className="add-player">
-            <p>Lisää pelaaja</p>
-            <input
-               autoFocus
-               value={name}
-               onChange={playerNameChanged}
-               onKeyDown={e =>
-                  e.key === 'Enter' ? addPlayer() : null
-               }
-            ></input>
-            <div className="player-modes">
-               {playerModes.map(mode => (
-                  <button
-                     className={
-                        'player-mode-button ' +
-                        (mode === playerMode ? 'selected' : '')
-                     }
-                     key={mode}
-                     onClick={() => setPlayerMode(mode)}
-                  >
-                     {mapPlayerModeToEmoji(mode)}
-                  </button>
-               ))}
+         <div className="start-menu__top-section">
+            <div className="add-player">
+               <div className="add-player__label">Choose class</div>
+               <div className="player-modes">
+                  {playerModes.map(mode => (
+                     <button
+                        className={
+                           'player-mode-button ' +
+                           (mode === playerMode ? 'selected' : '')
+                        }
+                        key={mode}
+                        onClick={() => selectPlayerMode(mode)}
+                     >
+                        {mapPlayerModeToEmoji(mode)}
+                     </button>
+                  ))}
+               </div>
+               <div className="add-player__label">Add player</div>
+               <input
+                  ref={nameInput}
+                  className="player-name-input"
+                  placeholder="Press Enter to add"
+                  autoFocus
+                  value={name}
+                  onChange={playerNameChanged}
+                  onKeyDown={e =>
+                     e.key === 'Enter' ? addPlayer() : null
+                  }
+               ></input>
             </div>
+            <button
+               className="start-button"
+               onClick={changeScene}
+               disabled={players.length < 1}
+            >
+               Start blasting 👉🔥🔥🚒
+            </button>
          </div>
-         <button onClick={changeScene}>toggle scene</button>
 
          <div className="start-menu__player-list">
             {players
