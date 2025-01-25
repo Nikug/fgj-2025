@@ -8,6 +8,7 @@ import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import { oob, playerOverlap, weaponOverlap } from './notUtils';
 import { animeWeaponMove, getNextPos } from '../aleksi/aleksi';
 import { playerTypeToWeaponType } from '../superSecretFile';
+import { playSound } from '../audio';
 
 const TimeBetweenActions = 600;
 
@@ -149,6 +150,7 @@ const resolveMovements = async () => {
                      state.players[playerIndex].pos = newPos;
                   }
                });
+               playSound('move');
                break;
             case Action.MoveDown:
                useMasterState.setState(state => {
@@ -161,6 +163,7 @@ const resolveMovements = async () => {
                      state.players[playerIndex].pos = newPos;
                   }
                });
+               playSound('move');
                break;
             case Action.MoveLeft:
                useMasterState.setState(state => {
@@ -173,6 +176,7 @@ const resolveMovements = async () => {
                      state.players[playerIndex].pos = newPos;
                   }
                });
+               playSound('move');
                break;
             case Action.MoveRight:
                useMasterState.setState(state => {
@@ -185,6 +189,7 @@ const resolveMovements = async () => {
                      state.players[playerIndex].pos = newPos;
                   }
                });
+               playSound('move');
                break;
             case Action.AttackUp:
                const weaponPosUp: V2 = {
@@ -209,6 +214,7 @@ const resolveMovements = async () => {
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponUp];
                });
+               playSound('attack');
                break;
             case Action.AttackDown:
                const weaponPosDown: V2 = {
@@ -235,6 +241,7 @@ const resolveMovements = async () => {
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponDown];
                });
+               playSound('attack');
                break;
             case Action.AttackLeft:
                const weaponPosLeft: V2 = {
@@ -262,6 +269,7 @@ const resolveMovements = async () => {
                   state.weapons = [...state.weapons, newWeaponLeft];
                });
 
+               playSound('attack');
                break;
             case Action.AttackRight:
                const weaponPosRight: V2 = {
@@ -288,6 +296,7 @@ const resolveMovements = async () => {
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponRight];
                });
+               playSound('attack');
                break;
             default:
                window.alert('what');
