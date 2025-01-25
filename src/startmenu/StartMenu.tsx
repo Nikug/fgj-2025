@@ -5,6 +5,7 @@ import { useMasterState } from '../states/MasterState';
 import { id } from '../id';
 import { PlayerModelType } from '../types';
 import menuSoundtrack from './../assets/whats_cooking_there.mp3';
+import { playSound } from '../audio';
 
 const menuAudio = new Audio(menuSoundtrack);
 
@@ -94,16 +95,6 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       };
    }, []);
 
-   // useEffect(() => {
-   //    menuAudio.loop = true;
-   //    menuAudio.play();
-
-   //    return () => {
-   //       menuAudio.pause();
-   //       menuAudio.currentTime = 0;
-   //    };
-   // }, []);
-
    useEffect(() => {
       // add two players for testing
       setPlayers([
@@ -166,6 +157,11 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       setPlayers(players.filter(player => player.name !== name));
    };
 
+   const startGame = () => {
+      playSound('wää', 0.3);
+      changeScene();
+   };
+
    return (
       <div className="start-menu">
          <div className="star-name__title">BUBBLE BLAST</div>
@@ -201,7 +197,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             </div>
             <button
                className="start-button"
-               onClick={changeScene}
+               onClick={startGame}
                disabled={players.length < 1}
             >
                Start blasting 👉🔥🔥🚒
