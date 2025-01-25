@@ -1,14 +1,19 @@
-import { Action, PlayerModelType, WeaponType } from './types';
+import {
+   Action,
+   Player,
+   PlayerModelType,
+   WeaponType,
+} from './types';
 
-export const playerTypeToWeaponType = (
-   playerType: PlayerModelType,
-) => {
-   return {
-      [PlayerModelType.Monkey]: WeaponType.Bansq,
-      [PlayerModelType.Ninja]: WeaponType.Star,
-      [PlayerModelType.Robot]: WeaponType.Sahuli,
-      [PlayerModelType.Wizard]: WeaponType.Taikuloinen,
-   }[playerType];
+export const playerTypeToWeaponType = (player: Player) => {
+   return player.hasLazor ?
+         WeaponType.Lazor
+      :  {
+            [PlayerModelType.Monkey]: WeaponType.Bansq,
+            [PlayerModelType.Ninja]: WeaponType.Star,
+            [PlayerModelType.Robot]: WeaponType.Sahuli,
+            [PlayerModelType.Wizard]: WeaponType.Taikuloinen,
+         }[player.mode];
 };
 
 export const isAttack = (action: Action) => {
