@@ -4,6 +4,9 @@ import { PlayerListitem } from './PlayerListItem';
 import { useMasterState } from '../states/MasterState';
 import { id } from '../id';
 import { PlayerModelType } from '../types';
+import menuSoundtrack from './../assets/whats_cooking_there.mp3';
+
+const menuAudio = new Audio(menuSoundtrack);
 
 export const pastellivärit = [
    '250, 208, 196', // Vaaleanpunainen
@@ -67,6 +70,16 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       setPlayerMode(mode);
       nameInput.current?.focus();
    };
+
+   useEffect(() => {
+      menuAudio.loop = true;
+      menuAudio.play();
+
+      return () => {
+         menuAudio.pause();
+         menuAudio.currentTime = 0;
+      };
+   }, []);
 
    useEffect(() => {
       // add two players for testing
