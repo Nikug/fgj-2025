@@ -49,6 +49,8 @@ export interface MasterState {
    damageObstacle: (pos: V2, damage: number) => void;
 
    killPlayer: (id: string) => void;
+   waitingAction: boolean;
+   setWaitingAction: (wait: boolean) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -170,5 +172,8 @@ export const useMasterState = create<MasterState>()(
             }
             state.players = newPlayers;
          }),
+      waitingAction: false,
+      setWaitingAction: (wait: boolean) =>
+         set(() => ({ waitingAction: wait })),
    })),
 );

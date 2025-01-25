@@ -9,7 +9,10 @@ export const enum Action {
    MoveDown,
    MoveLeft,
    MoveRight,
-   Attack,
+   AttackUp,
+   AttackDown,
+   AttackLeft,
+   AttackRight,
 }
 
 export interface Weapon {

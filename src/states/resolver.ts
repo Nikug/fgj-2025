@@ -2,7 +2,7 @@ import { cols, rows } from '../App';
 import { id } from '../id';
 import { shuffleList } from '../random';
 import { sleep } from '../sleep';
-import { Action, GamePhase, Player, Weapon } from '../types';
+import { Action, GamePhase, Player, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { playerOverlap } from './notUtils';
 import { moveFromElementToElement } from '../Vilperi';
@@ -120,11 +120,13 @@ const resolveMovements = async () => {
                   }
                });
                break;
-            case Action.Attack:
+            case Action.AttackUp:
+              const weaponPos: V2 = { x: player.pos.x, y: player.pos.y - 1 }
+              
                const newWeapon: Weapon = {
                   id: id(),
-                  pos: { x: player.pos.x + 1, y: player.pos.y },
-                  direction: 'ltr',
+                  pos: weaponPos,
+                  direction: 'btt',
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeapon];
