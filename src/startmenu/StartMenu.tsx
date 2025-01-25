@@ -98,37 +98,6 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       };
    }, []);
 
-   /*
-   useEffect(() => {
-      // add two players for testing
-      setPlayers([
-         {
-            name: 'Jaska',
-            mode: PlayerModelType.Monkey,
-            color: colors[i],
-            pos: { x: 0, y: 0 },
-            id: id(),
-            queueueueueuedActions: [],
-            elementId: `player-element-${id()}`,
-            isDead: false,
-            isAI: true,
-         },
-         {
-            name: 'Kalle',
-            mode: PlayerModelType.Ninja,
-            color: colors[i + 1],
-            pos: { x: 0, y: 0 },
-            id: id(),
-            queueueueueuedActions: [],
-            elementId: `player-element-${id()}`,
-            isDead: false,
-            isAI: true,
-         },
-      ]);
-      setI(i + 2);
-   }, []);
-   */
-
    const addPlayer = () => {
       const nameExists = players.find(
          player => player.name === name,
@@ -146,6 +115,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                queueueueueuedActions: [],
                elementId: `player-element-${id()}`,
                isDead: false,
+               attacksPerTurn: 1,
             },
          ]);
          setPlayerMode(getRandomPlayerMode());
@@ -182,6 +152,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             elementId: `player-element-${id()}`,
             isDead: false,
             isAI: true,
+            attacksPerTurn: 1,
          },
       ]);
    };

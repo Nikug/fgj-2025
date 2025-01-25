@@ -10,7 +10,7 @@ import {
 } from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { shuffleList } from '../random';
-import { cols, rows } from '../App';
+import { cols, countPlayerAttacks, rows } from '../App';
 import { resolver } from './resolver';
 import { playerOverlap, randomPos } from './notUtils';
 import { obstacleList } from '../map';
@@ -46,6 +46,7 @@ export interface MasterState {
    setPlayerOrder: (ids: string[]) => void;
 
    actionsPerTurn: number;
+   addExtraAttack: (player: Player) => void;
    actionActionsPerTurn: number;
    weaponMovePerTurn: number;
    moveWeapon: (weapon: Weapon, pos: V2) => Promise<void>;
@@ -107,6 +108,22 @@ export const useMasterState = create<MasterState>()(
          }),
       playerOrder: [],
       actionsPerTurn: 5,
+      addExtraAttack: player =>
+         set(state => {
+            const targetPlayerIndex = get().players.findIndex(
+               targetPlayer => player.id === targetPlayer.id,
+            );
+
+            if (targetPlayerIndex === -1) {
+               console.error(
+                  'Tried to give extra attack to non existing player',
+               );
+               return;
+            }
+
+            state.players[targetPlayerIndex].attacksPerTurn += 1;
+         }),
+
       actionActionsPerTurn: 1,
       weaponMovePerTurn: 3,
       setPlayerOrder: ids => set(() => ({ playerOrder: ids })),
@@ -152,8 +169,11 @@ export const useMasterState = create<MasterState>()(
             state.waitingAction = newWaitingAction;
 
             const isAttackAction = isAttack(actions[0]);
+
+            const attacksUsed = countPlayerAttacks(p);
+
             const alreadyDoneAttack =
-               p.queueueueueuedActions.some(isAttack);
+               p.attacksPerTurn <= attacksUsed;
 
             let newAction = actions[0];
             if (

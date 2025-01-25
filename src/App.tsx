@@ -9,6 +9,7 @@ import { SelectMoves } from './SelectMoves';
 import { AnyWeapon } from './AnyWeapon';
 import { isAttack } from './superSecretFile';
 import { PlayerTurnBackdrop } from './Vilperi2';
+import { Player as PlayerType } from './types';
 
 export const rows = 10;
 export const cols = 10;
@@ -24,6 +25,7 @@ function App() {
    const playerTurnId = useMasterState(state => state.playerTurn);
    const hasObstacle = useMasterState(state => state.hasObstacle);
    const activePlayer = useMasterState(state => state.activePlayer);
+   const addAttack = useMasterState(state => state.addExtraAttack);
 
    const setGamePhase = useMasterState(state => state.setGamePhase);
    const actionsPerTurn = useMasterState(
@@ -112,11 +114,14 @@ function App() {
                      </span>
                      <span>
                         {`${
-                           actionActionsPerTurn -
-                           (activePlayer()?.queueueueueuedActions.filter(
-                              isAttack,
-                           ).length ?? 0)
-                        }${' / '}${actionActionsPerTurn}${' attacks left'}`}
+                           countPlayerAttacksLeft(activePlayer()) ??
+                           1 -
+                              (activePlayer()?.queueueueueuedActions.filter(
+                                 isAttack,
+                              ).length ?? 0)
+                        }${' / '}${
+                           activePlayer()?.attacksPerTurn
+                        }${' attacks left'}`}
                      </span>
                   </div>
                </div>
@@ -150,6 +155,19 @@ function App() {
                      />
                   ))}
                </div>
+
+               <button
+                  onClick={() => {
+                     const player = activePlayer();
+
+                     if (!player) {
+                        return;
+                     }
+                     addAttack(player);
+                  }}
+               >
+                  Give me an extra attack
+               </button>
                <div className="phase-inner">
                   {bigText && (
                      <div className="phase-inner__big-text">
@@ -194,3 +212,33 @@ function App() {
 }
 
 export default App;
+
+export const countPlayerAttacks = (player: PlayerType | null) => {
+   let attacksUsed = 0;
+   if (!player) {
+      return 0;
+   }
+   player.queueueueueuedActions.forEach(action => {
+      if (isAttack(action)) {
+         attacksUsed += 1;
+      }
+   });
+
+   return attacksUsed;
+};
+
+export const countPlayerAttacksLeft = (
+   player: PlayerType | null,
+) => {
+   let attacksUsed = 0;
+   if (!player) {
+      return 1;
+   }
+   player.queueueueueuedActions.forEach(action => {
+      if (isAttack(action)) {
+         attacksUsed += 1;
+      }
+   });
+
+   return player.attacksPerTurn - attacksUsed;
+};
