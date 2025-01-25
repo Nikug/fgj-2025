@@ -264,6 +264,7 @@ export const moveFromElementToElement = (
    toElement: HTMLElement,
    afterMoveFunc?: () => void,
    animationDuration = '0.5s',
+   speedCurve = 'ease-in-out',
 ) => {
    const fromPos = fromElement.getBoundingClientRect();
    const toPos = toElement.getBoundingClientRect();
@@ -279,7 +280,7 @@ export const moveFromElementToElement = (
    elementToMove.style.left = `${fromPos.left}px`;
 
    // Apply the transformation with a smooth animation
-   elementToMove.style.transition = `transform ${animationDuration} ease-in-out`;
+   elementToMove.style.transition = `transform ${animationDuration} ${speedCurve}`;
    elementToMove.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
    // Clean up after the animation

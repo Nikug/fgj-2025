@@ -9,13 +9,22 @@ export const AnyWeapon = ({ weapon }: Props) => {
    const getWeapon = () => {
       switch (weapon.type) {
          case WeaponType.Taikuloinen:
-            return <Taikuloinen direction={weapon.direction} />;
+            return (
+               <Taikuloinen
+                  id={weapon.id}
+                  direction={weapon.direction}
+               />
+            );
          case WeaponType.Sahuli:
-            return <Sahuli direction={weapon.direction} />;
+            return (
+               <Sahuli id={weapon.id} direction={weapon.direction} />
+            );
          case WeaponType.Bansq:
-            return <Bansq direction={weapon.direction} />;
+            return (
+               <Bansq id={weapon.id} direction={weapon.direction} />
+            );
          case WeaponType.Star:
-            return <Star />;
+            return <Star id={weapon.id} />;
          default:
             window.alert('how');
       }

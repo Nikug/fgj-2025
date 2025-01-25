@@ -1,18 +1,28 @@
 import React, { PropsWithChildren } from 'react';
 import { Direction, Obstacle, Player, V2, Weapon } from '../types';
+import {
+   getGridElementMoveFrom,
+   getGridElementMoveTo,
+} from '../states/resolver';
+import { moveFromElementToElement } from '../Vilperi';
 
-export const Star = () => {
+interface StarProps {
+   id: string;
+}
+export const Star = (props: StarProps) => {
    return (
-      <div className="proj-container">
+      <div id={props.id} className="proj-container">
          <div className="star">★</div>
       </div>
    );
 };
 interface BansqProps {
+   id: string;
    direction: Direction;
 }
 interface TaikuloinenProps {
    direction: Direction;
+   id: string;
 }
 
 const filter = (
@@ -53,6 +63,34 @@ export const getNextPos = (pos: V2, direction: Direction) => {
    }
 };
 
+export const animeWeaponMove = (weapon: Weapon, newPos: V2) => {
+   const elementToMove = document.getElementById(weapon.id);
+   const fromElement = getGridElementMoveFrom(
+      weapon.pos.x,
+      weapon.pos.y,
+   );
+
+   const toElement = getGridElementMoveTo(newPos.x, newPos.y);
+
+   if (elementToMove && fromElement && toElement) {
+      moveFromElementToElement(
+         elementToMove,
+         fromElement,
+         toElement,
+         undefined,
+         '0.3s',
+         'linear',
+      );
+   } else {
+      console.error(
+         'Could not animate movement. One of the elements was null.',
+      );
+      console.log('element to move', elementToMove);
+      console.log('element to move from', fromElement);
+      console.log('element to move to', toElement);
+   }
+};
+
 const getBansqTranslate = (direction: Direction) => {
    switch (direction) {
       case 'rtl':
@@ -85,7 +123,7 @@ export const Bansq = (props: BansqProps) => {
       ...getBansqTranslate(props.direction),
    } as React.CSSProperties;
    return (
-      <div className="proj-container">
+      <div id={props.id} className="proj-container">
          <div className="bansq" style={styles}>
             ↢
          </div>
@@ -100,7 +138,7 @@ export const Taikuloinen = (props: TaikuloinenProps) => {
       ...getBansqTranslate(props.direction),
    } as React.CSSProperties;
    return (
-      <div className="proj-container">
+      <div id={props.id} className="proj-container">
          <div className="taikuloinen" style={styles}>
             🔥
          </div>
@@ -109,6 +147,7 @@ export const Taikuloinen = (props: TaikuloinenProps) => {
 };
 interface SahuliProps {
    direction: Direction;
+   id: string;
 }
 const getDeg = (dir: Direction, adjustment: number) => {
    switch (dir) {
@@ -131,7 +170,11 @@ export const Sahuli = (props: SahuliProps) => {
       transform: props.direction == 'ltr' ? 'scaleY(-1)' : 'none',
    } as React.CSSProperties;
    return (
-      <div className="proj-container" style={contStyles}>
+      <div
+         id={props.id}
+         className="proj-container"
+         style={contStyles}
+      >
          <div className="sahuli" style={styles}>
             🪚
          </div>
