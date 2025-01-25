@@ -6,6 +6,7 @@ import { Player } from './Player';
 import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
 import { Sahuli } from './aleksi/aleksi';
+import { popPlayer } from './Vilperi';
 
 export const rows = 10;
 export const cols = 10;
@@ -116,6 +117,18 @@ function App() {
                   </div>
                </div>
             </div>
+
+            {players.map((player, i) => (
+               <button
+                  onClick={() =>
+                     popPlayer(player, () => {
+                        console.log('Remove player from state here');
+                     })
+                  }
+               >
+                  Kill player {i + 1}
+               </button>
+            ))}
 
             <button onClick={toggleScene}>
                Back to start screen
