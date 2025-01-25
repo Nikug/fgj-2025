@@ -164,6 +164,9 @@ const AIPlayerLogic = async () => {
       !hasObstacle(pos) &&
       !enemyPlayers.some(
          p => p.pos.x === pos.x && p.pos.y === pos.y,
+      ) &&
+      !state.weapons.some(
+         w => w.pos.x === pos.x && w.pos.y === pos.y,
       );
 
    console.log('Checking position validity...');
@@ -202,12 +205,57 @@ const AIPlayerLogic = async () => {
    const actions: Action[] = [];
    let actionsUsed = 0;
 
+   const getCurrentPlayerPositionAfterActions = (
+      initialPos: V2,
+      actions: Action[],
+   ): V2 => {
+      const newPos = { ...initialPos };
+
+      actions.forEach(action => {
+         switch (action) {
+            case Action.MoveUp:
+               newPos.y -= 1;
+               break;
+            case Action.MoveDown:
+               newPos.y += 1;
+               break;
+            case Action.MoveLeft:
+               newPos.x -= 1;
+               break;
+            case Action.MoveRight:
+               newPos.x += 1;
+               break;
+            default:
+               break;
+         }
+      });
+
+      return newPos;
+   };
+
+   const newPosition = getCurrentPlayerPositionAfterActions(
+      activePlayer.pos,
+      actions,
+   );
+   console.log(
+      `New position after actions: x=${newPosition.x}, y=${newPosition.y}`,
+   );
+
    // 1. Try to attack if an enemy is in range
    const attackDirection = (enemyPos: V2): Direction | null => {
-      const dx = enemyPos.x - activePlayer.pos.x;
-      const dy = enemyPos.y - activePlayer.pos.y;
+      const currentPosition = getCurrentPlayerPositionAfterActions(
+         activePlayer.pos,
+         actions,
+      );
+      const dx = enemyPos.x - currentPosition.x;
+      const dy = enemyPos.y - currentPosition.y;
 
       console.log(`Attempting to attack: dx=${dx}, dy=${dy}`);
+
+      if (dx === 1 && dy === 0) return 'ltr';
+      if (dx === -1 && dy === 0) return 'rtl';
+      if (dx === 0 && dy === 1) return 'ttb';
+      if (dx === 0 && dy === -1) return 'btt';
 
       if (actions.length === 4 || Math.random() < 0.2) {
          const directions: Direction[] = [
@@ -225,11 +273,6 @@ const AIPlayerLogic = async () => {
          );
          return randomDirection;
       }
-
-      if (dx === 1 && dy === 0) return 'ltr';
-      if (dx === -1 && dy === 0) return 'rtl';
-      if (dx === 0 && dy === 1) return 'ttb';
-      if (dx === 0 && dy === -1) return 'btt';
 
       return null;
    };
@@ -266,8 +309,13 @@ const AIPlayerLogic = async () => {
       console.log('Attempting to move towards closest enemy.');
 
       const moveDirection = (): Direction | null => {
-         const dx = closestEnemy.pos.x - activePlayer.pos.x;
-         const dy = closestEnemy.pos.y - activePlayer.pos.y;
+         const currentPosition =
+            getCurrentPlayerPositionAfterActions(
+               activePlayer.pos,
+               actions,
+            );
+         const dx = closestEnemy.pos.x - currentPosition.x;
+         const dy = closestEnemy.pos.y - currentPosition.y;
 
          console.log(`Movement check: dx=${dx}, dy=${dy}`);
 
