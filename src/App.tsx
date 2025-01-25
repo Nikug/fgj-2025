@@ -47,6 +47,9 @@ function App() {
                   {hasPlayer && !obstacle && (
                      <Player player={hasPlayer} />
                   )}
+                  {hasWeapon && !obstacle && (
+                     <Sahuli direction={hasWeapon.direction} />
+                  )}
                </div>,
             );
          }
