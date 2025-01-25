@@ -83,8 +83,6 @@ function App() {
          break;
    }
 
-   console.log(playerTurn);
-
    return (
       <div className="container">
          <div className="sidebar">
