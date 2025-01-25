@@ -1,12 +1,10 @@
-.starContainer {
+.proj-container {
 	font-family: sans-serif;
 	height: 100%;
 	max-height: 100%;
 	max-width: 100%;
 	width: 100%;
-	transform: rotate(270deg);
 	container-type: inline-size;
-	animation: rotating 0.8s linear infinite;
 }
 
 .star {
@@ -14,9 +12,37 @@
 	font-size: 130cqw;
 	margin-top: -55cqw;
 	margin-left: -1cqw;
-
+	animation: rotating 0.8s linear infinite;
 }
 
+.bansq {
+	color: black;
+	font-size: 80cqw;
+	margin-left: 10cqw;
+	animation: rotating 1.5s linear infinite;
+}
+
+.sahuli {
+
+	color: black;
+	font-size: 80cqw;
+	margin-left: 10cqw;
+	animation: sahulating 0.2s linear infinite;
+}
+
+@keyframes sahulating {
+	0% {
+		transform: rotate(calc(var(--sahuli-deg) - 20deg));
+	}
+
+	50% {
+		transform: rotate(calc(var(--sahuli-deg) + 20deg));
+	}
+
+	100% {
+		transform: rotate(calc(var(--sahuli-deg) - 20deg));
+	}
+}
 
 @keyframes rotating {
 	from {

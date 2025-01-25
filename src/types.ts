@@ -3,12 +3,13 @@ export interface V2 {
    y: number;
 }
 
+export type Direction = 'ltr' | 'rtl' | 'ttb' | 'btt';
 export const enum Action {
    MoveUp,
    MoveDown,
    MoveLeft,
    MoveRight,
-   Attack
+   Attack,
 }
 
 export interface Player {
