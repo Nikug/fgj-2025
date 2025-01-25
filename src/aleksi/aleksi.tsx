@@ -75,9 +75,9 @@ interface SahuliProps {
 const getDeg = (dir: Direction, adjustment: number) => {
    switch (dir) {
       case 'rtl':
-         return `${180 + adjustment}deg`;
-      case 'ltr':
          return `${adjustment}deg`;
+      case 'ltr':
+         return `${180 + adjustment}deg`;
       case 'ttb':
          return `${-90 + adjustment}deg`;
       case 'btt':
