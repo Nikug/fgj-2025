@@ -139,14 +139,14 @@ const resolveMovements = async () => {
    await sleep(TimeBetweenActions);
 
    useMasterState.setState(state => {
-      state.gamePhase = GamePhase.Planning;
+      state.gamePhase = GamePhase.ActionAction;
       state.players = state.players.map(player => ({
          ...player,
          queueueueueuedActions: [],
       }));
-      state.players = shuffleList(state.players);
-      state.playerOrder = state.players.map(p => p.id);
-      state.playerTurn = state.players[0].id;
+      // state.players = shuffleList(state.players);
+      // state.playerOrder = state.players.map(p => p.id);
+      // state.playerTurn = state.players[0].id;
    });
 };
 

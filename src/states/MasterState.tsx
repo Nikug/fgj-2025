@@ -41,6 +41,7 @@ export interface MasterState {
    setPlayerOrder: (ids: string[]) => void;
 
    actionsPerTurn: number;
+   weaponMovePerTurn: number;
    runActionPhase: () => Promise<void>;
 
    obstacles: Obstacle[];
@@ -89,6 +90,7 @@ export const useMasterState = create<MasterState>()(
          }),
       playerOrder: [],
       actionsPerTurn: 5,
+      weaponMovePerTurn: 3,
       setPlayerOrder: ids => set(() => ({ playerOrder: ids })),
       gamePhase: GamePhase.Planning,
       setGamePhase: phase => set(() => ({ phase })),

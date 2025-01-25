@@ -44,6 +44,7 @@ export const enum PlayerModelType {
 export const enum GamePhase {
    Planning,
    Action,
+   ActionAction,
 }
 
 export type Obstacle = {
