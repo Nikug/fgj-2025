@@ -32,9 +32,6 @@ function App() {
    const actionsPerTurn = useMasterState(
       state => state.actionsPerTurn,
    );
-   const actionActionsPerTurn = useMasterState(
-      state => state.actionActionsPerTurn,
-   );
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {

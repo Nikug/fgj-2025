@@ -38,10 +38,9 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                height: '100%',
                containerType: 'inline-size',
                borderRadius: '4px',
-               outline:
-                  highlight ?
-                     '5px solid rgb(255, 0, 255)'
-                  :  undefined,
+               outline: highlight
+                  ? '5px solid rgb(255, 0, 255)'
+                  : undefined,
             }}
             ref={ref}
             id={id}
@@ -127,7 +126,7 @@ export const Router = () => {
 };
 
 export const Vilperi = () => {
-   const player = {
+   const player: PlayerType = {
       name: 'Jaska',
       mode: PlayerModelType.Monkey,
       color: pastellivärit[5],
@@ -136,6 +135,8 @@ export const Vilperi = () => {
       queueueueueuedActions: [],
       elementId: `player-element-${id()}`,
       isDead: false,
+      hasLazor: false,
+      attacksPerTurn: 1,
    };
 
    const [playerPopped, setPlayerPopped] = useState(false);
