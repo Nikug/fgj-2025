@@ -15,6 +15,7 @@ export interface MasterState {
    players: Player[];
    setPlayers: (players: Player[]) => void;
    movePlayer: (id: string, pos: V2) => void;
+   attaaak: (id: string, pos: V2) => void;
    queueueueAction: (id: string, actions: Action[]) => void;
 
    playerTurn: string | null;
@@ -76,6 +77,9 @@ export const useMasterState = create<MasterState>()(
                console.log(p.queueueueueuedActions[0]);
             }
          }),
+      attaaak: (id, pos) => {
+         console.log("very cool logic for weapon spawning and stuff")
+      },
       queueueueAction: (id, actions) =>
          set(state => {
             if (state.gamePhase === GamePhase.Action) return state;
