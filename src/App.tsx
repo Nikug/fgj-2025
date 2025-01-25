@@ -17,6 +17,7 @@ function App() {
    const weapons = useMasterState(state => state.weapons);
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
+   const playerTurnId = useMasterState(state => state.playerTurn);
    const hasObstacle = useMasterState(state => state.hasObstacle);
    const activePlayer = useMasterState(state => state.activePlayer);
    const actionsPerTurn = useMasterState(
@@ -81,6 +82,8 @@ function App() {
          break;
    }
 
+   console.log(playerTurn);
+
    return (
       <div className="container">
          <div className="sidebar">
@@ -90,7 +93,7 @@ function App() {
                      <Avatar
                         key={player.id}
                         player={player}
-                        active={player.name === playerTurn()?.name}
+                        active={player.id === playerTurnId}
                      />
                   ))}
                </div>
