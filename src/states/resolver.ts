@@ -33,18 +33,21 @@ export const resolver = async () => {
 
    useMasterState.setState(state => shuffleList(state.players));
    await resolveMovements();
-   useMasterState.setState(
-      state => (state.gamePhase = GamePhase.ActionAction),
-   );
    await resolveProjectiles();
 
    // Reset state back to planning
    useMasterState.setState(state => {
+      const newPower: UnlimitedPoweeer = {
+         id: id(),
+         type: getRandomPoveeeeer(),
+         pos: randomPos(cols, rows),
+      };
       state.gamePhase = GamePhase.Planning;
       state.players = state.players.map(player => ({
          ...player,
          queueueueueuedActions: [],
       }));
+      state.powers = [...state.powers, newPower];
       state.players = shuffleList(state.players);
       state.playerOrder = state.players.map(p => p.id);
       state.playerTurn = state.players[0].id;
@@ -345,23 +348,6 @@ const resolveMovements = async () => {
    }
 
    await sleep(TimeBetweenActions);
-
-   useMasterState.setState(state => {
-      const newPower: UnlimitedPoweeer = {
-         id: id(),
-         type: getRandomPoveeeeer(),
-         pos: randomPos(cols, rows),
-      };
-      state.gamePhase = GamePhase.Planning;
-      state.players = state.players.map(player => ({
-         ...player,
-         queueueueueuedActions: [],
-      }));
-      state.powers = [...state.powers, newPower];
-      state.players = shuffleList(state.players);
-      state.playerOrder = state.players.map(p => p.id);
-      state.playerTurn = state.players[0].id;
-   });
 };
 
 export const getGridElementMoveFrom = (x: number, y: number) => {
