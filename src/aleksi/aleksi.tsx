@@ -5,6 +5,17 @@ import {
    getGridElementMoveTo,
 } from '../states/resolver';
 import { moveFromElementToElement } from '../Vilperi';
+interface LaaaseriProps {
+   id: string;
+   direction: Direction;
+}
+export const Laaaseri = (props: LaaaseriProps) => {
+   return (
+      <div id={props.id} className="proj-container">
+         <div className="star">★</div>
+      </div>
+   );
+};
 
 interface StarProps {
    id: string;
@@ -188,7 +199,6 @@ export const Aleksi = () => {
             flexWrap: 'wrap',
             gap: '100px',
          }}
-      >
-      </div>
+      ></div>
    );
 };

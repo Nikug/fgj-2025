@@ -6,7 +6,9 @@ import {
    Action,
    Scene,
    Weapon,
-   Obstacle, UnlimitedPoweeer
+   Obstacle,
+   UnlimitedPoweeer,
+   WeaponType,
 } from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { shuffleList } from '../random';
@@ -225,19 +227,27 @@ export const useMasterState = create<MasterState>()(
                kill(target.player!.id);
             });
             console.log('hit player', target.player);
-            removeWeapons([w]);
+            if (w.type != WeaponType.Lazor) {
+               removeWeapons([w]);
+            }
             return;
          }
          if (target.obs) {
             playSound('hit');
             damageObstacle(target.obs.pos, 1);
             console.log('damaged obstacle', target.obs);
-            removeWeapons([w]);
+            if (w.type != WeaponType.Lazor) {
+               removeWeapons([w]);
+            }
             return;
          }
          if (target.weapon) {
             playSound('hit');
-            removeWeapons([w, target.weapon]);
+            if (w.type != WeaponType.Lazor) {
+               removeWeapons([w, target.weapon]);
+            } else {
+               removeWeapons([target.weapon]);
+            }
             return;
          }
       },

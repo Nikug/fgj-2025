@@ -2,10 +2,26 @@ import { cols, rows } from '../App';
 import { id } from '../id';
 import { shuffleList } from '../random';
 import { sleep } from '../sleep';
-import { Action, GamePhase, Player, PowerUp, UnlimitedPoweeer, V2, Weapon } from '../types';
+import {
+   Action,
+   GamePhase,
+   Player,
+   PowerUp,
+   UnlimitedPoweeer,
+   V2,
+   Weapon,
+   WeaponType,
+} from '../types';
+import {} from '../types';
 import { useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
-import { getRandomPoveeeeer, oob, playerOverlap, randomPos, weaponOverlap } from './notUtils';
+import {
+   getRandomPoveeeeer,
+   oob,
+   playerOverlap,
+   randomPos,
+   weaponOverlap,
+} from './notUtils';
 import { animeWeaponMove, getNextPos } from '../aleksi/aleksi';
 import { playerTypeToWeaponType } from '../superSecretFile';
 import { playSound } from '../audio';
@@ -51,8 +67,11 @@ const resolveProjectiles = async () => {
 const handleWeapon = async (w: Weapon) => {
    const moveWeapon = useMasterState.getState().moveWeapon;
    const weaponDistance =
-      useMasterState.getState().weaponMovePerTurn;
+      w.type == WeaponType.Lazor ?
+         69
+      :  useMasterState.getState().weaponMovePerTurn;
    const handleWeaponPos = useMasterState.getState().checkWeaponPos;
+
    const id = w.id;
    handleWeaponPos(w);
    for (let i = 0; i < weaponDistance; i++) {
@@ -104,10 +123,10 @@ const resolveMovements = async () => {
          const player =
             useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
-         const powers = useMasterState.getState().powers
+         const powers = useMasterState.getState().powers;
 
          console.log('player actions', player.queueueueueuedActions);
-         console.log('powers', powers)
+         console.log('powers', powers);
 
          const newPos = { ...player.pos };
          const moevement = getMovement(action, player.pos);
@@ -212,7 +231,7 @@ const resolveMovements = async () => {
                   pos: weaponPosUp,
                   direction: 'btt',
                   playerId: player.id,
-                  type: playerTypeToWeaponType(player.mode),
+                  type: playerTypeToWeaponType(player),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponUp];
@@ -240,7 +259,7 @@ const resolveMovements = async () => {
                   pos: weaponPosDown,
                   direction: 'ttb',
                   playerId: player.id,
-                  type: playerTypeToWeaponType(player.mode),
+                  type: playerTypeToWeaponType(player),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponDown];
@@ -268,7 +287,7 @@ const resolveMovements = async () => {
                   pos: weaponPosLeft,
                   direction: 'rtl',
                   playerId: player.id,
-                  type: playerTypeToWeaponType(player.mode),
+                  type: playerTypeToWeaponType(player),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponLeft];
@@ -297,7 +316,7 @@ const resolveMovements = async () => {
                   pos: weaponPosRight,
                   direction: 'ltr',
                   playerId: player.id,
-                  type: playerTypeToWeaponType(player.mode),
+                  type: playerTypeToWeaponType(player),
                };
                useMasterState.setState(state => {
                   state.weapons = [...state.weapons, newWeaponRight];
@@ -324,14 +343,14 @@ const resolveMovements = async () => {
       const newPower: UnlimitedPoweeer = {
          id: id(),
          type: getRandomPoveeeeer(),
-         pos: randomPos(cols, rows)
-      }
+         pos: randomPos(cols, rows),
+      };
       state.gamePhase = GamePhase.Planning;
       state.players = state.players.map(player => ({
          ...player,
          queueueueueuedActions: [],
       }));
-      state.powers = [...state.powers, newPower]
+      state.powers = [...state.powers, newPower];
       state.players = shuffleList(state.players);
       state.playerOrder = state.players.map(p => p.id);
       state.playerTurn = state.players[0].id;

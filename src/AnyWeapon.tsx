@@ -1,4 +1,10 @@
-import { Bansq, Sahuli, Star, Taikuloinen } from './aleksi/aleksi';
+import {
+   Bansq,
+   Laaaseri,
+   Sahuli,
+   Star,
+   Taikuloinen,
+} from './aleksi/aleksi';
 import { Weapon, WeaponType } from './types';
 
 interface Props {
@@ -25,6 +31,13 @@ export const AnyWeapon = ({ weapon }: Props) => {
             );
          case WeaponType.Star:
             return <Star id={weapon.id} />;
+         case WeaponType.Lazor:
+            return (
+               <Laaaseri
+                  id={weapon.id}
+                  direction={weapon.direction}
+               />
+            );
          default:
             window.alert('how');
       }
