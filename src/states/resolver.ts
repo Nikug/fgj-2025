@@ -4,7 +4,7 @@ import { shuffleList } from '../random';
 import { sleep } from '../sleep';
 import { Action, GamePhase, Player, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
-import { playerOverlap } from './notUtils';
+import { oob, playerOverlap } from './notUtils';
 import { moveFromElementToElement } from '../Vilperi';
 import { getTarget } from '../aleksi/aleksi';
 
@@ -121,15 +121,97 @@ const resolveMovements = async () => {
                });
                break;
             case Action.AttackUp:
-              const weaponPos: V2 = { x: player.pos.x, y: player.pos.y - 1 }
-              
-               const newWeapon: Weapon = {
+               const weaponPosUp: V2 = {
+                  x: player.pos.x,
+                  y: player.pos.y - 1,
+               };
+
+               if (
+                  oob(weaponPosUp, cols, rows) ||
+                  useMasterState.getState().hasObstacle(weaponPosUp)
+               ) {
+                  break;
+               }
+
+               const newWeaponUp: Weapon = {
                   id: id(),
-                  pos: weaponPos,
+                  pos: weaponPosUp,
                   direction: 'btt',
                };
                useMasterState.setState(state => {
-                  state.weapons = [...state.weapons, newWeapon];
+                  state.weapons = [...state.weapons, newWeaponUp];
+               });
+               break;
+            case Action.AttackDown:
+               const weaponPosDown: V2 = {
+                  x: player.pos.x,
+                  y: player.pos.y + 1,
+               };
+
+               if (
+                  oob(weaponPosDown, cols, rows) ||
+                  useMasterState
+                     .getState()
+                     .hasObstacle(weaponPosDown)
+               ) {
+                  break;
+               }
+
+               const newWeaponDown: Weapon = {
+                  id: id(),
+                  pos: weaponPosDown,
+                  direction: 'ttb',
+               };
+               useMasterState.setState(state => {
+                  state.weapons = [...state.weapons, newWeaponDown];
+               });
+               break;
+            case Action.AttackLeft:
+               const weaponPosLeft: V2 = {
+                  x: player.pos.x - 1,
+                  y: player.pos.y,
+               };
+
+               if (
+                  oob(weaponPosLeft, cols, rows) ||
+                  useMasterState
+                     .getState()
+                     .hasObstacle(weaponPosLeft)
+               ) {
+                  break;
+               }
+
+               const newWeaponLeft: Weapon = {
+                  id: id(),
+                  pos: weaponPosLeft,
+                  direction: 'rtl',
+               };
+               useMasterState.setState(state => {
+                  state.weapons = [...state.weapons, newWeaponLeft];
+               });
+               break;
+            case Action.AttackRight:
+               const weaponPosRight: V2 = {
+                  x: player.pos.x + 1,
+                  y: player.pos.y,
+               };
+
+               if (
+                  oob(weaponPosRight, cols, rows) ||
+                  useMasterState
+                     .getState()
+                     .hasObstacle(weaponPosRight)
+               ) {
+                  break;
+               }
+
+               const newWeaponRight: Weapon = {
+                  id: id(),
+                  pos: weaponPosRight,
+                  direction: 'ltr',
+               };
+               useMasterState.setState(state => {
+                  state.weapons = [...state.weapons, newWeaponRight];
                });
                break;
             default:
