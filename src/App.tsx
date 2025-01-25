@@ -4,6 +4,7 @@ import './App.css';
 import { GamePhase, Scene } from './types';
 import { Player } from './Player';
 import { Avatar } from './Avatar';
+import { Obstacle } from './Obstacle';
 import { Sahuli } from './aleksi/aleksi';
 
 export const rows = 10;
@@ -16,6 +17,11 @@ function App() {
    const weapons = useMasterState(state => state.weapons)
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
+   const hasObstacle = useMasterState(state => state.hasObstacle);
+   const activePlayer = useMasterState(state => state.activePlayer);
+   const actionsPerTurn = useMasterState(
+      state => state.actionsPerTurn,
+   );
 
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -25,14 +31,22 @@ function App() {
                player =>
                   player.pos.x === col && player.pos.y === row,
             );
+            const obstacle = hasObstacle({ x: col, y: row });
             const hasWeapon = weapons.find(
                weapon =>
                   weapon.pos.x === col && weapon.pos.y === row,
             )
             grid.push(
-               <div className="game-tile" key={`${row} ${col}`}>
-                  {hasPlayer && <Player player={hasPlayer} />}
-                  {hasWeapon && <Sahuli direction={hasWeapon.direction}/>}
+               <div
+                  className="game-tile"
+                  key={`${row} ${col}`}
+                  data-x={col}
+                  data-y={row}
+               >
+                  {obstacle && <Obstacle />}
+                  {hasPlayer && !obstacle && (
+                     <Player player={hasPlayer} />
+                  )}
                </div>,
             );
          }
@@ -65,8 +79,15 @@ function App() {
                   <div className="phase-inner">
                      <p>It is planning my dudes</p>
                      <p>Turn: {playerTurn()?.name}</p>
+                     <p>
+                        Movement:{' '}
+                        {
+                           activePlayer()?.queueueueueuedActions
+                              .length
+                        }
+                        /{actionsPerTurn}
+                     </p>
                   </div>
-                  <div className="placeholder">placeholder</div>
                </div>
             )}
 

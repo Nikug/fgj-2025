@@ -7,6 +7,14 @@
 	container-type: inline-size;
 }
 
+.taikuloinen {
+	color: black;
+	font-size: 100cqw;
+	margin-top: -15cqw;
+	margin-left: -1cqw;
+	animation: dartulating 0.4s linear infinite;
+}
+
 .star {
 	color: black;
 	font-size: 130cqw;
@@ -19,7 +27,7 @@
 	color: black;
 	font-size: 80cqw;
 	margin-left: 10cqw;
-	animation: rotating 1.5s linear infinite;
+	animation: dartulating 0.8s linear infinite;
 }
 
 .sahuli {
@@ -27,7 +35,31 @@
 	color: black;
 	font-size: 80cqw;
 	margin-left: 10cqw;
-	animation: sahulating 0.2s linear infinite;
+	animation: sahulating 0.3s linear infinite;
+}
+
+@keyframes dartulating {
+	0% {
+		transform: var(--tikka-translate) rotate(calc(var(--tikka-deg) - 0deg));
+	}
+
+	25% {
+		transform: translate(0, 0) rotate(calc(var(--tikka-deg) - 10deg));
+
+	}
+
+	50% {
+		transform: var(--tikka-translate-mid) rotate(calc(var(--tikka-deg) + 0deg));
+	}
+
+	75% {
+		transform: translate(0, 0) rotate(calc(var(--tikka-deg) + 10deg));
+
+	}
+
+	100% {
+		transform: var(--tikka-translate) rotate(calc(var(--tikka-deg) - 0deg));
+	}
 }
 
 @keyframes sahulating {

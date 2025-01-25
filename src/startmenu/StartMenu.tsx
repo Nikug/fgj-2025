@@ -78,6 +78,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             pos: { x: 0, y: 0 },
             id: id(),
             queueueueueuedActions: [],
+            elementId: `player-element-${id()}`,
          },
          {
             name: 'Kalle',
@@ -86,6 +87,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             pos: { x: 0, y: 0 },
             id: id(),
             queueueueueuedActions: [],
+            elementId: `player-element-${id()}`,
          },
       ]);
       setI(i + 2);
@@ -106,6 +108,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                pos: { x: 0, y: 0 },
                id: id(),
                queueueueueuedActions: [],
+               elementId: `player-element-${id()}`,
             },
          ]);
          setPlayerMode(getRandomPlayerMode());

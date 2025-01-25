@@ -59,6 +59,7 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
       return (
          <PlayerModel
             ref={ref}
+            id={player.elementId}
             model={PlayerModelType.Monkey}
             color={player.color}
          />

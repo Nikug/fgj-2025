@@ -25,6 +25,7 @@ export interface Player {
    pos: V2;
    id: string;
    queueueueueuedActions: Action[];
+   elementId: string;
 }
 
 export const enum Scene {
@@ -43,3 +44,8 @@ export const enum GamePhase {
    Planning,
    Action,
 }
+
+export type Obstacle = {
+   pos: V2;
+   health: number;
+};
