@@ -1,4 +1,4 @@
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import {
    Player as PlayerType,
    Action,
@@ -18,6 +18,9 @@ interface Props {
 export const Player = forwardRef<HTMLDivElement | null, Props>(
    (props, ref) => {
       const { player } = props;
+      const [triggeredForThisTurn, setTriggeredForThisTurn] =
+         useState(false);
+      const gamePhase = useMasterState(state => state.gamePhase);
       const playerTurn = useMasterState(state => state.playerTurn);
       const qAction = useMasterState(state => state.queueueueAction);
       const waitingAction = useMasterState(
@@ -111,15 +114,30 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
          // Trigger AI action if it's the AI player's turn
          if (
             player.isAI &&
-            playerTurn !== player.id &&
-            allowKeyboard
+            playerTurn === player.id &&
+            gamePhase === GamePhase.Planning &&
+            allowKeyboard &&
+            !triggeredForThisTurn
          ) {
             console.log('AI should move now!');
+            setTriggeredForThisTurn(true);
             makeAIMoves(5);
          }
 
          return () => removeEventListener('keydown', handleKeyDown);
-      }, [player.pos, playerTurn, waitingAction, allowKeyboard]);
+      }, [
+         player,
+         player.isAI,
+         player.pos,
+         playerTurn,
+         waitingAction,
+         allowKeyboard,
+         gamePhase,
+      ]);
+
+      useEffect(() => {
+         setTriggeredForThisTurn(false);
+      }, [gamePhase]);
 
       return (
          <PlayerModel
@@ -356,18 +374,41 @@ const AIPlayerLogic = async () => {
             'ttb',
             'btt',
          ];
+         const validDirections: Direction[] = [];
+
          for (const dir of directions) {
             const newPos = {
-               x:
-                  currentPosition.x +
-                  (dir === 'ltr' ? 1 : dir === 'rtl' ? -1 : 0),
-               y:
-                  currentPosition.y +
-                  (dir === 'ttb' ? 1 : dir === 'btt' ? -1 : 0),
+               x: currentPosition.x,
+               y: currentPosition.y,
             };
-            if (isPositionValid(newPos)) {
-               return dir;
+            switch (dir) {
+               case 'ltr':
+                  newPos.x += 1;
+                  break;
+               case 'rtl':
+                  newPos.x -= 1;
+                  break;
+               case 'ttb':
+                  newPos.y += 1;
+                  break;
+               case 'btt':
+                  newPos.y -= 1;
+                  break;
             }
+            if (isPositionValid(newPos)) {
+               validDirections.push(dir);
+            }
+         }
+
+         if (validDirections.length > 0) {
+            const randomDirection =
+               validDirections[
+                  Math.floor(Math.random() * validDirections.length)
+               ];
+            console.log(
+               `Random valid move direction chosen: ${randomDirection}`,
+            );
+            return randomDirection;
          }
 
          // Try to find a direction with an obstacle and move there
@@ -443,17 +484,23 @@ const AIPlayerLogic = async () => {
 const runAI = () => {
    const state = useMasterState.getState();
 
-   console.log('Checking if AI turn should run...');
+   console.log('Checking if AI turn should run...', {
+      gamePhase: state.gamePhase,
+      playerTurn: state.playerTurn,
+   });
    if (state.gamePhase === GamePhase.Planning && state.playerTurn) {
       const activePlayer = state.activePlayer();
       if (activePlayer && activePlayer.isAI) {
          console.log('AI is active, running AI logic...');
          AIPlayerLogic();
+         return true;
       } else {
          console.log('No active AI player or not AI turn.');
+         return false;
       }
    } else {
       console.log('Game phase is not Planning or not player turn.');
+      return false;
    }
 };
 
@@ -461,8 +508,13 @@ const makeAIMoves = async (times: number) => {
    console.log(`Making ${times} AI moves.`);
    for (let i = 0; i < times; i++) {
       console.log(`Move ${i + 1} of ${times}`);
-      await sleep(200);
-      runAI();
-      await sleep(200);
+      await sleep(250);
+      const success = runAI();
+
+      if (!success) {
+         console.log('AI turn failed, stopping AI moves.');
+         break;
+      }
+      await sleep(250);
    }
 };
