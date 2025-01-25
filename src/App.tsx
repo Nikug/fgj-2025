@@ -47,23 +47,18 @@ function App() {
                   data-x={col}
                   data-y={row}
                >
-                  {obstacle && (
-                     <AbsoluteWrapper>
-                        <Obstacle />
-                     </AbsoluteWrapper>
-                  )}
+                  {obstacle && <Obstacle />}
                   {tilePlayers.map(tilePlayer => (
-                     <AbsoluteWrapper key={tilePlayer.id}>
-                        <Player
-                           key={tilePlayer.id}
-                           player={tilePlayer}
-                        />
-                     </AbsoluteWrapper>
+                     <Player
+                        key={tilePlayer.id}
+                        player={tilePlayer}
+                     />
                   ))}
                   {tileWeapons.map(tileWeapon => (
-                     <AbsoluteWrapper key={tileWeapon.id}>
-                        <Sahuli direction={tileWeapon.direction} />
-                     </AbsoluteWrapper>
+                     <Sahuli
+                        key={tileWeapon.id}
+                        direction={tileWeapon.direction}
+                     />
                   ))}
                </div>,
             );
