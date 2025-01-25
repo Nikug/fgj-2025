@@ -14,7 +14,7 @@ function App() {
    const scene = useMasterState(state => state.scene);
    const setScene = useMasterState(state => state.setScene);
    const players = useMasterState(state => state.players);
-   const weapons = useMasterState(state => state.weapons)
+   const weapons = useMasterState(state => state.weapons);
    const gamePhase = useMasterState(state => state.gamePhase);
    const playerTurn = useMasterState(state => state.getPlayerTurn);
    const hasObstacle = useMasterState(state => state.hasObstacle);
@@ -35,7 +35,7 @@ function App() {
             const hasWeapon = weapons.find(
                weapon =>
                   weapon.pos.x === col && weapon.pos.y === row,
-            )
+            );
             grid.push(
                <div
                   className="game-tile"
@@ -69,30 +69,50 @@ function App() {
       return <StartMenu changeScene={toggleScene} />;
    }
 
+   let instructionText = '';
+
+   switch (gamePhase) {
+      case GamePhase.Planning:
+         instructionText =
+            'Plan your moves. Use arow keys to move your bubble and <add instructions for attaaak here>';
+         break;
+      case GamePhase.Action:
+         instructionText = 'Watch the action!';
+         break;
+   }
+
    return (
       <div className="container">
          <div className="sidebar">
-            {gamePhase === GamePhase.Planning && (
-               <div className="phase">
-                  <div className="players">
-                     {players.map(player => (
-                        <Avatar key={player.id} player={player} />
-                     ))}
+            <div className="phase">
+               <div className="players">
+                  {players.map(player => (
+                     <Avatar
+                        key={player.id}
+                        player={player}
+                        active={player.name === playerTurn()?.name}
+                     />
+                  ))}
+               </div>
+               <div className="phase-inner">
+                  <div className="phase-inner__player-name">
+                     {playerTurn()?.name}
                   </div>
-                  <div className="phase-inner">
-                     <p>It is planning my dudes</p>
-                     <p>Turn: {playerTurn()?.name}</p>
-                     <p>
-                        Movement:{' '}
-                        {
-                           activePlayer()?.queueueueueuedActions
-                              .length
-                        }
-                        /{actionsPerTurn}
-                     </p>
+                  <div className="phase-inner__instructions">
+                     {instructionText}
+                  </div>
+                  <div className="phase-inner__moves-used">
+                     <span>{'Moves used: '}</span>
+                     <span>
+                        {`
+                           ${
+                              activePlayer()?.queueueueueuedActions
+                                 .length
+                           }${' / '}${actionsPerTurn}`}
+                     </span>
                   </div>
                </div>
-            )}
+            </div>
 
             <button onClick={toggleScene}>
                Back to start screen
