@@ -178,7 +178,7 @@
 
    /* this sets the position and size of the pseudo-element */
    position: relative;
-   top: 0;
+   top: 2.5cqw;
    left: calc(50% - 2.5cqw);
    width: 5cqw;
 
