@@ -73,14 +73,33 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    };
 
    useEffect(() => {
-      menuAudio.loop = true;
-      menuAudio.play();
+      if (userEventDetected.current) return;
+
+      const startMusic = () => {
+         if (userEventDetected.current) return;
+
+         userEventDetected.current = true;
+         menuAudio.play();
+      };
+
+      document.addEventListener('click', startMusic);
+      document.addEventListener('keydown', startMusic);
 
       return () => {
-         menuAudio.pause();
-         menuAudio.currentTime = 0;
+         document.removeEventListener('click', startMusic);
+         document.removeEventListener('keydown', startMusic);
       };
    }, []);
+
+   // useEffect(() => {
+   //    menuAudio.loop = true;
+   //    menuAudio.play();
+
+   //    return () => {
+   //       menuAudio.pause();
+   //       menuAudio.currentTime = 0;
+   //    };
+   // }, []);
 
    useEffect(() => {
       // add two players for testing
