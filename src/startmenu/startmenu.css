@@ -9,9 +9,17 @@
     padding: 2rem 10rem;
 }
 
+.star-name__title {
+    font-size: 4rem;
+    font-weight: bold;
+    letter-spacing: 0.6rem;
+
+}
+
 .start-menu__player-list {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 1rem;
     
 }

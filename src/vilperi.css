@@ -2,7 +2,6 @@
    height: 100%;
    width: 100%;
    border-radius: 50%;
-   position: relative;
 
    /* Bubble-like gradient */
    background: radial-gradient(
@@ -13,8 +12,16 @@
       rgba(var(--player-color), 0.4)
    );
 
+   /* Player animation */
    animation: bubbleIdle 2s ease-out infinite;
    will-change: transform;
+
+   /* Layout settings */
+   display: flex;
+   flex-direction: row;
+   align-items: end;
+   justify-content: end;
+   container-type: inline-size;
 }
 
 /* Small white reflection at the top of the model */
@@ -111,4 +118,9 @@
 }
 
 .player-monkey {
+}
+
+.player-hand {
+   font-size: 60cqw;
+   margin: -5cqw;
 }

@@ -25,12 +25,29 @@ export const PlayerModel = (props: Props) => {
             height: '100%',
          }}
       >
-         <div
-            className={getPlayerClassNames(model)}
-            style={cssVars}
-         />
+         <div className={getPlayerClassNames(model)} style={cssVars}>
+            <PlayerHands model={model} />
+         </div>
       </div>
    );
+};
+
+interface PlayerHandsProps {
+   model: PlayerModelType;
+}
+
+const PlayerHands = (props: PlayerHandsProps) => {
+   const { model } = props;
+   switch (model) {
+      case PlayerModelType.Monkey:
+         return <div className="player-hand ">🍌</div>;
+      case PlayerModelType.Ninja:
+         return <div className="player-hand ">🌟</div>;
+      case PlayerModelType.Robot:
+         return <div className="player-hand ">🪚</div>;
+      case PlayerModelType.Wizard:
+         return <div className="player-hand">🔮</div>;
+   }
 };
 
 const getPlayerClassNames = (model: PlayerModelType) => {
