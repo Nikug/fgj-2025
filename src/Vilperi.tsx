@@ -18,35 +18,43 @@ export const PlayerModel = (props: Props) => {
    return (
       <div
          style={{
+            position: 'relative', // Ensure relative positioning for hand placement
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
             height: '100%',
+            containerType: 'inline-size',
          }}
       >
-         <div className={getPlayerClassNames(model)} style={cssVars}>
-            <PlayerHands model={model} />
-         </div>
+         {/* Bubble Model */}
+         <div
+            className={getPlayerClassNames(model)}
+            style={cssVars}
+         ></div>
+
+         {/* Player Hands */}
+         <PlayerHands model={model} />
       </div>
    );
 };
-
 interface PlayerHandsProps {
    model: PlayerModelType;
 }
 
 const PlayerHands = (props: PlayerHandsProps) => {
    const { model } = props;
+   const randomAnimation = Math.ceil(Math.random() * 4);
+   let animation = `hand-idle-animation-${randomAnimation}`;
    switch (model) {
       case PlayerModelType.Monkey:
-         return <div className="player-hand ">🍌</div>;
+         return <div className={`player-hand ${animation}`}>🍌</div>;
       case PlayerModelType.Ninja:
-         return <div className="player-hand ">🌟</div>;
+         return <div className={`player-hand ${animation}`}>🌟</div>;
       case PlayerModelType.Robot:
-         return <div className="player-hand ">🪚</div>;
+         return <div className={`player-hand ${animation}`}>🪚</div>;
       case PlayerModelType.Wizard:
-         return <div className="player-hand">🔮</div>;
+         return <div className={`player-hand ${animation}`}>🔮</div>;
    }
 };
 
