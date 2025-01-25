@@ -1,22 +1,20 @@
-import {
-   forwardRef,
-   PropsWithChildren,
-   useRef,
-   useState,
-} from 'react';
+import { forwardRef, PropsWithChildren, useRef } from 'react';
 import App from './App';
 import { PlayerModelType } from './types';
 import { pastellivärit } from './startmenu/StartMenu';
 import { Aleksi } from './aleksi/aleksi';
+import { id } from './id';
+import { sleep } from './sleep';
 
 interface Props {
    model: PlayerModelType;
    color?: string;
+   id: string;
 }
 
 export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
    (props: Props, ref) => {
-      const { model, color } = props;
+      const { model, color, id } = props;
 
       const cssVars = {
          '--player-color': color,
@@ -34,6 +32,7 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                containerType: 'inline-size',
             }}
             ref={ref}
+            id={id}
          >
             {/* Bubble Model */}
             <div
@@ -117,18 +116,21 @@ export const Vilperi = () => {
          <VilperiRow>
             <VilperiBox size="small">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[0]}
                   model={PlayerModelType.Monkey}
                />
             </VilperiBox>
             <VilperiBox size="medium">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[0]}
                   model={PlayerModelType.Monkey}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[0]}
                   model={PlayerModelType.Monkey}
                />
@@ -137,18 +139,21 @@ export const Vilperi = () => {
          <VilperiRow>
             <VilperiBox size="small">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[1]}
                   model={PlayerModelType.Ninja}
                />
             </VilperiBox>
             <VilperiBox size="medium">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[1]}
                   model={PlayerModelType.Ninja}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[1]}
                   model={PlayerModelType.Ninja}
                />
@@ -157,18 +162,21 @@ export const Vilperi = () => {
          <VilperiRow>
             <VilperiBox size="small">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[2]}
                   model={PlayerModelType.Robot}
                />
             </VilperiBox>
             <VilperiBox size="medium">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[2]}
                   model={PlayerModelType.Robot}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[2]}
                   model={PlayerModelType.Robot}
                />
@@ -177,18 +185,21 @@ export const Vilperi = () => {
          <VilperiRow>
             <VilperiBox size="small">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[3]}
                   model={PlayerModelType.Wizard}
                />
             </VilperiBox>
             <VilperiBox size="medium">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[3]}
                   model={PlayerModelType.Wizard}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
+                  id={id()}
                   color={pastellivärit[3]}
                   model={PlayerModelType.Wizard}
                />
@@ -199,12 +210,12 @@ export const Vilperi = () => {
    );
 };
 
-export const moveFromElementToElement = async (
+export const moveFromElementToElement = (
    elementToMove: HTMLElement,
    fromElement: HTMLElement,
    toElement: HTMLElement,
-   setCurrentElement: () => void,
-   animationDuration = '1s',
+   afterMoveFunc?: () => void,
+   animationDuration = '0.5s',
 ) => {
    const fromPos = fromElement.getBoundingClientRect();
    const toPos = toElement.getBoundingClientRect();
@@ -229,15 +240,16 @@ export const moveFromElementToElement = async (
       elementToMove.style.transform = ''; // Reset the transform
       elementToMove.style.top = `${toPos.top}px`; // Finalize position
       elementToMove.style.left = `${toPos.left}px`;
+
       elementToMove.removeEventListener(
-         'transitioned',
+         'transitionend',
          handleTransitionEnd,
       );
-      setCurrentElement();
+      afterMoveFunc && afterMoveFunc();
    };
 
    elementToMove.addEventListener(
-      'transitionen',
+      'transitionend',
       handleTransitionEnd,
    );
 };
@@ -297,6 +309,7 @@ const VilperiGrid = () => {
          >
             <div style={{ position: 'absolute' }}>Cell 1</div>
             <PlayerModel
+               id={id()}
                ref={playerElement}
                model={PlayerModelType.Wizard}
                color={pastellivärit[1]}

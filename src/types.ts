@@ -25,6 +25,7 @@ export interface Player {
    pos: V2;
    id: string;
    queueueueueuedActions: Action[];
+   elementId: string;
 }
 
 export const enum Scene {

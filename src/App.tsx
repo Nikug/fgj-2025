@@ -24,7 +24,12 @@ function App() {
                   player.pos.x === col && player.pos.y === row,
             );
             grid.push(
-               <div className="game-tile" key={`${row} ${col}`}>
+               <div
+                  className="game-tile"
+                  key={`${row} ${col}`}
+                  data-x={col}
+                  data-y={row}
+               >
                   {hasPlayer && <Player player={hasPlayer} />}
                </div>,
             );
