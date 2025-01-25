@@ -234,60 +234,6 @@ export const Aleksi = () => {
             gap: '100px',
          }}
       >
-         <AleksiRow>
-            <AleksiBox size="medium">
-               <Taikuloinen direction="rtl" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Taikuloinen direction="ltr" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Taikuloinen direction="ttb" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Taikuloinen direction="btt" />
-            </AleksiBox>
-         </AleksiRow>
-         <AleksiRow>
-            <AleksiBox size="medium">
-               <Bansq direction="rtl" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Bansq direction="ltr" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Bansq direction="ttb" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Bansq direction="btt" />
-            </AleksiBox>
-         </AleksiRow>
-
-         <AleksiRow>
-            <AleksiBox size="medium">
-               <Sahuli direction="rtl" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Sahuli direction="ltr" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Sahuli direction="ttb" />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Sahuli direction="btt" />
-            </AleksiBox>
-         </AleksiRow>
-         <AleksiRow>
-            <AleksiBox size="small">
-               <Star />
-            </AleksiBox>
-            <AleksiBox size="medium">
-               <Star />
-            </AleksiBox>
-            <AleksiBox size="large">
-               <Star />
-            </AleksiBox>
-         </AleksiRow>
       </div>
    );
 };
