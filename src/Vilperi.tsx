@@ -370,7 +370,7 @@ export const popPlayer = (
       return;
    }
    playerElement.className = getPlayerClassNames(player.mode, 'pop');
-   playSound('perkele');
+   playSound('perkele', 0.2);
 
    // Clean up after the animation
    const handleTransitionEnd = () => {
