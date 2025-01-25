@@ -8,8 +8,11 @@ export const Star = () => {
       </div>
    );
 };
+interface BansqProps {
+   direction: Direction;
+}
 
-export const Bansq = () => {
+export const Bansq = (props: BansqProps) => {
    return (
       <div className="proj-container">
          <div className="bansq">🍌</div>
