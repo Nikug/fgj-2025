@@ -8,5 +8,6 @@ export default defineConfig({
       outDir: './build',
       emptyOutDir: true,
    },
+   assetsInclude: ['**/*.gif'],
    base: '/fgj-2025',
 });
