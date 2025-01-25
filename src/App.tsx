@@ -64,11 +64,23 @@ function App() {
          <div style={{ padding: '1rem' }}>
             <button onClick={toggleScene}>toggle scene</button>
          </div>
-         <div>
-            {players.map(player => (
-               <Avatar key={player.id} player={player} />
-            ))}
-         </div>
+         {gamePhase === GamePhase.Planning && (
+            <>
+               <div className="phase">
+                  <div className="players">
+                     Players:
+                     {players.map(player => (
+                        <Avatar key={player.id} player={player} />
+                     ))}
+                  </div>
+                  <div className="phase-inner">
+                     <p>It is planning my dudes</p>
+                     <p>Turn: {playerTurn()?.name}</p>
+                  </div>
+                  <div className="placeholder">placeholder</div>
+               </div>
+            </>
+         )}
          <div className="game-container">
             <div
                className="game-grid"
@@ -80,16 +92,6 @@ function App() {
                {divs}
             </div>
          </div>
-         {gamePhase === GamePhase.Planning && (
-            <>
-               <div className="phase">
-                  <div className="phase-inner">
-                     <p>It is planning my dudes</p>
-                     <p>Turn: {playerTurn()?.name}</p>
-                  </div>
-               </div>
-            </>
-         )}
       </div>
    );
 }
