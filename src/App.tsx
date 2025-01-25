@@ -84,7 +84,7 @@ function App() {
    switch (gamePhase) {
       case GamePhase.Planning:
          instructionText =
-            'Plan your moves. Use arow keys to move your bubble and <add instructions for attaaak here>';
+            'Plan your moves. Use the buttons below or se arow keys to move your bubble and b + arrow keys to shoot.';
          break;
       case GamePhase.Action:
          instructionText = 'Watch the action!';
@@ -105,25 +105,26 @@ function App() {
                   ))}
                </div>
                <div className="phase-inner">
-                  <div className="phase-inner__player-name">
-                     {playerTurn()?.name}
-                  </div>
+                  {gamePhase === GamePhase.Planning && (
+                     <div className="phase-inner__player-name">
+                        <span>{playerTurn()?.name}</span>
+                        <span>
+                           {` has 
+                           ${
+                              actionsPerTurn -
+                              (activePlayer()?.queueueueueuedActions
+                                 .length ?? 0)
+                           }${' / '}${actionsPerTurn}${' moves left'}`}
+                        </span>
+                     </div>
+                  )}
                   <div className="phase-inner__instructions">
                      {instructionText}
                   </div>
-                  <div className="phase-inner__moves-used">
-                     <span>{'Moves used: '}</span>
-                     <span>
-                        {`
-                           ${
-                              activePlayer()?.queueueueueuedActions
-                                 .length
-                           }${' / '}${actionsPerTurn}`}
-                     </span>
-                  </div>
-                  {playerTurnId && (
-                     <SelectMoves playerId={playerTurnId} />
-                  )}
+                  {playerTurnId &&
+                     gamePhase === GamePhase.Planning && (
+                        <SelectMoves playerId={playerTurnId} />
+                     )}
                </div>
             </div>
 
