@@ -25,6 +25,7 @@ export interface MasterState {
    setPlayerOrder: (ids: string[]) => void;
 
    actionsPerTurn: number;
+   runActionPhase: () => Promise<void>;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -73,18 +74,18 @@ export const useMasterState = create<MasterState>()(
             const p = state.players.find((e: any) => e.id == id);
             if (p) {
                p.pos = pos;
-               console.log(p.queueueueueuedActions[0]);
             }
          }),
-      queueueueAction: (id, actions) =>
-         set(state => {
-            if (state.gamePhase === GamePhase.Action) return state;
 
+      runActionPhase: async () => {
+         await resolver();
+      },
+      queueueueAction: (id, actions) => {
+         if (get().gamePhase === GamePhase.Action) return;
+         set(state => {
             const p = state.players.find((e: any) => e.id == id);
 
             if (!p) return;
-
-            console.log(actions);
 
             p.queueueueueuedActions = [
                ...p.queueueueueuedActions,
@@ -98,13 +99,13 @@ export const useMasterState = create<MasterState>()(
                );
                const nextTurn = state.playerOrder[currentIndex + 1];
                if (nextTurn) state.playerTurn = nextTurn;
-               else {
-                  state.gamePhase = GamePhase.Action;
-
-                  // Resolve action phase lol
-                  resolver();
-               }
+               else state.gamePhase = GamePhase.Action;
             }
-         }),
+         });
+
+         if (get().gamePhase === GamePhase.Action) {
+            get().runActionPhase();
+         }
+      },
    })),
 );
