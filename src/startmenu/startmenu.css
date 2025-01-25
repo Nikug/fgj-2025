@@ -39,24 +39,12 @@
 
 .player-list-item {
    display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: space-between;
-   flex-grow: 1;
-   gap: 1rem;
-   padding: 1rem;
-   color: black;
-   border-radius: 8px;
-   font-size: 1.5rem;
-}
-
-.player-list-item-row {
-   display: flex;
    flex-direction: row;
    align-items: center;
    justify-content: space-between;
    flex-grow: 1;
-   gap: 1rem;
+   gap: 0.5rem;
+   padding: 1rem;
    color: black;
    border-radius: 8px;
    font-size: 1.5rem;
