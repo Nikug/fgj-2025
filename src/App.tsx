@@ -132,8 +132,11 @@ function App() {
                </button>
             ))}
 
-            <button onClick={toggleScene}>
-               Back to start screen
+            <button
+               className="back-to-menu-button"
+               onClick={toggleScene}
+            >
+               Back to menu
             </button>
          </div>
          <div className="game-container">
