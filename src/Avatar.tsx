@@ -22,7 +22,9 @@ export function Avatar({ player, active }: AvatarProps) {
          </div>
          <div className="avatar__name">{name}</div>
          {player.isAI && <p className="player-list-label">AI</p>}
-         <div>{queueueueueuedActions.length}</div>
+         <div className="avatar__number">
+            {queueueueueuedActions.length}
+         </div>
       </div>
    );
 }

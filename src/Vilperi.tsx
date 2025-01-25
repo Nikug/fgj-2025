@@ -1,15 +1,13 @@
-import {
-   forwardRef,
-   PropsWithChildren,
-   useRef,
-   useState,
-} from 'react';
+import { forwardRef, PropsWithChildren, useRef } from 'react';
 import App from './App';
-import { Player as PlayerType, PlayerModelType } from './types';
+import {
+   Player as PlayerType,
+   PlayerModelType,
+   PowerUp,
+} from './types';
 import { pastellivärit } from './startmenu/StartMenu';
 import { Aleksi } from './aleksi/aleksi';
 import { id } from './id';
-import { Player } from './Player';
 import { playSound } from './audio';
 
 interface Props {
@@ -38,10 +36,9 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                height: '100%',
                containerType: 'inline-size',
                borderRadius: '4px',
-               outline:
-                  highlight ?
-                     '5px solid rgb(255, 0, 255)'
-                  :  undefined,
+               outline: highlight
+                  ? '5px solid rgb(255, 0, 255)'
+                  : undefined,
             }}
             ref={ref}
             id={id}
@@ -58,6 +55,44 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
       );
    },
 );
+
+interface PowerUpModelProps {
+   model: PowerUp;
+}
+
+export const PowerUpModel = forwardRef<
+   HTMLDivElement | null,
+   PowerUpModelProps
+>((props, ref) => {
+   const { model } = props;
+
+   const content = {
+      [PowerUp.PlusOne]: '+1',
+      [PowerUp.Lazor]: '🔫',
+   }[model];
+
+   return (
+      <div
+         style={{
+            position: 'relative', // Ensure relative positioning for hand placement
+            display: 'flex',
+            width: '100%',
+            height: '100%',
+            containerType: 'inline-size',
+            justifyContent: 'center',
+            alignItems: 'center',
+         }}
+      >
+         <div
+            ref={ref}
+            className={getPowerUpClassNames(model)}
+         ></div>
+         <div className="power-up-icon bubble-idle-animation-1">
+            <p className="power-up-icon-inner">{content}</p>
+         </div>
+      </div>
+   );
+});
 
 interface PlayerHandsProps {
    model: PlayerModelType;
@@ -116,6 +151,20 @@ export const getPlayerClassNames = (
    }`;
 };
 
+export const getPowerUpClassNames = (model: PowerUp) => {
+   let modelClassName;
+   switch (model) {
+      case PowerUp.PlusOne:
+         modelClassName = 'power-up-plus-one';
+         break;
+      case PowerUp.Lazor:
+         modelClassName = 'power-up-laser';
+         break;
+   }
+
+   return `power-up bubble-idle-animation-1 ${modelClassName}`;
+};
+
 export const Router = () => {
    if (location.toString().includes('#vilperi')) {
       return <Vilperi />;
@@ -127,19 +176,6 @@ export const Router = () => {
 };
 
 export const Vilperi = () => {
-   const player = {
-      name: 'Jaska',
-      mode: PlayerModelType.Monkey,
-      color: pastellivärit[5],
-      pos: { x: 0, y: 0 },
-      id: id(),
-      queueueueueuedActions: [],
-      elementId: `player-element-${id()}`,
-      isDead: false,
-   };
-
-   const [playerPopped, setPlayerPopped] = useState(false);
-
    return (
       <div
          style={{
@@ -242,20 +278,29 @@ export const Vilperi = () => {
                />
             </VilperiBox>
          </VilperiRow>
+         <VilperiRow>
+            <VilperiBox size="small">
+               <PowerUpModel model={PowerUp.PlusOne} />
+            </VilperiBox>
+            <VilperiBox size="medium">
+               <PowerUpModel model={PowerUp.PlusOne} />
+            </VilperiBox>
+            <VilperiBox size="large">
+               <PowerUpModel model={PowerUp.PlusOne} />
+            </VilperiBox>
+         </VilperiRow>
+         <VilperiRow>
+            <VilperiBox size="small">
+               <PowerUpModel model={PowerUp.Lazor} />
+            </VilperiBox>
+            <VilperiBox size="medium">
+               <PowerUpModel model={PowerUp.Lazor} />
+            </VilperiBox>
+            <VilperiBox size="large">
+               <PowerUpModel model={PowerUp.Lazor} />
+            </VilperiBox>
+         </VilperiRow>
          <VilperiGrid />
-
-         <VilperiBox size="large">
-            {!playerPopped && <Player player={player} />}
-            <div style={{ padding: '2em' }}>
-               <button
-                  onClick={() =>
-                     popPlayer(player, () => setPlayerPopped(true))
-                  }
-               >
-                  Pop player
-               </button>
-            </div>
-         </VilperiBox>
       </div>
    );
 };

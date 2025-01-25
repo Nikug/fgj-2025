@@ -10,6 +10,7 @@ import { AnyWeapon } from './AnyWeapon';
 import { isAttack } from './superSecretFile';
 import { PlayerTurnBackdrop } from './Vilperi2';
 import { Player as PlayerType } from './types';
+import { PowerUpModel } from './Vilperi';
 
 export const rows = 10;
 export const cols = 10;
@@ -31,9 +32,6 @@ function App() {
    const setGamePhase = useMasterState(state => state.setGamePhase);
    const actionsPerTurn = useMasterState(
       state => state.actionsPerTurn,
-   );
-   const actionActionsPerTurn = useMasterState(
-      state => state.actionActionsPerTurn,
    );
    const generateDivs = () => {
       const grid: React.ReactNode[] = [];
@@ -84,7 +82,10 @@ function App() {
                   {}
                   {}
                   {tilePowers.map(tilePower => (
-                     <div key={tilePower.id}>{tilePower.type}</div> //TODO: add poweeeeeeer
+                     <PowerUpModel
+                        key={tilePower.id}
+                        model={tilePower.type}
+                     />
                   ))}
                </div>,
             );
