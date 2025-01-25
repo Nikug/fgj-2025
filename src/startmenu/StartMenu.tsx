@@ -39,6 +39,7 @@ type StartMenuProps = {
 };
 
 export function StartMenu({ changeScene }: StartMenuProps) {
+   const userEventDetected = useRef(false);
    const nameInput = useRef<any>(null);
    const [colors] = useState(
       pastellivärit.sort(() => Math.random() - 0.5),
