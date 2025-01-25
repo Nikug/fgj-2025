@@ -164,6 +164,9 @@ const AIPlayerLogic = async () => {
       !hasObstacle(pos) &&
       !enemyPlayers.some(
          p => p.pos.x === pos.x && p.pos.y === pos.y,
+      ) &&
+      !state.weapons.some(
+         w => w.pos.x === pos.x && w.pos.y === pos.y,
       );
 
    console.log('Checking position validity...');
@@ -172,6 +175,10 @@ const AIPlayerLogic = async () => {
       Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
 
    console.log('Distance function defined.');
+
+   // Decision-making
+   const actions: Action[] = [];
+   let actionsUsed = 0;
 
    const findClosestEnemy = () =>
       enemyPlayers.reduce<{
@@ -182,10 +189,12 @@ const AIPlayerLogic = async () => {
             closest: { player: PlayerType | null; distance: number },
             enemy,
          ) => {
-            const distance = getDistance(
-               activePlayer.pos,
-               enemy.pos,
-            );
+            const currentPosition =
+               getCurrentPlayerPositionAfterActions(
+                  activePlayer.pos,
+                  activePlayer.queueueueueuedActions.concat(actions),
+               );
+            const distance = getDistance(currentPosition, enemy.pos);
             console.log(
                `Distance to enemy ${enemy.id}: ${distance}`,
             );
@@ -198,16 +207,57 @@ const AIPlayerLogic = async () => {
 
    console.log('Find closest enemy function defined.');
 
-   // Decision-making
-   const actions: Action[] = [];
-   let actionsUsed = 0;
+   const getCurrentPlayerPositionAfterActions = (
+      initialPos: V2,
+      actions: Action[],
+   ): V2 => {
+      const newPos = { ...initialPos };
+
+      actions.forEach(action => {
+         switch (action) {
+            case Action.MoveUp:
+               newPos.y -= 1;
+               break;
+            case Action.MoveDown:
+               newPos.y += 1;
+               break;
+            case Action.MoveLeft:
+               newPos.x -= 1;
+               break;
+            case Action.MoveRight:
+               newPos.x += 1;
+               break;
+            default:
+               break;
+         }
+      });
+
+      return newPos;
+   };
+
+   const newPosition = getCurrentPlayerPositionAfterActions(
+      activePlayer.pos,
+      actions,
+   );
+   console.log(
+      `New position after actions: x=${newPosition.x}, y=${newPosition.y}`,
+   );
 
    // 1. Try to attack if an enemy is in range
    const attackDirection = (enemyPos: V2): Direction | null => {
-      const dx = enemyPos.x - activePlayer.pos.x;
-      const dy = enemyPos.y - activePlayer.pos.y;
+      const currentPosition = getCurrentPlayerPositionAfterActions(
+         activePlayer.pos,
+         activePlayer.queueueueueuedActions.concat(actions),
+      );
+      const dx = enemyPos.x - currentPosition.x;
+      const dy = enemyPos.y - currentPosition.y;
 
       console.log(`Attempting to attack: dx=${dx}, dy=${dy}`);
+
+      if (dx === 1 && dy === 0) return 'ltr';
+      if (dx === -1 && dy === 0) return 'rtl';
+      if (dx === 0 && dy === 1) return 'ttb';
+      if (dx === 0 && dy === -1) return 'btt';
 
       if (actions.length === 4 || Math.random() < 0.2) {
          const directions: Direction[] = [
@@ -225,11 +275,6 @@ const AIPlayerLogic = async () => {
          );
          return randomDirection;
       }
-
-      if (dx === 1 && dy === 0) return 'ltr';
-      if (dx === -1 && dy === 0) return 'rtl';
-      if (dx === 0 && dy === 1) return 'ttb';
-      if (dx === 0 && dy === -1) return 'btt';
 
       return null;
    };
@@ -266,15 +311,20 @@ const AIPlayerLogic = async () => {
       console.log('Attempting to move towards closest enemy.');
 
       const moveDirection = (): Direction | null => {
-         const dx = closestEnemy.pos.x - activePlayer.pos.x;
-         const dy = closestEnemy.pos.y - activePlayer.pos.y;
+         const currentPosition =
+            getCurrentPlayerPositionAfterActions(
+               activePlayer.pos,
+               activePlayer.queueueueueuedActions.concat(actions),
+            );
+         const dx = closestEnemy.pos.x - currentPosition.x;
+         const dy = closestEnemy.pos.y - currentPosition.y;
 
          console.log(`Movement check: dx=${dx}, dy=${dy}`);
 
          if (Math.abs(dx) > Math.abs(dy)) {
             const newPos = {
-               x: activePlayer.pos.x + Math.sign(dx),
-               y: activePlayer.pos.y,
+               x: currentPosition.x + Math.sign(dx),
+               y: currentPosition.y,
             };
             console.log(
                `Checking horizontal move to position: ${newPos.x}, ${newPos.y}`,
@@ -286,8 +336,8 @@ const AIPlayerLogic = async () => {
             }
          } else {
             const newPos = {
-               x: activePlayer.pos.x,
-               y: activePlayer.pos.y + Math.sign(dy),
+               x: currentPosition.x,
+               y: currentPosition.y + Math.sign(dy),
             };
             console.log(
                `Checking vertical move to position: ${newPos.x}, ${newPos.y}`,
@@ -309,10 +359,10 @@ const AIPlayerLogic = async () => {
          for (const dir of directions) {
             const newPos = {
                x:
-                  activePlayer.pos.x +
+                  currentPosition.x +
                   (dir === 'ltr' ? 1 : dir === 'rtl' ? -1 : 0),
                y:
-                  activePlayer.pos.y +
+                  currentPosition.y +
                   (dir === 'ttb' ? 1 : dir === 'btt' ? -1 : 0),
             };
             if (isPositionValid(newPos)) {
@@ -331,10 +381,10 @@ const AIPlayerLogic = async () => {
             for (const dir of directions) {
                const newPos = {
                   x:
-                     activePlayer.pos.x +
+                     currentPosition.x +
                      (dir === 'ltr' ? 1 : dir === 'rtl' ? -1 : 0),
                   y:
-                     activePlayer.pos.y +
+                     currentPosition.y +
                      (dir === 'ttb' ? 1 : dir === 'btt' ? -1 : 0),
                };
                if (hasObstacle(newPos)) {
@@ -411,8 +461,8 @@ const makeAIMoves = async (times: number) => {
    console.log(`Making ${times} AI moves.`);
    for (let i = 0; i < times; i++) {
       console.log(`Move ${i + 1} of ${times}`);
-      await sleep(1000);
+      await sleep(200);
       runAI();
-      await sleep(1000);
+      await sleep(200);
    }
 };
