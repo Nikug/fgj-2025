@@ -8,7 +8,6 @@ import menuSoundtrack from './../assets/whats_cooking_there.mp3';
 import { playSound } from '../audio';
 import { FloatingPlayerBubble } from '../Vilperi2';
 import '../vilperi2.css';
-import Marquee from 'react-fast-marquee';
 import { Lore } from '../Lore';
 
 const menuAudio = new Audio(menuSoundtrack);
@@ -99,32 +98,34 @@ export function StartMenu({ changeScene }: StartMenuProps) {
       };
    }, []);
 
-   // useEffect(() => {
-   //    // add two players for testing
-   //    setPlayers([
-   //       {
-   //          name: 'Jaska',
-   //          mode: PlayerModelType.Monkey,
-   //          color: colors[i],
-   //          pos: { x: 0, y: 0 },
-   //          id: id(),
-   //          queueueueueuedActions: [],
-   //          elementId: `player-element-${id()}`,
-   //          isDead: false,
-   //       },
-   //       {
-   //          name: 'Kalle',
-   //          mode: PlayerModelType.Ninja,
-   //          color: colors[i + 1],
-   //          pos: { x: 0, y: 0 },
-   //          id: id(),
-   //          queueueueueuedActions: [],
-   //          elementId: `player-element-${id()}`,
-   //          isDead: false,
-   //       },
-   //    ]);
-   //    setI(i + 2);
-   // }, []);
+   useEffect(() => {
+      // add two players for testing
+      setPlayers([
+         {
+            name: 'Jaska',
+            mode: PlayerModelType.Monkey,
+            color: colors[i],
+            pos: { x: 0, y: 0 },
+            id: id(),
+            queueueueueuedActions: [],
+            elementId: `player-element-${id()}`,
+            isDead: false,
+            isAI: true,
+         },
+         {
+            name: 'Kalle',
+            mode: PlayerModelType.Ninja,
+            color: colors[i + 1],
+            pos: { x: 0, y: 0 },
+            id: id(),
+            queueueueueuedActions: [],
+            elementId: `player-element-${id()}`,
+            isDead: false,
+            isAI: true,
+         },
+      ]);
+      setI(i + 2);
+   }, []);
 
    const addPlayer = () => {
       const nameExists = players.find(

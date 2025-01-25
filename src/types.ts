@@ -33,6 +33,7 @@ export interface Player {
    queueueueueuedActions: Action[];
    elementId: string;
    isDead: boolean;
+   isAI?: boolean;
 }
 
 export const enum Scene {
