@@ -117,9 +117,9 @@ export const getPlayerClassNames = (
 };
 
 export const Router = () => {
-   if (location.pathname === '/vilperi') {
+   if (location.toString().includes('#vilperi')) {
       return <Vilperi />;
-   } else if (location.pathname == '/aleksi') {
+   } else if (location.toString().includes('#aleksi')) {
       return <Aleksi />;
    } else {
       return <App />;
