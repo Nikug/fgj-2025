@@ -3,6 +3,7 @@ import { GamePhase, Player, V2, Action, Scene } from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { randomInt, shuffleList } from '../random';
 import { cols, rows } from '../App';
+import { resolver } from './resolver';
 
 export interface MasterState {
    scene: Scene;
@@ -77,6 +78,8 @@ export const useMasterState = create<MasterState>()(
          }),
       queueueueAction: (id, actions) =>
          set(state => {
+            if (state.gamePhase === GamePhase.Action) return state;
+
             const p = state.players.find((e: any) => e.id == id);
 
             if (!p) return;
@@ -95,7 +98,12 @@ export const useMasterState = create<MasterState>()(
                );
                const nextTurn = state.playerOrder[currentIndex + 1];
                if (nextTurn) state.playerTurn = nextTurn;
-               else state.gamePhase = GamePhase.Action;
+               else {
+                  state.gamePhase = GamePhase.Action;
+
+                  // Resolve action phase lol
+                  resolver();
+               }
             }
          }),
    })),
