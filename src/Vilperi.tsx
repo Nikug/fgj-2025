@@ -10,6 +10,7 @@ import { pastellivärit } from './startmenu/StartMenu';
 import { Aleksi } from './aleksi/aleksi';
 import { id } from './id';
 import { Player } from './Player';
+import { playSound } from './audio';
 
 interface Props {
    model: PlayerModelType;
@@ -37,9 +38,10 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                height: '100%',
                containerType: 'inline-size',
                borderRadius: '4px',
-               outline: highlight
-                  ? '5px solid rgb(255, 0, 255)'
-                  : undefined,
+               outline:
+                  highlight ?
+                     '5px solid rgb(255, 0, 255)'
+                  :  undefined,
             }}
             ref={ref}
             id={id}
@@ -323,6 +325,7 @@ export const popPlayer = (
       return;
    }
    playerElement.className = getPlayerClassNames(player.mode, 'pop');
+   playSound('perkele');
 
    // Clean up after the animation
    const handleTransitionEnd = () => {
