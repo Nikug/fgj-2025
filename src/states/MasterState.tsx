@@ -213,6 +213,7 @@ export const useMasterState = create<MasterState>()(
                   state.deadPlayers.push({
                      ...player,
                      isDead: true,
+                     queueueueueuedActions: [],
                   });
                } else {
                   newPlayers.push(player);
