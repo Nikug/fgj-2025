@@ -10,24 +10,27 @@ const TimeBetweenActions = 500;
 export const resolver = async () => {
    await sleep(TimeBetweenActions);
 
-   const players = shuffleList(useMasterState.getState().players);
+   useMasterState.setState(state => shuffleList(state.players));
 
    // Main loop
    for (
       let playerIndex = 0;
-      playerIndex < players.length;
+      playerIndex < useMasterState.getState().players.length;
       playerIndex++
    ) {
-      const player = players[playerIndex];
       useMasterState.setState(state => {
-         state.playerTurn = player.id;
+         state.playerTurn = state.players[playerIndex].id;
       });
 
       for (
          let actionIndex = 0;
-         actionIndex < player.queueueueueuedActions.length;
+         actionIndex <
+         useMasterState.getState().players[playerIndex]
+            .queueueueueuedActions.length;
          actionIndex++
       ) {
+         const player =
+            useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
 
          const newPos = { ...player.pos };
@@ -37,40 +40,28 @@ export const resolver = async () => {
                useMasterState.setState(state => {
                   newPos.y -= 1;
                   if (newPos.y < 0) newPos.y = 0;
-                  state.players[playerIndex] = {
-                     ...player,
-                     pos: newPos,
-                  };
+                  state.players[playerIndex].pos = newPos;
                });
                break;
             case Action.MoveDown:
                useMasterState.setState(state => {
                   newPos.y += 1;
                   if (newPos.y >= rows) newPos.y = rows - 1;
-                  state.players[playerIndex] = {
-                     ...player,
-                     pos: newPos,
-                  };
+                  state.players[playerIndex].pos = newPos;
                });
                break;
             case Action.MoveLeft:
                useMasterState.setState(state => {
                   newPos.x -= 1;
                   if (newPos.x < 0) newPos.x = 0;
-                  state.players[playerIndex] = {
-                     ...player,
-                     pos: newPos,
-                  };
+                  state.players[playerIndex].pos = newPos;
                });
                break;
             case Action.MoveRight:
                useMasterState.setState(state => {
-                  newPos.x == 1;
+                  newPos.x += 1;
                   if (newPos.x >= cols) newPos.x = cols - 1;
-                  state.players[playerIndex] = {
-                     ...player,
-                     pos: newPos,
-                  };
+                  state.players[playerIndex].pos = newPos;
                });
                break;
             case Action.Attack:
