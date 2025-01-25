@@ -49,8 +49,7 @@ function App() {
                   weapon.pos.x === col && weapon.pos.y === row,
             );
             const tilePowers = powers.filter(
-               power =>
-                  power.pos.x === col && power.pos.y === row,
+               power => power.pos.x === col && power.pos.y === row,
             );
             grid.push(
                <div
@@ -58,7 +57,13 @@ function App() {
                   key={`${row} ${col}`}
                   data-x={col}
                   data-y={row}
+                  // style={{
+                  //    fontSize: '2rem',
+                  //    color: 'black',
+                  //    backgroundColor: 'white',
+                  // }}
                >
+                  {/* {`x: ${col}, y: ${row}`} */}
                   {obstacle && <Obstacle />}
                   {tilePlayers.map(tilePlayer => (
                      <Player

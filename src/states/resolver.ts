@@ -13,7 +13,7 @@ import {
    WeaponType,
 } from '../types';
 import {} from '../types';
-import { useMasterState } from './MasterState';
+import { MasterState, useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import {
    getRandomPoveeeeer,
@@ -37,11 +37,17 @@ export const resolver = async () => {
 
    // Reset state back to planning
    useMasterState.setState(state => {
+      const newPower: UnlimitedPoweeer = {
+         id: id(),
+         type: getRandomPoveeeeer(),
+         pos: randomPos(cols, rows),
+      };
       state.gamePhase = GamePhase.Planning;
       state.players = state.players.map(player => ({
          ...player,
          queueueueueuedActions: [],
       }));
+      state.powers = [...state.powers, newPower];
       state.players = shuffleList(state.players);
       state.playerOrder = state.players.map(p => p.id);
       state.playerTurn = state.players[0].id;
@@ -171,6 +177,7 @@ const resolveMovements = async () => {
                   ) {
                      state.players[playerIndex].pos = newPos;
                   }
+                  checkPowerUpFromPos(player.id, newPos, state);
                });
                playSound('move');
                break;
@@ -184,6 +191,7 @@ const resolveMovements = async () => {
                   ) {
                      state.players[playerIndex].pos = newPos;
                   }
+                  checkPowerUpFromPos(player.id, newPos, state);
                });
                playSound('move');
                break;
@@ -197,6 +205,7 @@ const resolveMovements = async () => {
                   ) {
                      state.players[playerIndex].pos = newPos;
                   }
+                  checkPowerUpFromPos(player.id, newPos, state);
                });
                playSound('move');
                break;
@@ -210,6 +219,7 @@ const resolveMovements = async () => {
                   ) {
                      state.players[playerIndex].pos = newPos;
                   }
+                  checkPowerUpFromPos(player.id, newPos, state);
                });
                playSound('move');
                break;
@@ -338,23 +348,6 @@ const resolveMovements = async () => {
    }
 
    await sleep(TimeBetweenActions);
-
-   useMasterState.setState(state => {
-      const newPower: UnlimitedPoweeer = {
-         id: id(),
-         type: getRandomPoveeeeer(),
-         pos: randomPos(cols, rows),
-      };
-      state.gamePhase = GamePhase.Planning;
-      state.players = state.players.map(player => ({
-         ...player,
-         queueueueueuedActions: [],
-      }));
-      state.powers = [...state.powers, newPower];
-      state.players = shuffleList(state.players);
-      state.playerOrder = state.players.map(p => p.id);
-      state.playerTurn = state.players[0].id;
-   });
 };
 
 export const getGridElementMoveFrom = (x: number, y: number) => {
@@ -399,6 +392,24 @@ const animatePlayerMovement = (
    }
 };
 
+const checkPowerUpFromPos = (
+   id: string,
+   pos: V2,
+   state: MasterState,
+) => {
+   const power = state.powers.find(
+      e => e.pos.x === pos.x && e.pos.y === pos.y,
+   );
+   if (power) {
+      if (power.type == PowerUp.Lazor) {
+         const p = state.players.find(e => e.id === id);
+         if (p) {
+            const i = state.players.indexOf(p);
+            state.players[i].hasLazor = true;
+         }
+      }
+   }
+};
 const getMovement = (
    action: Action,
    position: { x: number; y: number },

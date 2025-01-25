@@ -217,10 +217,33 @@ export const useMasterState = create<MasterState>()(
                const currentIndex = state.playerOrder.indexOf(
                   state.playerTurn ?? state.playerOrder[0],
                );
-               const nextTurn = state.playerOrder[currentIndex + 1];
+               let nextTurn: string | undefined =
+                  state.playerOrder[currentIndex + 1];
                if (nextTurn) {
-                  state.playerTurn = nextTurn;
-                  state.gamePhase = GamePhase.NextTurn;
+                  const nextPlayer = state.players.find(
+                     p => p.id === nextTurn,
+                  );
+                  if (!nextPlayer || nextPlayer.isDead) {
+                     // Panic mode, this should not happen but it keeps happening all the time
+                     const newOrder = state.playerOrder.filter(id =>
+                        state.players.some(
+                           player =>
+                              player.id === id && !player.isDead,
+                        ),
+                     );
+                     const nextNextTurn = newOrder.find(id =>
+                        state.players.find(
+                           p =>
+                              p.id === id &&
+                              p.queueueueueuedActions.length === 0,
+                        ),
+                     );
+                     if (nextNextTurn) nextTurn = nextNextTurn;
+                     else state.gamePhase = GamePhase.Action;
+                  } else {
+                     state.playerTurn = nextTurn;
+                     state.gamePhase = GamePhase.NextTurn;
+                  }
                } else {
                   state.gamePhase = GamePhase.Action;
                }
