@@ -46,6 +46,7 @@ export interface MasterState {
 
    actionsPerTurn: number;
    weaponMovePerTurn: number;
+   moveWeapon: (weapon: Weapon, pos: V2) => Promise<void>;
    runActionPhase: () => Promise<void>;
 
    obstacles: Obstacle[];
@@ -148,6 +149,10 @@ export const useMasterState = create<MasterState>()(
             get().runActionPhase();
          }
       },
+      moveWeapon: async (w, pos) => {
+         return new Promise(resolve => resolve());
+      },
+
       obstacles: obstacleList(),
       hasObstacle: (pos: V2) =>
          get().obstacles.some(

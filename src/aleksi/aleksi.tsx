@@ -23,43 +23,30 @@ const filter = (
    return [...players.filter(f), ...obstacles.filter(f)];
 };
 
-export const getTarget = (
+export const getFromPos = (
    pos: V2,
-   direction: Direction,
    obstacles: Obstacle[],
    players: Player[],
 ) => {
-   let predicate: (e: Player | Obstacle) => boolean;
-   let ab: (
-      prev: Player | Obstacle,
-      curr: Player | Obstacle,
-   ) => Player | Obstacle;
+   return {
+      player: players.find(
+         e => e.pos.y == pos.y && e.pos.x == pos.x,
+      ),
+      obs: obstacles.find(e => e.pos.y == pos.y && e.pos.x == pos.x),
+   };
+};
+
+export const getNextPos = (pos: V2, direction: Direction) => {
    switch (direction) {
       case 'ltr':
-         predicate = e => e.pos.y === pos.y && e.pos.x > pos.x;
-         ab = (prev, curr) =>
-            prev.pos.x < curr.pos.x ? prev : curr;
-         break;
+         return { x: pos.x + 1, y: pos.y };
       case 'rtl':
-         predicate = e => e.pos.y === pos.y && e.pos.x < pos.x;
-         ab = (prev, curr) =>
-            prev.pos.x > curr.pos.x ? prev : curr;
-         break;
+         return { x: pos.x - 1, y: pos.y };
       case 'ttb':
-         predicate = e => e.pos.x === pos.x && e.pos.y > pos.y;
-         ab = (prev, curr) =>
-            prev.pos.y > curr.pos.y ? prev : curr;
-         break;
+         return { x: pos.x, y: pos.y + 1 };
       case 'btt':
-         predicate = e => e.pos.x === pos.x && e.pos.y < pos.y;
-         ab = (prev, curr) =>
-            prev.pos.y < curr.pos.y ? prev : curr;
-         break;
+         return { x: pos.x, y: pos.y - 1 };
    }
-   const collidables = filter(predicate, players, obstacles);
-   return collidables.length > 0 ?
-         collidables.reduce(ab)
-      :  undefined;
 };
 
 const getBansqTranslate = (direction: Direction) => {

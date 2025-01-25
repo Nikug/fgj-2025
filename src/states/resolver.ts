@@ -6,7 +6,7 @@ import { Action, GamePhase, Player, V2, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { oob, playerOverlap } from './notUtils';
 import { moveFromElementToElement } from '../Vilperi';
-import { getTarget } from '../aleksi/aleksi';
+import { getFromPos, getNextPos, getTarget } from '../aleksi/aleksi';
 
 const TimeBetweenActions = 1000;
 
@@ -17,17 +17,48 @@ export const resolver = async () => {
    await resolveMovements();
    await resolveProjectiles();
 };
+
 const resolveProjectiles = async () => {
    const weapons = useMasterState.getState().weapons;
+   for (const weapon of weapons) {
+      await handleWeapon(weapon);
+   }
+};
+
+const handleWeapon = async (weapon: Weapon) => {
    const obstacles = useMasterState.getState().obstacles;
    const players = useMasterState.getState().players;
-   for (const { pos, direction } of weapons) {
-      const target = getTarget(pos, direction, obstacles, players);
-      if (target) {
-         console.log(target);
+   const weaponDistance =
+      useMasterState.getState().weaponMovePerTurn;
+   const damageObstacle = useMasterState.getState().damageObstacle;
+   const kill = useMasterState.getState().killPlayer;
+   const moveWeapon = useMasterState.getState().moveWeapon;
+   for (let i = 0; i < weaponDistance; i++) {
+      const nextPos = getNextPos(weapon.pos, weapon.direction);
+      await moveWeapon(weapon, nextPos);
+      if (
+         nextPos.x > 10 ||
+         nextPos.y > 10 ||
+         nextPos.x < 0 ||
+         nextPos.y < 0
+      ) {
+         console.log('hit wall');
+         break;
+      }
+      const target = getFromPos(nextPos, obstacles, players);
+      if (target.player) {
+         kill(target.player.id);
+         console.log('hit player');
+         break;
+      }
+      if (target.obs) {
+         damageObstacle(target.obs.pos, 1);
+         console.log('damaged obstacle');
+         break;
       }
    }
 };
+
 const resolveMovements = async () => {
    const alivePlayerCount = useMasterState.getState().players.length;
 

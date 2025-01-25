@@ -7,7 +7,7 @@ import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
 import { Sahuli } from './aleksi/aleksi';
 import { popPlayer } from './Vilperi';
-import { AbsoluteWrapper } from './AbsoluteWrapper';
+import { SelectMoves } from './SelectMoves';
 
 export const rows = 10;
 export const cols = 10;
@@ -121,6 +121,9 @@ function App() {
                            }${' / '}${actionsPerTurn}`}
                      </span>
                   </div>
+                  {playerTurnId && (
+                     <SelectMoves playerId={playerTurnId} />
+                  )}
                </div>
             </div>
 
