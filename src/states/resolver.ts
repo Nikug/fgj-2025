@@ -6,6 +6,7 @@ import { Action, GamePhase, Player, Weapon } from '../types';
 import { useMasterState } from './MasterState';
 import { playerOverlap } from './notUtils';
 import { moveFromElementToElement } from '../Vilperi';
+import { getTarget } from '../aleksi/aleksi';
 
 const TimeBetweenActions = 1000;
 
@@ -16,7 +17,17 @@ export const resolver = async () => {
    await resolveMovements();
    await resolveProjectiles();
 };
-const resolveProjectiles = async () => {};
+const resolveProjectiles = async () => {
+   const weapons = useMasterState.getState().weapons;
+   const obstacles = useMasterState.getState().obstacles;
+   const players = useMasterState.getState().players;
+   for (const { pos, direction } of weapons) {
+      const target = getTarget(pos, direction, obstacles, players);
+      if (target) {
+         console.log(target);
+      }
+   }
+};
 const resolveMovements = async () => {
    const alivePlayerCount = useMasterState.getState().players.length;
 
