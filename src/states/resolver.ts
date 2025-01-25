@@ -407,6 +407,7 @@ const checkPowerUpFromPos = (
             if (p) {
                const i = state.players.indexOf(p);
                state.players[i].hasLazor = true;
+               state.powers = state.powers.filter(e => e !== power)
             }
             break;
          }
@@ -414,6 +415,7 @@ const checkPowerUpFromPos = (
             const p = state.players.find(e => e.id === id);
             if (p) {
                p.attacksPerTurn += 1;
+               state.powers = state.powers.filter(e => e !== power)
             }
             break;
          }
