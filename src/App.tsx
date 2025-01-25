@@ -7,6 +7,7 @@ import { Avatar } from './Avatar';
 import { Obstacle } from './Obstacle';
 import { Sahuli } from './aleksi/aleksi';
 import { popPlayer } from './Vilperi';
+import { AbsoluteWrapper } from './AbsoluteWrapper';
 
 export const rows = 10;
 export const cols = 10;
@@ -30,12 +31,12 @@ function App() {
       const grid: React.ReactNode[] = [];
       for (let row = 0; row < rows; row++) {
          for (let col = 0; col < cols; col++) {
-            const hasPlayer = players.find(
+            const tilePlayers = players.filter(
                player =>
                   player.pos.x === col && player.pos.y === row,
             );
             const obstacle = hasObstacle({ x: col, y: row });
-            const hasWeapon = weapons.find(
+            const tileWeapons = weapons.filter(
                weapon =>
                   weapon.pos.x === col && weapon.pos.y === row,
             );
@@ -46,13 +47,24 @@ function App() {
                   data-x={col}
                   data-y={row}
                >
-                  {obstacle && <Obstacle />}
-                  {hasPlayer && !obstacle && (
-                     <Player player={hasPlayer} />
+                  {obstacle && (
+                     <AbsoluteWrapper>
+                        <Obstacle />
+                     </AbsoluteWrapper>
                   )}
-                  {hasWeapon && !obstacle && (
-                     <Sahuli direction={hasWeapon.direction} />
-                  )}
+                  {tilePlayers.map(tilePlayer => (
+                     <AbsoluteWrapper key={tilePlayer.id}>
+                        <Player
+                           key={tilePlayer.id}
+                           player={tilePlayer}
+                        />
+                     </AbsoluteWrapper>
+                  ))}
+                  {tileWeapons.map(tileWeapon => (
+                     <AbsoluteWrapper key={tileWeapon.id}>
+                        <Sahuli direction={tileWeapon.direction} />
+                     </AbsoluteWrapper>
+                  ))}
                </div>,
             );
          }
