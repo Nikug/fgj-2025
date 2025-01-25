@@ -169,7 +169,7 @@ export const useMasterState = create<MasterState>()(
          ),
       damageObstacle: (pos: V2, damage: number) =>
          set(state => {
-            state.obstacles = [];
+            const remainingObstacles: Obstacle[] = [];
             state.obstacles.forEach(obstacle => {
                if (
                   obstacle.pos.x === pos.x &&
@@ -177,10 +177,13 @@ export const useMasterState = create<MasterState>()(
                ) {
                   obstacle.health -= damage;
                   if (obstacle.health > 0) {
-                     state.obstacles.push(obstacle);
+                     remainingObstacles.push(obstacle);
                   }
-               } else state.obstacles.push(obstacle);
+               } else {
+                  remainingObstacles.push(obstacle);
+               }
             });
+            state.obstacles = remainingObstacles;
          }),
       killPlayer: id =>
          set(state => {
