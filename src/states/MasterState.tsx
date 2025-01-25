@@ -6,17 +6,16 @@ import {
    Action,
    Scene,
    Weapon,
-   Direction,
    Obstacle,
 } from '../types';
 import { immer } from 'zustand/middleware/immer';
-import { randomInt, shuffleList } from '../random';
+import { shuffleList } from '../random';
 import { cols, rows } from '../App';
 import { resolver } from './resolver';
-import { id } from '../id';
 import { playerOverlap, randomPos } from './notUtils';
 import { obstacleList } from '../map';
 import { startGameMusic, stopGameMusic } from '../audio';
+import { isAttack } from '../superSecretFile';
 
 export interface MasterState {
    scene: Scene;
@@ -140,9 +139,18 @@ export const useMasterState = create<MasterState>()(
 
             state.waitingAction = newWaitingAction;
 
+            const isAttackAction = isAttack(actions[0]);
+            const alreadyDoneAttack =
+               p.queueueueueuedActions.some(isAttack);
+
+            let newAction = actions[0];
+            if (isAttackAction && alreadyDoneAttack) {
+               newAction = Action.Nothing;
+            }
+
             p.queueueueueuedActions = [
                ...p.queueueueueuedActions,
-               ...actions,
+               newAction,
             ];
             if (
                p.queueueueueuedActions.length >= state.actionsPerTurn
