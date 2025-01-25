@@ -133,9 +133,26 @@
   }
 }
 
+.add-ai-button {
+  background-color: rgb(37, 37, 37);
+  padding: 0.5rem;
+  font-size: 1.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+
+  &:hover {
+    background-color: rgb(49, 49, 49);
+  }
+
+  &:focus {   
+    outline: 5px solid rgb(255, 0, 255);
+  }
+}
+
 .start-button {
   background-color: purple;
-  padding: 1rem;
+  padding: 0.4rem 1rem;
   border-radius: 8px;
   font-size: 2rem;
   cursor: pointer;

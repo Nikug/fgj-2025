@@ -176,6 +176,25 @@ export function StartMenu({ changeScene }: StartMenuProps) {
 
             <div className="start-menu__top-section">
                <div className="add-player">
+                  <div className="add-player__label">Start game</div>
+                  <button
+                     className="start-button"
+                     onClick={startGame}
+                     disabled={players.length < 1}
+                  >
+                     Start blasting 👉🔥🔥🚒
+                  </button>
+                  <div className="add-player__label">
+                     Add AI player
+                  </div>
+                  <button
+                     className="add-ai-button"
+                     onClick={addAIPlayer}
+                  >
+                     Add AI player
+                  </button>
+               </div>
+               <div className="add-player">
                   <div className="add-player__label">
                      Choose class
                   </div>
@@ -205,17 +224,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                         e.key === 'Enter' ? addPlayer() : null
                      }
                   ></input>
-                  <button onClick={addAIPlayer}>
-                     Add AI player
-                  </button>
                </div>
-               <button
-                  className="start-button"
-                  onClick={startGame}
-                  disabled={players.length < 1}
-               >
-                  Start blasting 👉🔥🔥🚒
-               </button>
             </div>
 
             <div className="start-menu__player-list">
