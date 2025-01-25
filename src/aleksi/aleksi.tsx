@@ -26,18 +26,23 @@ interface TaikuloinenProps {
 }
 
 export const getFromPos = (
-   pos: V2,
+   w: Weapon,
    obstacles: Obstacle[],
    players: Player[],
    weapons: Weapon[],
 ) => {
    return {
       player: players.find(
-         e => e.pos.y == pos.y && e.pos.x == pos.x,
+         e => e.pos.y == w.pos.y && e.pos.x == w.pos.x,
       ),
-      obs: obstacles.find(e => e.pos.y == pos.y && e.pos.x == pos.x),
+      obs: obstacles.find(
+         e => e.pos.y == w.pos.y && e.pos.x == w.pos.x,
+      ),
       weapon: weapons.find(
-         e => e.pos.y == pos.y && e.pos.x == pos.x,
+         e =>
+            e.pos.y == w.pos.y &&
+            e.pos.x == w.pos.x &&
+            e.id !== w.id,
       ),
    };
 };
