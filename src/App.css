@@ -90,7 +90,7 @@
   display: flex;
   width: 100%;
   font-size: 1rem;
-  gap: 1rem;
+  gap: 1.5rem;
   flex-direction: column;
   justify-content: center;
   align-items: start;
@@ -102,6 +102,7 @@
 
 .phase-inner__instructions {
   font-size: 1.2rem;
+  margin-bottom: 0.2rem;
 }
 
 .phase-inner__moves-used {
