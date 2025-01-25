@@ -128,7 +128,12 @@ function App() {
                            }${' / '}${actionsPerTurn}${' moves left'}`}
                         </p>
                         <p>
-                           {`${actionActionsPerTurn - (activePlayer()?.queueueueueuedActions.filter(isAttack).length ?? 0)}${' / '}${actionActionsPerTurn}${' attacks left'}`}
+                           {`${
+                              actionActionsPerTurn -
+                              (activePlayer()?.queueueueueuedActions.filter(
+                                 isAttack,
+                              ).length ?? 0)
+                           }${' / '}${actionActionsPerTurn}${' attacks left'}`}
                         </p>
                      </div>
                   )}

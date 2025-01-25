@@ -10,6 +10,10 @@
    background-image: url(../../ezgif.com-animated-gif-maker.gif);
    background-size: cover;
 }
+.start-menu__container {
+   height: 100%;
+   width: 100%;
+}
 
 .star-name__title {
    font-size: 4rem;
