@@ -401,11 +401,21 @@ const checkPowerUpFromPos = (
       e => e.pos.x === pos.x && e.pos.y === pos.y,
    );
    if (power) {
-      if (power.type == PowerUp.Lazor) {
-         const p = state.players.find(e => e.id === id);
-         if (p) {
-            const i = state.players.indexOf(p);
-            state.players[i].hasLazor = true;
+      switch (power.type) {
+         case PowerUp.Lazor: {
+            const p = state.players.find(e => e.id === id);
+            if (p) {
+               const i = state.players.indexOf(p);
+               state.players[i].hasLazor = true;
+            }
+            break;
+         }
+         case PowerUp.PlusOne: {
+            const p = state.players.find(e => e.id === id);
+            if (p) {
+               p.attacksPerTurn += 1;
+            }
+            break;
          }
       }
    }
