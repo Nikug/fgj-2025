@@ -85,7 +85,9 @@ export const Player = forwardRef<HTMLDivElement | null, Props>(
                   );
                }
             }
-            if (e.key === ' ') {
+            if (e.key === ' ' || e.key === 'b' || e.key == 'B') {
+               e.preventDefault();
+               e.stopPropagation();
                setWaitingAction(true);
             } else {
                qAction(
