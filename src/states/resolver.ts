@@ -92,9 +92,7 @@ const handleWeapon = async (w: Weapon) => {
       await sleep(1)
       animeWeaponMove(weapon!, nextPos);
       await sleep(310);
-      console.log(weapon.pos)
       moveWeapon(weapon!, nextPos);
-      console.log(weapon.pos)
       if (
          nextPos.x > cols ||
          nextPos.y > rows ||
@@ -132,10 +130,6 @@ const resolveMovements = async () => {
          const player =
             useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
-         const powers = useMasterState.getState().powers;
-
-         console.log('player actions', player.queueueueueuedActions);
-         console.log('powers', powers);
 
          const newPos = { ...player.pos };
          const moevement = getMovement(action, player.pos);
