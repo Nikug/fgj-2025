@@ -180,7 +180,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                   <button
                      className="start-button"
                      onClick={startGame}
-                     disabled={players.length < 1}
+                     disabled={players.length < 2}
                   >
                      Start blasting 👉🔥🔥🚒
                   </button>
