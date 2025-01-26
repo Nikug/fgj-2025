@@ -6,15 +6,15 @@ import {
 } from './types';
 
 export const playerTypeToWeaponType = (player: Player) => {
-   return WeaponType.Lazor;
    return player.hasLazor ?
          WeaponType.Lazor
-      :  {
+         // @ts-ignore
+      :  ({
             [PlayerModelType.Monkey]: WeaponType.Bansq,
             [PlayerModelType.Ninja]: WeaponType.Star,
             [PlayerModelType.Robot]: WeaponType.Sahuli,
             [PlayerModelType.Wizard]: WeaponType.Taikuloinen,
-         }[player.mode];
+         }[player.mode] as WeaponType);
 };
 
 export const isAttack = (action: Action) => {
