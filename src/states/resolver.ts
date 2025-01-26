@@ -179,7 +179,7 @@ const resolveMovements = async () => {
                   }
                   checkPowerUpFromPos(player.id, newPos, state);
                });
-               playSound('move');
+               playSound('move', 0.7);
                break;
             case Action.MoveDown:
                useMasterState.setState(state => {
@@ -193,7 +193,7 @@ const resolveMovements = async () => {
                   }
                   checkPowerUpFromPos(player.id, newPos, state);
                });
-               playSound('move');
+               playSound('move', 0.7);
                break;
             case Action.MoveLeft:
                useMasterState.setState(state => {
@@ -207,7 +207,7 @@ const resolveMovements = async () => {
                   }
                   checkPowerUpFromPos(player.id, newPos, state);
                });
-               playSound('move');
+               playSound('move', 0.7);
                break;
             case Action.MoveRight:
                useMasterState.setState(state => {
@@ -221,7 +221,7 @@ const resolveMovements = async () => {
                   }
                   checkPowerUpFromPos(player.id, newPos, state);
                });
-               playSound('move');
+               playSound('move', 0.7);
                break;
             case Action.AttackUp: {
                const weaponPosUp: V2 = {

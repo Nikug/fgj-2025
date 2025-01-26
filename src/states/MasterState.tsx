@@ -202,9 +202,9 @@ export const useMasterState = create<MasterState>()(
             }
 
             if (isAttackAction) {
-               playSound('attack');
+               playSound('attack', 0.8);
             } else {
-               playSound('move');
+               playSound('move', 0.7);
             }
 
             p.queueueueueuedActions = [

@@ -1,4 +1,10 @@
-import { forwardRef, PropsWithChildren, useRef } from 'react';
+import {
+   forwardRef,
+   memo,
+   PropsWithChildren,
+   useRef,
+   useState,
+} from 'react';
 import App from './App';
 import {
    Player as PlayerType,
@@ -17,15 +23,31 @@ interface Props {
    highlight?: boolean;
 }
 
-export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
-   (props: Props, ref) => {
-      const { model, color, id, highlight } = props;
+export const PlayerModel = memo((props: Props) => {
+   const { model, color, id, highlight } = props;
 
-      const cssVars = {
-         '--player-color': color,
-      } as React.CSSProperties;
+   const cssVars = {
+      '--player-color': color,
+   } as React.CSSProperties;
 
-      return (
+   return (
+      <div
+         style={{
+            position: 'relative', // Ensure relative positioning for hand placement
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+            containerType: 'inline-size',
+            borderRadius: '4px',
+            outline: highlight
+               ? '5px solid rgb(255, 0, 255)'
+               : undefined,
+         }}
+         id={id}
+      >
+         {/* Bubble Model */}
          <div
             style={{
                position: 'relative', // Ensure relative positioning for hand placement
@@ -40,7 +62,6 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                   ? '5px solid rgb(255, 0, 255)'
                   : undefined,
             }}
-            ref={ref}
             id={id}
          >
             {/* Bubble Model */}
@@ -48,13 +69,13 @@ export const PlayerModel = forwardRef<HTMLDivElement | null, Props>(
                className={getPlayerClassNames(model)}
                style={cssVars}
             ></div>
-
-            {/* Player Hands */}
-            <PlayerHands model={model} />
          </div>
-      );
-   },
-);
+
+         {/* Player Hands */}
+         <PlayerHands model={model} />
+      </div>
+   );
+});
 
 interface PowerUpModelProps {
    model: PowerUp;
@@ -82,12 +103,10 @@ export const PowerUpModel = forwardRef<
             justifyContent: 'center',
             alignItems: 'center',
          }}
+         className="power-up-idle-bounce"
+         ref={ref}
       >
-         <div
-            ref={ref}
-            className={getPowerUpClassNames(model)}
-         ></div>
-         <div className="power-up-icon bubble-idle-animation-1">
+         <div className="power-up-icon power-up-idle-rotate">
             <p className="power-up-icon-inner">{content}</p>
          </div>
       </div>
@@ -162,7 +181,7 @@ export const getPowerUpClassNames = (model: PowerUp) => {
          break;
    }
 
-   return `power-up bubble-idle-animation-1 ${modelClassName}`;
+   return `power-up ${modelClassName}`;
 };
 
 export const Router = () => {
@@ -370,7 +389,7 @@ export const popPlayer = (
       return;
    }
    playerElement.className = getPlayerClassNames(player.mode, 'pop');
-   playSound('perkele');
+   playSound('perkele', 0.2);
 
    // Clean up after the animation
    const handleTransitionEnd = () => {
