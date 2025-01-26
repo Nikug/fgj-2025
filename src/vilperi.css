@@ -304,22 +304,21 @@
 }
 
 .power-up-icon {
-   width: 50cqw;
-   height: 50cqw;
-   background: white;
+   width: 60cqw;
+   height: 60cqw;
+   background: #ffc1cc;
    border-radius: 50%;
-   transform: translateX(0px) translateY(0px);
    position: absolute;
+   bottom: 0;
 }
 
 .power-up-icon-inner {
    position: absolute;
-   left: 5cqw;
-   top: 20cqw;
-   font-size: 35cqw;
-   line-height: 10cqw;
+   top: 30cqw;
+   left: 2cqw;
+   font-size: 45cqw;
+   line-height: 0cqw;
    margin: 0;
-
    color: black;
    font-family: Arial;
    font-weight: bold;
@@ -330,54 +329,31 @@
    width: 100%;
    border-radius: 50%;
    position: absolute;
-
-   /* Bubble-like gradient */
-   background: radial-gradient(
-      circle at 50% 55%,
-      rgba(255, 116, 108, 0.8),
-      rgba(255, 116, 108, 0.8) 40%,
-      rgba(255, 116, 108, 0.6) 60%,
-      rgba(255, 116, 108, 0.2)
-   );
-
-   /* Player animation */
-   will-change: transform;
 }
 
-/* Small white reflection at the top of the model */
-.power-up::before {
-   content: '';
-   position: absolute;
-   top: 5%;
-   left: 10%;
-   width: 80%;
-   height: 80%;
-   border-radius: 50%;
-   background: radial-gradient(
-      circle at 50% 80%,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 0) 74%,
-      white 80%,
-      white 84%,
-      rgba(255, 255, 255, 0) 100%
-   );
-   z-index: 2;
+@keyframes powerUpIdle {
+   to {
+      transform: translateY(-10%);
+   }
 }
 
-/* Extra shine at the top of the bubble*/
-.power-up::after {
-   content: '';
-   position: absolute;
-   top: 1%;
-   left: 5%;
-   width: 90%;
-   height: 90%;
-   border-radius: 50%;
-   background: radial-gradient(
-      circle at top,
-      white,
-      rgba(255, 255, 255, 0) 58%
-   );
-   filter: blur(5px);
-   z-index: 2;
+@keyframes powerUpIdleRotate {
+   to {
+      transform: rotateY(90deg);
+   }
+}
+
+.power-up-idle {
+   animation-name: powerUpIdle;
+   animation-duration: 2s;
+   animation-iteration-count: infinite;
+   animation-timing-function: ease-in;
+   animation-direction: alternate;
+}
+
+.power-up-idle-2 {
+   animation-name: powerUpIdleRotate;
+   animation-duration: 2s;
+   animation-iteration-count: infinite;
+   animation-timing-function: ease-in;
 }
