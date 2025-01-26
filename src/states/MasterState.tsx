@@ -207,10 +207,15 @@ export const useMasterState = create<MasterState>()(
                playSound('move', 0.7);
             }
 
-            p.queueueueueuedActions = [
-               ...p.queueueueueuedActions,
-               newAction,
-            ];
+            if (
+               p.queueueueueuedActions.length < state.actionsPerTurn
+            ) {
+               p.queueueueueuedActions = [
+                  ...p.queueueueueuedActions,
+                  newAction,
+               ];
+            }
+
             if (
                p.queueueueueuedActions.length >= state.actionsPerTurn
             ) {

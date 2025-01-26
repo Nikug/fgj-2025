@@ -238,7 +238,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                {players
                   .map(player => (
                      <PlayerListitem
-                        key={player.name}
+                        key={player.id}
                         player={player}
                         removePlayer={removePlayer}
                      />
