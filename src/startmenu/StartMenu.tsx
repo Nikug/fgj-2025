@@ -64,6 +64,9 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    const setPlayers = useMasterState(state => state.setPlayers);
    const players = useMasterState(state => state.players);
 
+   const obs = useMasterState(state => state.randomObs)
+   const setObs = useMasterState(state => state.setRandomObs)
+
    const playerNameChanged = (
       event: React.ChangeEvent<HTMLInputElement>,
    ) => {
@@ -202,6 +205,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                   >
                      Add AI player
                   </button>
+                  <input type="checkbox" checked={obs} onChange={setObs}/>
                </div>
                <div className="add-player">
                   <div className="add-player__label">

@@ -13,7 +13,7 @@ import {
 } from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { shuffleList } from '../random';
-import { cols, countPlayerAttacks, rows } from '../App';
+import { countPlayerAttacks } from '../App';
 import { resolver } from './resolver';
 import { playerOverlap, randomPos } from './notUtils';
 import { obstacleList } from '../map';
@@ -21,6 +21,9 @@ import { playSound, startGameMusic, stopGameMusic } from '../audio';
 import { isAttack } from '../superSecretFile';
 import { getFromPos } from '../aleksi/aleksi';
 import { popPlayer } from '../Vilperi';
+
+export const rows = 10;
+export const cols = 10;
 
 export interface MasterState {
    scene: Scene;
@@ -56,8 +59,10 @@ export interface MasterState {
    moveWeapon: (weapon: Weapon, pos: V2) => void;
    runActionPhase: () => Promise<void>;
 
+   randomObs: boolean
+   setRandomObs: () => void;
    obstacles: Obstacle[];
-   hasObstacle: (pos: V2) => boolean;
+   hasObstacle: (pos: V2, obstacles?: Obstacle[]) => boolean;
    damageObstacle: (pos: V2, damage: number) => void;
 
    killPlayer: (id: string, killerId: string) => void;
@@ -77,13 +82,15 @@ export const useMasterState = create<MasterState>()(
          set(state => {
             let playerOrder: string[] = [];
             let players: Player[] = [];
+            const obstacles: Obstacle[] = obstacleList(state.randomObs)
 
             if (scene === Scene.Game) {
                players = shuffleList(state.players);
                players = players.map(player => {
                   let newPos: V2 = randomPos(cols, rows);
+                  console.log(obstacles)
                   while (
-                     state.hasObstacle(newPos) ||
+                     state.hasObstacle(newPos, obstacles) ||
                      playerOverlap(newPos, state.players)
                   ) {
                      newPos = randomPos(cols, rows);
@@ -110,7 +117,7 @@ export const useMasterState = create<MasterState>()(
                playerTurn: playerOrder[0] ?? null,
                weapons: [],
                deadPlayers: [],
-               obstacles: obstacleList(),
+               obstacles: obstacles,
                scoreboard: {},
                powers: [],
             };
@@ -318,11 +325,18 @@ export const useMasterState = create<MasterState>()(
          }
       },
 
-      obstacles: obstacleList(),
-      hasObstacle: (pos: V2) =>
-         get().obstacles.some(
+      randomObs: false,
+      setRandomObs: () => {
+         set(state => {
+            state.randomObs = !state.randomObs
+         })
+      },
+      obstacles: obstacleList(false),
+      hasObstacle: (pos: V2, obstacles?: Obstacle[]) => {
+         if (!obstacles) {obstacles = get().obstacles}
+         return obstacles.some(
             ob => ob.pos.x === pos.x && ob.pos.y === pos.y,
-         ),
+         )},
       damageObstacle: (pos: V2, damage: number) =>
          set(state => {
             const remainingObstacles: Obstacle[] = [];

@@ -1,5 +1,5 @@
 import { StartMenu } from './startmenu/StartMenu';
-import { useMasterState } from './states/MasterState';
+import { cols, rows, useMasterState } from './states/MasterState';
 import './App.css';
 import { GamePhase, Scene } from './types';
 import { Player } from './Player';
@@ -11,9 +11,6 @@ import { isAttack } from './superSecretFile';
 import { PlayerTurnBackdrop } from './Vilperi2';
 import { Player as PlayerType } from './types';
 import { PowerUpModel } from './Vilperi';
-
-export const rows = 10;
-export const cols = 10;
 
 function App() {
    const scene = useMasterState(state => state.scene);

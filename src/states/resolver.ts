@@ -1,4 +1,3 @@
-import { cols, rows } from '../App';
 import { id } from '../id';
 import { shuffleList } from '../random';
 import { sleep } from '../sleep';
@@ -13,7 +12,7 @@ import {
    WeaponType,
 } from '../types';
 import {} from '../types';
-import { MasterState, useMasterState } from './MasterState';
+import { cols, MasterState, rows, useMasterState } from './MasterState';
 import { moveFromElementToElement, popPlayer } from '../Vilperi';
 import {
    getRandomPoveeeeer,

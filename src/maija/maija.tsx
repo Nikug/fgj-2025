@@ -1,6 +1,5 @@
-import { cols, rows } from '../App';
 import { sleep } from '../sleep';
-import { useMasterState } from '../states/MasterState';
+import { cols, rows, useMasterState } from '../states/MasterState';
 import {
    Action,
    Direction,
