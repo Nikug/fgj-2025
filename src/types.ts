@@ -47,6 +47,7 @@ export interface Player {
    isDead: boolean;
    isAI?: boolean;
    attacksPerTurn: number;
+   powerUps: PowerUp[];
 }
 
 export const enum Scene {

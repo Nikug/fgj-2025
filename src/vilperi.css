@@ -116,6 +116,22 @@
 
 .player-hand-left {
    right: 55%;
+   bottom: 5%;
+}
+
+.player-hand-right {
+   left: 55%;
+   bottom: 5%;
+}
+
+.player-hand-top-left {
+   bottom: 55%;
+   right: 55%;
+}
+
+.player-hand-top-right {
+   bottom: 55%;
+   left: 55%;
 }
 
 @keyframes handIdle {

@@ -73,9 +73,9 @@ const resolveProjectiles = async () => {
 const handleWeapon = async (w: Weapon) => {
    const moveWeapon = useMasterState.getState().moveWeapon;
    const weaponDistance =
-      w.type == WeaponType.Lazor ?
-         69
-      :  useMasterState.getState().weaponMovePerTurn;
+      w.type == WeaponType.Lazor
+         ? 69
+         : useMasterState.getState().weaponMovePerTurn;
    const handleWeaponPos = useMasterState.getState().checkWeaponPos;
 
    const id = w.id;
@@ -407,6 +407,7 @@ const checkPowerUpFromPos = (
             if (p) {
                const i = state.players.indexOf(p);
                state.players[i].hasLazor = true;
+               state.players[i].powerUps.push(PowerUp.Lazor);
                state.powers = state.powers.filter(e => e !== power);
             }
             break;
@@ -415,6 +416,7 @@ const checkPowerUpFromPos = (
             const p = state.players.find(e => e.id === id);
             if (p) {
                p.attacksPerTurn += 1;
+               p.powerUps.push(PowerUp.PlusOne);
                state.powers = state.powers.filter(e => e !== power);
             }
             break;

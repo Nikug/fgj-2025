@@ -9,6 +9,7 @@ import {
    Obstacle,
    UnlimitedPoweeer,
    WeaponType,
+   PowerUp,
 } from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { shuffleList } from '../random';
@@ -125,6 +126,9 @@ export const useMasterState = create<MasterState>()(
             }
 
             state.players[targetPlayerIndex].attacksPerTurn += 1;
+            state.players[targetPlayerIndex].powerUps.push(
+               PowerUp.PlusOne,
+            );
          }),
 
       actionActionsPerTurn: 1,

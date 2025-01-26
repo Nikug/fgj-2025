@@ -25,6 +25,8 @@ export const PlayerModel = memo((props: Props) => {
       '--player-color': color,
    } as React.CSSProperties;
 
+   const handsCount = 1 + countPlusOnes(powerUps ?? []);
+
    return (
       <div
          style={{
@@ -66,25 +68,26 @@ export const PlayerModel = memo((props: Props) => {
             ></div>
          </div>
 
-         {powerUps?.includes(PowerUp.PlusOne) && (
+         {[...Array(handsCount).keys()].map(index => (
             <PlayerHands
                model={
-                  powerUps.includes(PowerUp.Lazor)
+                  powerUps && powerUps.includes(PowerUp.Lazor)
                      ? PlayerModelType.Lazor
                      : model
                }
-               side="left"
+               side={
+                  index === 0
+                     ? 'right'
+                     : index === 1
+                     ? 'left'
+                     : index === 2
+                     ? 'top-right'
+                     : index === 3
+                     ? 'top-left'
+                     : 'none'
+               }
             />
-         )}
-
-         {/* Player Hands */}
-         <PlayerHands
-            model={
-               powerUps && powerUps.includes(PowerUp.Lazor)
-                  ? PlayerModelType.Lazor
-                  : model
-            }
-         />
+         ))}
       </div>
    );
 });
@@ -127,11 +130,16 @@ export const PowerUpModel = forwardRef<
 
 interface PlayerHandsProps {
    model: PlayerModelType;
-   side?: 'left' | 'right';
+   side?: 'left' | 'right' | 'top-right' | 'top-left' | 'none';
 }
 
 export const PlayerHands = (props: PlayerHandsProps) => {
    const { model, side } = props;
+
+   if (side === 'none') {
+      return null;
+   }
+
    const randomAnimation = Math.ceil(Math.random() * 4);
    let animation = `hand-idle-animation-${randomAnimation}`;
    switch (model) {
@@ -270,6 +278,12 @@ export const Vilperi = () => {
                   id={id()}
                   color={pastellivärit[0]}
                   model={PlayerModelType.Monkey}
+                  powerUps={[
+                     PowerUp.PlusOne,
+                     PowerUp.PlusOne,
+                     PowerUp.PlusOne,
+                     PowerUp.PlusOne,
+                  ]}
                />
             </VilperiBox>
          </VilperiRow>
@@ -695,4 +709,16 @@ export const VilperiBox = (props: VilperiBoxProps) => {
          {children}
       </div>
    );
+};
+
+const countPlusOnes = (powerUps: PowerUp[]) => {
+   let count = 0;
+
+   powerUps.forEach(pp => {
+      if (pp === PowerUp.PlusOne) {
+         count += 1;
+      }
+   });
+
+   return count;
 };
