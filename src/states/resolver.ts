@@ -39,7 +39,7 @@ export const resolver = async () => {
    useMasterState.setState(state => {
       const newPowers: UnlimitedPoweeer[] = [];
       [...new Array(Math.ceil((cols * rows) / 100)).keys()].map(
-         i => {
+         () => {
             newPowers.push({
                id: id(),
                type: getRandomPoveeeeer(),
@@ -79,9 +79,9 @@ const resolveProjectiles = async () => {
 const handleWeapon = async (w: Weapon) => {
    const moveWeapon = useMasterState.getState().moveWeapon;
    const weaponDistance =
-      w.type == WeaponType.Lazor
-         ? 69
-         : useMasterState.getState().weaponMovePerTurn;
+      w.type == WeaponType.Lazor ?
+         69
+      :  useMasterState.getState().weaponMovePerTurn;
    const handleWeaponPos = useMasterState.getState().checkWeaponPos;
 
    const id = w.id;
