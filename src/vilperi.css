@@ -114,6 +114,10 @@
    will-change: transform;
 }
 
+.player-hand-left {
+   right: 55%;
+}
+
 @keyframes handIdle {
    0% {
       transform: translateY(0%);

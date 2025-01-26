@@ -1,10 +1,4 @@
-import {
-   forwardRef,
-   memo,
-   PropsWithChildren,
-   useRef,
-   useState,
-} from 'react';
+import { forwardRef, memo, PropsWithChildren, useRef } from 'react';
 import App from './App';
 import {
    Player as PlayerType,
@@ -21,10 +15,11 @@ interface Props {
    color?: string;
    id: string;
    highlight?: boolean;
+   powerUps?: PowerUp[];
 }
 
 export const PlayerModel = memo((props: Props) => {
-   const { model, color, id, highlight } = props;
+   const { model, color, id, highlight, powerUps } = props;
 
    const cssVars = {
       '--player-color': color,
@@ -71,8 +66,25 @@ export const PlayerModel = memo((props: Props) => {
             ></div>
          </div>
 
+         {powerUps?.includes(PowerUp.PlusOne) && (
+            <PlayerHands
+               model={
+                  powerUps.includes(PowerUp.Lazor)
+                     ? PlayerModelType.Lazor
+                     : model
+               }
+               side="left"
+            />
+         )}
+
          {/* Player Hands */}
-         <PlayerHands model={model} />
+         <PlayerHands
+            model={
+               powerUps && powerUps.includes(PowerUp.Lazor)
+                  ? PlayerModelType.Lazor
+                  : model
+            }
+         />
       </div>
    );
 });
@@ -115,21 +127,54 @@ export const PowerUpModel = forwardRef<
 
 interface PlayerHandsProps {
    model: PlayerModelType;
+   side?: 'left' | 'right';
 }
 
 export const PlayerHands = (props: PlayerHandsProps) => {
-   const { model } = props;
+   const { model, side } = props;
    const randomAnimation = Math.ceil(Math.random() * 4);
    let animation = `hand-idle-animation-${randomAnimation}`;
    switch (model) {
       case PlayerModelType.Monkey:
-         return <div className={`player-hand ${animation}`}>🍌</div>;
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🍌
+            </div>
+         );
       case PlayerModelType.Ninja:
-         return <div className={`player-hand ${animation}`}>🌟</div>;
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🌟
+            </div>
+         );
       case PlayerModelType.Robot:
-         return <div className={`player-hand ${animation}`}>🪚</div>;
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🪚
+            </div>
+         );
       case PlayerModelType.Wizard:
-         return <div className={`player-hand ${animation}`}>🔮</div>;
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🔮
+            </div>
+         );
+      case PlayerModelType.Lazor:
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🔫
+            </div>
+         );
    }
 };
 
@@ -287,12 +332,14 @@ export const Vilperi = () => {
                   id={id()}
                   color={pastellivärit[3]}
                   model={PlayerModelType.Wizard}
+                  powerUps={[PowerUp.Lazor]}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
                   id={id()}
                   color={pastellivärit[3]}
+                  powerUps={[PowerUp.PlusOne]}
                   model={PlayerModelType.Wizard}
                />
             </VilperiBox>
@@ -495,7 +542,6 @@ const VilperiGrid = () => {
             <div style={{ position: 'absolute' }}>Cell 1</div>
             <PlayerModel
                id={id()}
-               ref={playerElement}
                model={PlayerModelType.Wizard}
                color={pastellivärit[1]}
             />

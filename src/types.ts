@@ -59,6 +59,7 @@ export const enum PlayerModelType {
    Ninja,
    Robot,
    Wizard,
+   Lazor,
 }
 
 export const enum GamePhase {
