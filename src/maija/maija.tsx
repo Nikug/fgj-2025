@@ -191,8 +191,8 @@ const getAttackAction = (
             action === Action.AttackDown,
       );
    if (
-      attackActions.length < activePlayer.attacksPerTurn &&
-      (actions.length === 4 || Math.random() < 0.2)
+      attackActions.length < activePlayer.attacksPerTurn /*&&
+      (actions.length === 4 || Math.random() < 0.2)*/
    ) {
       const directions: Direction[] = ['ltr', 'rtl', 'ttb', 'btt'];
       const randomDirection =
@@ -497,11 +497,11 @@ export const AIPlayerLogic = async () => {
 
    if (actions.length === 0 && actionsLeft) {
       // 4. If no enemies nearby, try to move to an random direction
-      const actionToMoveToObstacle =
+      const actionToMoveToRandomDirection =
          tryToMoveToRandomValidDirection(actions);
 
-      if (actionToMoveToObstacle) {
-         actions.push(actionToMoveToObstacle);
+      if (actionToMoveToRandomDirection) {
+         actions.push(actionToMoveToRandomDirection);
          actionsUsed++;
       } else {
          // 5. If no valid direction, try to move to an obstacle direction
