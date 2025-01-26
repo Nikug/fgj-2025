@@ -89,12 +89,15 @@ const handleWeapon = async (w: Weapon) => {
       }
       const nextPos = getNextPos(weapon!.pos, weapon!.direction);
       playSound('projectile');
-      await moveWeapon(weapon!, nextPos);
+      await sleep(1)
       animeWeaponMove(weapon!, nextPos);
       await sleep(310);
+      console.log(weapon.pos)
+      moveWeapon(weapon!, nextPos);
+      console.log(weapon.pos)
       if (
-         nextPos.x > 10 ||
-         nextPos.y > 10 ||
+         nextPos.x > cols ||
+         nextPos.y > rows ||
          nextPos.x < 0 ||
          nextPos.y < 0
       ) {

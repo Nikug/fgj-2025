@@ -52,7 +52,7 @@ export interface MasterState {
    addExtraAttack: (player: Player) => void;
    actionActionsPerTurn: number;
    weaponMovePerTurn: number;
-   moveWeapon: (weapon: Weapon, pos: V2) => Promise<void>;
+   moveWeapon: (weapon: Weapon, pos: V2) => void;
    runActionPhase: () => Promise<void>;
 
    obstacles: Obstacle[];
@@ -207,10 +207,15 @@ export const useMasterState = create<MasterState>()(
                playSound('move', 0.7);
             }
 
-            p.queueueueueuedActions = [
-               ...p.queueueueueuedActions,
-               newAction,
-            ];
+            if (
+               p.queueueueueuedActions.length < state.actionsPerTurn
+            ) {
+               p.queueueueueuedActions = [
+                  ...p.queueueueueuedActions,
+                  newAction,
+               ];
+            }
+
             if (
                p.queueueueueuedActions.length >= state.actionsPerTurn
             ) {
@@ -227,19 +232,15 @@ export const useMasterState = create<MasterState>()(
                      // Panic mode, this should not happen but it keeps happening all the time
                      console.log('Going to panic');
                      console.log('AAAAAAAAAAAAAA');
-                     const newOrder = state.playerOrder.filter(id =>
-                        state.players.some(
-                           player =>
-                              player.id === id && !player.isDead,
-                        ),
+                     // Create new order from player list
+                     const newNewOrder = state.players.filter(
+                        p => !p.isDead,
                      );
-                     const nextNextTurn = newOrder.find(id =>
-                        state.players.find(
-                           p =>
-                              p.id === id &&
-                              p.queueueueueuedActions.length === 0,
-                        ),
+                     const newIndex = newNewOrder.find(
+                        p => p.queueueueueuedActions.length === 0,
                      );
+                     state.playerOrder = newNewOrder.map(p => p.id);
+                     const nextNextTurn = newIndex?.id;
                      if (nextNextTurn) nextTurn = nextNextTurn;
                      else state.gamePhase = GamePhase.Action;
                   } else {
@@ -256,23 +257,20 @@ export const useMasterState = create<MasterState>()(
             get().runActionPhase();
          }
       },
-      moveWeapon: async (w, pos) => {
-         return new Promise(resolve => {
+      moveWeapon: (w, pos) => {
             set(state => {
                console.log('hahaa', pos);
                state.weapons.find(e => e.id == w.id)!.pos = pos;
             });
-            resolve();
-         });
       },
-      checkWeaponPos: w => {
+      checkWeaponPos: a => {
          const obstacles = get().obstacles;
          const players = get().players;
          const damageObstacle = get().damageObstacle;
          const kill = get().killPlayer;
          const removeWeapons = get().removeWeapons;
          const allWeapons = get().weapons;
-
+         const w = get().weapons.find(e => e.id === a.id)!;
          const target = getFromPos(
             w,
             obstacles,
