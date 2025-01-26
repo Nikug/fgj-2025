@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Direction, Obstacle, Player, V2, Weapon } from '../types';
 import {
    getGridElementMoveFrom,
@@ -9,24 +9,27 @@ interface LaaaseriProps {
    id: string;
    direction: Direction;
 }
-export const Laaaseri = (props: LaaaseriProps) => {
+export const Laaaseri = memo((props: LaaaseriProps) => {
    return (
       <div id={props.id} className="proj-container">
          <div className="star">★</div>
       </div>
    );
-};
+});
 
 interface StarProps {
    id: string;
 }
-export const Star = (props: StarProps) => {
-   return (
-      <div id={props.id} className="proj-container">
-         <div className="star">★</div>
-      </div>
-   );
-};
+export const Star = memo(
+   (props: StarProps) => {
+      return (
+         <div id={props.id} className="proj-container">
+            <div className="star">★</div>
+         </div>
+      );
+   },
+   (p, n) => p.id === n.id,
+);
 interface BansqProps {
    id: string;
    direction: Direction;
@@ -124,7 +127,7 @@ const getBansqTranslate = (direction: Direction) => {
    }
 };
 
-export const Bansq = (props: BansqProps) => {
+export const Bansq = memo((props: BansqProps) => {
    const deg = getDeg(props.direction, 0);
    const styles = {
       '--tikka-deg': deg,
@@ -137,9 +140,9 @@ export const Bansq = (props: BansqProps) => {
          </div>
       </div>
    );
-};
+});
 
-export const Taikuloinen = (props: TaikuloinenProps) => {
+export const Taikuloinen = memo((props: TaikuloinenProps) => {
    const deg = getDeg(props.direction, 90);
    const styles = {
       '--tikka-deg': deg,
@@ -152,7 +155,7 @@ export const Taikuloinen = (props: TaikuloinenProps) => {
          </div>
       </div>
    );
-};
+});
 interface SahuliProps {
    direction: Direction;
    id: string;
