@@ -126,8 +126,6 @@ export const Player = (props: Props) => {
       setTriggeredForThisTurn(false);
    }, [gamePhase]);
 
-   console.log(player);
-
    return (
       <PlayerModel
          id={player.elementId}
