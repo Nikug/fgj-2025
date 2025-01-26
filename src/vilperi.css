@@ -331,9 +331,17 @@
    position: absolute;
 }
 
-@keyframes powerUpIdle {
-   to {
-      transform: translateY(-10%);
+@keyframes powerUpIdleBounce {
+   0% {
+      transform: translateY(0%);
+   }
+
+   30% {
+      transform: translateY(0%);
+   }
+
+   100% {
+      transform: translateY(-20%);
    }
 }
 
@@ -343,17 +351,18 @@
    }
 }
 
-.power-up-idle {
-   animation-name: powerUpIdle;
+.power-up-idle-bounce {
+   animation-name: powerUpIdleBounce;
    animation-duration: 2s;
    animation-iteration-count: infinite;
-   animation-timing-function: ease-in;
+   animation-timing-function: ease-in-out;
    animation-direction: alternate;
 }
 
-.power-up-idle-2 {
+.power-up-idle-rotate {
    animation-name: powerUpIdleRotate;
    animation-duration: 2s;
    animation-iteration-count: infinite;
    animation-timing-function: ease-in;
+   animation-direction: alternate;
 }

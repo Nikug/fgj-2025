@@ -82,10 +82,10 @@ export const PowerUpModel = forwardRef<
             justifyContent: 'center',
             alignItems: 'center',
          }}
-         className="power-up-idle power-up-idle-2"
+         className="power-up-idle-bounce"
          ref={ref}
       >
-         <div className="power-up-icon">
+         <div className="power-up-icon power-up-idle-rotate">
             <p className="power-up-icon-inner">{content}</p>
          </div>
       </div>
