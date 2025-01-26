@@ -89,12 +89,12 @@ const handleWeapon = async (w: Weapon) => {
       }
       const nextPos = getNextPos(weapon!.pos, weapon!.direction);
       playSound('projectile');
-      await sleep(1)
+      await sleep(1);
       animeWeaponMove(weapon!, nextPos);
       await sleep(310);
-      console.log(weapon.pos)
+      console.log(weapon.pos);
       moveWeapon(weapon!, nextPos);
-      console.log(weapon.pos)
+      console.log(weapon.pos);
       if (
          nextPos.x > cols ||
          nextPos.y > rows ||
@@ -341,8 +341,9 @@ const resolveMovements = async () => {
                window.alert('what');
          }
 
-         if (weaponOverlap(moevement, weapons)) {
-            kill(player.id);
+         const overlappingWeapon = weaponOverlap(moevement, weapons);
+         if (overlappingWeapon) {
+            kill(player.id, overlappingWeapon.playerId);
             playerIndex--;
             alivePlayerCount--;
             break;
