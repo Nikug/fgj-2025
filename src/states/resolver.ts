@@ -50,7 +50,7 @@ export const resolver = async () => {
       state.powers = [...state.powers, newPower];
       state.players = shuffleList(state.players);
       state.playerOrder = state.players.map(p => p.id);
-      state.playerTurn = state.players[0].id;
+      state.playerTurn = state.players[0]?.id ?? null;
    });
 };
 
@@ -182,7 +182,7 @@ const resolveMovements = async () => {
                   }
                   checkPowerUpFromPos(player.id, newPos, state);
                });
-               playSound('move');
+               playSound('move', 0.7);
                break;
             case Action.MoveDown:
                useMasterState.setState(state => {
@@ -196,7 +196,7 @@ const resolveMovements = async () => {
                   }
                   checkPowerUpFromPos(player.id, newPos, state);
                });
-               playSound('move');
+               playSound('move', 0.7);
                break;
             case Action.MoveLeft:
                useMasterState.setState(state => {
@@ -210,7 +210,7 @@ const resolveMovements = async () => {
                   }
                   checkPowerUpFromPos(player.id, newPos, state);
                });
-               playSound('move');
+               playSound('move', 0.7);
                break;
             case Action.MoveRight:
                useMasterState.setState(state => {
@@ -224,7 +224,7 @@ const resolveMovements = async () => {
                   }
                   checkPowerUpFromPos(player.id, newPos, state);
                });
-               playSound('move');
+               playSound('move', 0.7);
                break;
             case Action.AttackUp: {
                const weaponPosUp: V2 = {
@@ -410,7 +410,7 @@ const checkPowerUpFromPos = (
             if (p) {
                const i = state.players.indexOf(p);
                state.players[i].hasLazor = true;
-               state.powers = state.powers.filter(e => e !== power)
+               state.powers = state.powers.filter(e => e !== power);
             }
             break;
          }
@@ -418,7 +418,7 @@ const checkPowerUpFromPos = (
             const p = state.players.find(e => e.id === id);
             if (p) {
                p.attacksPerTurn += 1;
-               state.powers = state.powers.filter(e => e !== power)
+               state.powers = state.powers.filter(e => e !== power);
             }
             break;
          }
