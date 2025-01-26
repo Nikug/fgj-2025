@@ -6,6 +6,7 @@ import {
 } from './types';
 
 export const playerTypeToWeaponType = (player: Player) => {
+   return WeaponType.Lazor;
    return player.hasLazor ?
          WeaponType.Lazor
       :  {
