@@ -181,23 +181,31 @@ const getAttackAction = (
    if (dx === 0 && dy === -1)
       return mapDirectionToAttackAction('btt');
 
-   const attackActions = activePlayer.queueueueueuedActions
-      .concat(actions)
-      .filter(
-         action =>
-            action === Action.AttackLeft ||
-            action === Action.AttackRight ||
-            action === Action.AttackUp ||
-            action === Action.AttackDown,
-      );
-   if (
-      attackActions.length < activePlayer.attacksPerTurn /*&&
-      (actions.length === 4 || Math.random() < 0.2)*/
-   ) {
-      const directions: Direction[] = ['ltr', 'rtl', 'ttb', 'btt'];
-      const randomDirection =
-         directions[Math.floor(Math.random() * directions.length)];
-      return mapDirectionToAttackAction(randomDirection);
+   const allActions =
+      activePlayer.queueueueueuedActions.concat(actions);
+
+   if (allActions.length === 4) {
+      const closestEnemy = findClosestEnemy(actions);
+
+      if (closestEnemy) {
+         const dx2 = closestEnemy.pos.x - currentPosition.x;
+         const dy2 = closestEnemy.pos.y - currentPosition.y;
+
+         if (Math.abs(dx2) > Math.abs(dy2)) {
+            return mapDirectionToAttackAction(
+               dx2 > 0 ? 'ltr' : 'rtl',
+            );
+         } else {
+            return mapDirectionToAttackAction(
+               dy2 > 0 ? 'ttb' : 'btt',
+            );
+         }
+      }
+
+      // const directions: Direction[] = ['ltr', 'rtl', 'ttb', 'btt'];
+      // const randomDirection =
+      //    directions[Math.floor(Math.random() * directions.length)];
+      // return mapDirectionToAttackAction(randomDirection);
    }
 
    return null;
