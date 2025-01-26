@@ -184,7 +184,7 @@ const getAttackAction = (
    const allActions =
       activePlayer.queueueueueuedActions.concat(actions);
 
-   if (allActions.length === 4) {
+   if (allActions.length === state.actionsPerTurn - 1) {
       const closestEnemy = findClosestEnemy(actions);
 
       if (closestEnemy) {
@@ -201,11 +201,6 @@ const getAttackAction = (
             );
          }
       }
-
-      // const directions: Direction[] = ['ltr', 'rtl', 'ttb', 'btt'];
-      // const randomDirection =
-      //    directions[Math.floor(Math.random() * directions.length)];
-      // return mapDirectionToAttackAction(randomDirection);
    }
 
    return null;

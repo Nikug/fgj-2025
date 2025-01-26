@@ -12,8 +12,8 @@ import { PlayerTurnBackdrop } from './Vilperi2';
 import { Player as PlayerType } from './types';
 import { PowerUpModel } from './Vilperi';
 
-export const rows = 10;
-export const cols = 10;
+export const rows = 30;
+export const cols = 30;
 
 function App() {
    const scene = useMasterState(state => state.scene);
