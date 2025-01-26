@@ -83,7 +83,27 @@
 
 .add-player__label {
   font-size: 1.5rem;
+  display: flex;
+  gap: 1rem;
   align-self: flex-start;
+  align-items: center;
+}
+
+.random-map-checkbox {
+  background-color: lightgray;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: #4CAF50;
+
+
+  &:focus {
+    outline: 5px solid rgb(255, 0, 255);
+  }
+
+  
 }
 
 .player-name-input {

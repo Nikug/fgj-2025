@@ -64,8 +64,8 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    const setPlayers = useMasterState(state => state.setPlayers);
    const players = useMasterState(state => state.players);
 
-   const obs = useMasterState(state => state.randomObs)
-   const setObs = useMasterState(state => state.setRandomObs)
+   const obs = useMasterState(state => state.randomObs);
+   const setObs = useMasterState(state => state.setRandomObs);
 
    const playerNameChanged = (
       event: React.ChangeEvent<HTMLInputElement>,
@@ -199,6 +199,15 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                      Start blasting 👉🔥🔥🚒
                   </button>
                   <div className="add-player__label">
+                     <input
+                        className="random-map-checkbox"
+                        type="checkbox"
+                        checked={obs}
+                        onChange={setObs}
+                     />
+                     <span>Use random map</span>
+                  </div>
+                  <div className="add-player__label">
                      Add AI player
                   </div>
                   <button
@@ -207,7 +216,6 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                   >
                      Add AI player
                   </button>
-                  <input type="checkbox" checked={obs} onChange={setObs}/>
                </div>
                <div className="add-player">
                   <div className="add-player__label">
