@@ -76,7 +76,9 @@ function App() {
 
             grid.push(
                <div
-                  className={`game-tile ${children.length > 1 ? 'game-tile-multiple' : ''}`}
+                  className={`game-tile ${
+                     children.length > 1 ? 'game-tile-multiple' : ''
+                  }`}
                   key={`${row} ${col}`}
                   data-x={col}
                   data-y={row}

@@ -37,17 +37,23 @@ export const resolver = async () => {
 
    // Reset state back to planning
    useMasterState.setState(state => {
-      const newPower: UnlimitedPoweeer = {
-         id: id(),
-         type: getRandomPoveeeeer(),
-         pos: randomPos(cols, rows),
-      };
+      const newPowers: UnlimitedPoweeer[] = [];
+      [...new Array(Math.ceil((cols * rows) / 100)).keys()].map(
+         i => {
+            newPowers.push({
+               id: id(),
+               type: getRandomPoveeeeer(),
+               pos: randomPos(cols, rows),
+            });
+         },
+      );
+
       state.gamePhase = GamePhase.Planning;
       state.players = state.players.map(player => ({
          ...player,
          queueueueueuedActions: [],
       }));
-      state.powers = [...state.powers, newPower];
+      state.powers = [...state.powers, ...newPowers];
       state.players = shuffleList(state.players);
       state.playerOrder = state.players.map(p => p.id);
       state.playerTurn = state.players[0]?.id ?? null;

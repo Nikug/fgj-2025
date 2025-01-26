@@ -70,6 +70,7 @@ export const PlayerModel = memo((props: Props) => {
 
          {[...Array(handsCount).keys()].map(index => (
             <PlayerHands
+               key={`player-hand-${index}`}
                model={
                   powerUps && powerUps.includes(PowerUp.Lazor)
                      ? PlayerModelType.Lazor
