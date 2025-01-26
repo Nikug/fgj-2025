@@ -227,19 +227,15 @@ export const useMasterState = create<MasterState>()(
                      // Panic mode, this should not happen but it keeps happening all the time
                      console.log('Going to panic');
                      console.log('AAAAAAAAAAAAAA');
-                     const newOrder = state.playerOrder.filter(id =>
-                        state.players.some(
-                           player =>
-                              player.id === id && !player.isDead,
-                        ),
+                     // Create new order from player list
+                     const newNewOrder = state.players.filter(
+                        p => !p.isDead,
                      );
-                     const nextNextTurn = newOrder.find(id =>
-                        state.players.find(
-                           p =>
-                              p.id === id &&
-                              p.queueueueueuedActions.length === 0,
-                        ),
+                     const newIndex = newNewOrder.find(
+                        p => p.queueueueueuedActions.length === 0,
                      );
+                     state.playerOrder = newNewOrder.map(p => p.id);
+                     const nextNextTurn = newIndex?.id;
                      if (nextNextTurn) nextTurn = nextNextTurn;
                      else state.gamePhase = GamePhase.Action;
                   } else {
