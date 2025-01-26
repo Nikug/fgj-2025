@@ -13,6 +13,7 @@ export const Player = (props: Props) => {
    const [triggeredForThisTurn, setTriggeredForThisTurn] =
       useState(false);
    const gamePhase = useMasterState(state => state.gamePhase);
+   const players = useMasterState(state => state.players);
    const playerTurn = useMasterState(state => state.playerTurn);
    const qAction = useMasterState(state => state.queueueueAction);
    const waitingAction = useMasterState(
@@ -101,7 +102,8 @@ export const Player = (props: Props) => {
          playerTurn === player.id &&
          gamePhase === GamePhase.Planning &&
          allowKeyboard &&
-         !triggeredForThisTurn
+         !triggeredForThisTurn &&
+         players.length > 1
       ) {
          console.log(
             'AI should move now! Player name is',
@@ -120,6 +122,7 @@ export const Player = (props: Props) => {
       waitingAction,
       allowKeyboard,
       gamePhase,
+      players.length,
    ]);
 
    useEffect(() => {

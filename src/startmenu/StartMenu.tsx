@@ -46,7 +46,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    const userEventDetected = useRef(false);
    const nameInput = useRef<any>(null);
    const [colors] = useState(
-      pastellivärit.sort(() => Math.random() - 0.5),
+      pastellivärit.slice().sort(() => Math.random() - 0.5),
    );
    const [i, setI] = useState(0);
    const playerModes = [
@@ -145,14 +145,14 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    };
 
    const addAIPlayer = () => {
-      const newI = i;
       const mode = getRandomPlayerMode();
+
       setPlayers([
          ...players,
          {
             name: generateAIName(),
             mode: mode,
-            color: colors[newI] ?? colors[0],
+            color: colors[i],
             pos: { x: 0, y: 0 },
             id: id(),
             queueueueueuedActions: [],
@@ -164,6 +164,8 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             powerUps: [],
          },
       ]);
+      const newI = i + 1;
+
       if (newI >= colors.length) {
          setI(0);
       } else {
