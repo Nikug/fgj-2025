@@ -146,7 +146,7 @@ const findClosestEnemy = (actions: Action[]) => {
             activePlayer.queueueueueuedActions.concat(actions),
          );
          const distance = getDistance(currentPosition, enemy.pos);
-         console.log(`Distance to enemy ${enemy.id}: ${distance}`);
+         // console.log(`Distance to enemy ${enemy.id}: ${distance}`);
          return distance < closest.distance
             ? { player: enemy, distance }
             : closest;
@@ -191,8 +191,8 @@ const getAttackAction = (
             action === Action.AttackDown,
       );
    if (
-      attackActions.length < activePlayer.attacksPerTurn &&
-      (actions.length === 4 || Math.random() < 0.2)
+      attackActions.length < activePlayer.attacksPerTurn /*&&
+      (actions.length === 4 || Math.random() < 0.2)*/
    ) {
       const directions: Direction[] = ['ltr', 'rtl', 'ttb', 'btt'];
       const randomDirection =
@@ -233,6 +233,21 @@ const mapDirectionToMoveAction = (direction: Direction) => {
       btt: Action.MoveUp,
       ttb: Action.MoveDown,
    }[direction];
+};
+
+const mapMoveActionToDirection = (action: Action) => {
+   switch (action) {
+      case Action.MoveLeft:
+         return 'rtl';
+      case Action.MoveRight:
+         return 'ltr';
+      case Action.MoveUp:
+         return 'btt';
+      case Action.MoveDown:
+         return 'ttb';
+      default:
+         return null;
+   }
 };
 
 const tryToGetActionToMoveTowardsEnemy = (
@@ -374,13 +389,59 @@ const tryToMoveToRandomValidDirection = (actions: Action[]) => {
       }
    }
 
+   const allPreviousActions =
+      activePlayer.queueueueueuedActions.concat(actions);
+
+   if (allPreviousActions.length > 0) {
+      const previousMoveAction = allPreviousActions
+         .reverse()
+         .find(
+            action =>
+               action === Action.MoveLeft ||
+               action === Action.MoveRight ||
+               action === Action.MoveUp ||
+               action === Action.MoveDown,
+         );
+
+      if (previousMoveAction) {
+         const direction = mapMoveActionToDirection(
+            previousMoveAction!,
+         );
+         const oppositeDirection = {
+            rtl: 'ltr',
+            ltr: 'rtl',
+            ttb: 'btt',
+            btt: 'ttb',
+         }[direction!];
+
+         if (oppositeDirection) {
+            const filteredDirections = validDirections.filter(
+               dir => dir !== oppositeDirection,
+            );
+
+            if (filteredDirections.length > 0) {
+               const randomDirection =
+                  filteredDirections[
+                     Math.floor(
+                        Math.random() * filteredDirections.length,
+                     )
+                  ];
+               return mapDirectionToMoveAction(randomDirection);
+            }
+         }
+      }
+   }
+
    if (validDirections.length > 0) {
       const randomDirection =
          validDirections[
             Math.floor(Math.random() * validDirections.length)
          ];
+
       return mapDirectionToMoveAction(randomDirection);
    }
+
+   return null;
 };
 
 export const AIPlayerLogic = async () => {
@@ -436,11 +497,11 @@ export const AIPlayerLogic = async () => {
 
    if (actions.length === 0 && actionsLeft) {
       // 4. If no enemies nearby, try to move to an random direction
-      const actionToMoveToObstacle =
+      const actionToMoveToRandomDirection =
          tryToMoveToRandomValidDirection(actions);
 
-      if (actionToMoveToObstacle) {
-         actions.push(actionToMoveToObstacle);
+      if (actionToMoveToRandomDirection) {
+         actions.push(actionToMoveToRandomDirection);
          actionsUsed++;
       } else {
          // 5. If no valid direction, try to move to an obstacle direction
@@ -453,7 +514,6 @@ export const AIPlayerLogic = async () => {
       }
    }
 
-   // 3. Queue the AI's actions
    if (actions.length > 0) {
       queueueueAction(activePlayer.id, actions, false);
       console.log(`AI queued ${actions.length} actions.`);

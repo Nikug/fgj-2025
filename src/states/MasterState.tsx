@@ -112,6 +112,7 @@ export const useMasterState = create<MasterState>()(
                deadPlayers: [],
                obstacles: obstacleList(),
                scoreboard: {},
+               powers: [],
             };
          }),
       playerOrder: [],
