@@ -52,7 +52,7 @@ export interface MasterState {
    addExtraAttack: (player: Player) => void;
    actionActionsPerTurn: number;
    weaponMovePerTurn: number;
-   moveWeapon: (weapon: Weapon, pos: V2) => Promise<void>;
+   moveWeapon: (weapon: Weapon, pos: V2) => void;
    runActionPhase: () => Promise<void>;
 
    obstacles: Obstacle[];
@@ -256,23 +256,20 @@ export const useMasterState = create<MasterState>()(
             get().runActionPhase();
          }
       },
-      moveWeapon: async (w, pos) => {
-         return new Promise(resolve => {
+      moveWeapon: (w, pos) => {
             set(state => {
                console.log('hahaa', pos);
                state.weapons.find(e => e.id == w.id)!.pos = pos;
             });
-            resolve();
-         });
       },
-      checkWeaponPos: w => {
+      checkWeaponPos: a => {
          const obstacles = get().obstacles;
          const players = get().players;
          const damageObstacle = get().damageObstacle;
          const kill = get().killPlayer;
          const removeWeapons = get().removeWeapons;
          const allWeapons = get().weapons;
-
+         const w = get().weapons.find(e => e.id === a.id);
          const target = getFromPos(
             w,
             obstacles,
