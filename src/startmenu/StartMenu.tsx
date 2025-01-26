@@ -142,12 +142,14 @@ export function StartMenu({ changeScene }: StartMenuProps) {
    };
 
    const addAIPlayer = () => {
+      const newI = i;
+      const mode = getRandomPlayerMode();
       setPlayers([
          ...players,
          {
             name: generateAIName(),
-            mode: PlayerModelType.Ninja,
-            color: colors[i + 1],
+            mode: mode,
+            color: colors[newI] ?? colors[0],
             pos: { x: 0, y: 0 },
             id: id(),
             queueueueueuedActions: [],
@@ -159,6 +161,11 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             powerUps: [],
          },
       ]);
+      if (newI >= colors.length) {
+         setI(0);
+      } else {
+         setI(i + 1);
+      }
    };
 
    return (
@@ -233,7 +240,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                {players
                   .map(player => (
                      <PlayerListitem
-                        key={player.name}
+                        key={player.id}
                         player={player}
                         removePlayer={removePlayer}
                      />
@@ -259,6 +266,13 @@ const generateAIName = () => {
       'Bold',
       'Rapid',
       'Witty',
+      'Bubbly',
+      'Pure',
+      'Violent',
+      'Aggressive',
+      'Super',
+      'Techno',
+      'Incredible',
    ];
    const gamerNames = [
       'Ninja',
@@ -271,6 +285,12 @@ const generateAIName = () => {
       'Master',
       'Phantom',
       'Baiter',
+      'Gamer',
+      'Bubble',
+      'Cat',
+      'Koala',
+      'Fighter',
+      'Wizard',
    ];
 
    const randomAdjective =

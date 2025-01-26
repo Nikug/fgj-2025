@@ -97,178 +97,174 @@ const getEnemyPlayers = (): PlayerType[] => {
    return players.filter(player => player.id !== activePlayer?.id);
 };
 
+const isPositionValid = (pos: V2, actions: Action[]) => {
+   const state = useMasterState.getState();
+   const { hasObstacle } = state;
+   const activePlayer = state.activePlayer();
+   const enemyPlayers = getEnemyPlayers();
+
+   if (!activePlayer) {
+      return false;
+   }
+
+   const ownActions = getPositionsOfOwnAttacks(
+      activePlayer.pos,
+      activePlayer.queueueueueuedActions.concat(actions),
+   );
+
+   return (
+      pos.x >= 0 &&
+      pos.y >= 0 &&
+      pos.x < cols &&
+      pos.y < rows &&
+      !hasObstacle(pos) &&
+      !enemyPlayers.some(
+         p => p.pos.x === pos.x && p.pos.y === pos.y,
+      ) &&
+      !state.weapons.some(
+         w => w.pos.x === pos.x && w.pos.y === pos.y,
+      ) &&
+      !ownActions.some(a => a.x === pos.x && a.y === pos.y)
+   );
+};
+
+const findClosestEnemy = (actions: Action[]) => {
+   const state = useMasterState.getState();
+   const activePlayer = state.activePlayer()!;
+   const enemyPlayers = getEnemyPlayers();
+
+   return enemyPlayers.reduce<{
+      player: PlayerType | null;
+      distance: number;
+   }>(
+      (
+         closest: { player: PlayerType | null; distance: number },
+         enemy,
+      ) => {
+         const currentPosition = getPositionAfterActions(
+            activePlayer.pos,
+            activePlayer.queueueueueuedActions.concat(actions),
+         );
+         const distance = getDistance(currentPosition, enemy.pos);
+         console.log(`Distance to enemy ${enemy.id}: ${distance}`);
+         return distance < closest.distance
+            ? { player: enemy, distance }
+            : closest;
+      },
+      { player: null, distance: Infinity },
+   ).player;
+};
+
+const attackDirection = (
+   enemyPos: V2,
+   actions: Action[],
+): Direction | null => {
+   const state = useMasterState.getState();
+   const activePlayer = state.activePlayer()!;
+   const currentPosition = getPositionAfterActions(
+      activePlayer.pos,
+      activePlayer.queueueueueuedActions.concat(actions),
+   );
+   const dx = enemyPos.x - currentPosition.x;
+   const dy = enemyPos.y - currentPosition.y;
+
+   console.log(`Attempting to attack: dx=${dx}, dy=${dy}`);
+
+   if (dx === 1 && dy === 0) return 'ltr';
+   if (dx === -1 && dy === 0) return 'rtl';
+   if (dx === 0 && dy === 1) return 'ttb';
+   if (dx === 0 && dy === -1) return 'btt';
+
+   const attackActions = activePlayer.queueueueueuedActions
+      .concat(actions)
+      .filter(
+         action =>
+            action === Action.AttackLeft ||
+            action === Action.AttackRight ||
+            action === Action.AttackUp ||
+            action === Action.AttackDown,
+      );
+   if (
+      attackActions.length < activePlayer.attacksPerTurn &&
+      (actions.length === 4 || Math.random() < 0.2)
+   ) {
+      const directions: Direction[] = ['ltr', 'rtl', 'ttb', 'btt'];
+      const randomDirection =
+         directions[Math.floor(Math.random() * directions.length)];
+      console.log(
+         `Random attack direction chosen: ${randomDirection}`,
+      );
+      return randomDirection;
+   }
+
+   return null;
+};
+
+const getAttackActions = (actions: Action[]) => {
+   const state = useMasterState.getState();
+   const activePlayer = state.activePlayer()!;
+   return activePlayer.queueueueueuedActions
+      .concat(actions)
+      .filter(
+         action =>
+            action === Action.AttackLeft ||
+            action === Action.AttackRight ||
+            action === Action.AttackUp ||
+            action === Action.AttackDown,
+      );
+};
+
 export const AIPlayerLogic = async () => {
    const state = useMasterState.getState();
    const activePlayer = state.activePlayer();
 
    if (!activePlayer) {
-      console.log('No active player for the AI.');
+      //   console.log('No active player for the AI.');
       return;
    }
 
    console.log(
-      `AI is taking its turn: Player ID ${activePlayer.id}`,
+      `AI is taking its turn: Player name ${activePlayer.name}`,
    );
 
    const { hasObstacle, queueueueAction, actionsPerTurn } = state;
 
-   const enemyPlayers = getEnemyPlayers();
-
-   console.log(
-      `Number of enemy players found: ${enemyPlayers.length}`,
-   );
-
-   const isPositionValid = (pos: V2) => {
-      const ownActions = getPositionsOfOwnAttacks(
-         activePlayer.pos,
-         activePlayer.queueueueueuedActions.concat(actions),
-      );
-      const allActions =
-         activePlayer.queueueueueuedActions.concat(actions);
-      console.log('isPositionValid', {
-         allActions,
-         ownActions,
-         pos,
-      });
-
-      return (
-         pos.x >= 0 &&
-         pos.y >= 0 &&
-         pos.x < cols &&
-         pos.y < rows &&
-         !hasObstacle(pos) &&
-         !enemyPlayers.some(
-            p => p.pos.x === pos.x && p.pos.y === pos.y,
-         ) &&
-         !state.weapons.some(
-            w => w.pos.x === pos.x && w.pos.y === pos.y,
-         ) &&
-         !ownActions.some(a => a.x === pos.x && a.y === pos.y)
-      );
-   };
-   console.log('Checking position validity...');
-
    const actions: Action[] = [];
    let actionsUsed = 0;
 
-   const findClosestEnemy = () =>
-      enemyPlayers.reduce<{
-         player: PlayerType | null;
-         distance: number;
-      }>(
-         (
-            closest: { player: PlayerType | null; distance: number },
-            enemy,
-         ) => {
-            const currentPosition = getPositionAfterActions(
-               activePlayer.pos,
-               activePlayer.queueueueueuedActions.concat(actions),
-            );
-            const distance = getDistance(currentPosition, enemy.pos);
-            console.log(
-               `Distance to enemy ${enemy.id}: ${distance}`,
-            );
-            return distance < closest.distance
-               ? { player: enemy, distance }
-               : closest;
-         },
-         { player: null, distance: Infinity },
-      ).player;
-
-   const newPosition = getPositionAfterActions(
-      activePlayer.pos,
-      actions,
-   );
-   console.log(
-      `New position after actions: x=${newPosition.x}, y=${newPosition.y}`,
-   );
-
    // 1. Try to attack if an enemy is in range
-   const attackDirection = (enemyPos: V2): Direction | null => {
-      const currentPosition = getPositionAfterActions(
-         activePlayer.pos,
-         activePlayer.queueueueueuedActions.concat(actions),
-      );
-      const dx = enemyPos.x - currentPosition.x;
-      const dy = enemyPos.y - currentPosition.y;
 
-      console.log(`Attempting to attack: dx=${dx}, dy=${dy}`);
+   const actionsLeft = actionsUsed < actionsPerTurn;
+   const closestEnemy = findClosestEnemy(actions);
 
-      if (dx === 1 && dy === 0) return 'ltr';
-      if (dx === -1 && dy === 0) return 'rtl';
-      if (dx === 0 && dy === 1) return 'ttb';
-      if (dx === 0 && dy === -1) return 'btt';
-
-      const attackActions = activePlayer.queueueueueuedActions
-         .concat(actions)
-         .filter(
-            action =>
-               action === Action.AttackLeft ||
-               action === Action.AttackRight ||
-               action === Action.AttackUp ||
-               action === Action.AttackDown,
-         );
-      if (
-         attackActions.length < activePlayer.attacksPerTurn &&
-         (actions.length === 4 || Math.random() < 0.2)
-      ) {
-         const directions: Direction[] = [
-            'ltr',
-            'rtl',
-            'ttb',
-            'btt',
-         ];
-         const randomDirection =
-            directions[
-               Math.floor(Math.random() * directions.length)
-            ];
-         console.log(
-            `Random attack direction chosen: ${randomDirection}`,
-         );
-         return randomDirection;
-      }
-
-      return null;
-   };
-
-   const closestEnemy = findClosestEnemy();
    if (closestEnemy) {
-      console.log(
-         `Closest enemy found: Player ID ${closestEnemy.id}`,
-      );
-      const direction = attackDirection(closestEnemy.pos);
-      const attackActions = activePlayer.queueueueueuedActions
-         .concat(actions)
-         .filter(
-            action =>
-               action === Action.AttackLeft ||
-               action === Action.AttackRight ||
-               action === Action.AttackUp ||
-               action === Action.AttackDown,
-         );
-      if (
+      //   console.log(
+      //      `Closest enemy found: Player name ${closestEnemy.name}`,
+      //   );
+      const direction = attackDirection(closestEnemy.pos, actions);
+      const attackActions = getAttackActions(actions);
+      const canAttack =
          attackActions.length < activePlayer.attacksPerTurn &&
-         direction &&
-         actionsUsed < actionsPerTurn
-      ) {
-         const vammaDirection = {
+         actionsLeft;
+
+      if (canAttack && direction) {
+         const action = {
             rtl: Action.AttackLeft,
             ltr: Action.AttackRight,
             btt: Action.AttackUp,
             ttb: Action.AttackDown,
          }[direction];
 
-         actions.push(vammaDirection);
+         actions.push(action);
 
          actionsUsed++;
-         console.log(`AI attacks in direction: ${direction}`);
       } else {
-         console.log(
-            'No valid attack direction or max actions used.',
-         );
+         //  console.log(
+         //     'No valid attack direction or max actions used.',
+         //  );
       }
    } else {
-      console.log('No closest enemy found.');
+      //   console.log('No closest enemy found.');
    }
 
    // 2. If no attack, move toward the closest enemy
@@ -293,7 +289,7 @@ export const AIPlayerLogic = async () => {
             console.log(
                `Checking horizontal move to position: ${newPos.x}, ${newPos.y}`,
             );
-            if (isPositionValid(newPos)) {
+            if (isPositionValid(newPos, actions)) {
                return dx > 0 ? 'ltr' : 'rtl';
             } else {
                console.log('Invalid horizontal move position.');
@@ -306,7 +302,7 @@ export const AIPlayerLogic = async () => {
             console.log(
                `Checking vertical move to position: ${newPos.x}, ${newPos.y}`,
             );
-            if (isPositionValid(newPos)) {
+            if (isPositionValid(newPos, actions)) {
                return dy > 0 ? 'ttb' : 'btt';
             } else {
                console.log('Invalid vertical move position.');
@@ -341,7 +337,7 @@ export const AIPlayerLogic = async () => {
                   newPos.y -= 1;
                   break;
             }
-            if (isPositionValid(newPos)) {
+            if (isPositionValid(newPos, actions)) {
                validDirections.push(dir);
             }
          }
@@ -430,37 +426,36 @@ export const AIPlayerLogic = async () => {
 export const runAI = () => {
    const state = useMasterState.getState();
 
-   console.log('Checking if AI turn should run...', {
-      gamePhase: state.gamePhase,
-      playerTurn: state.playerTurn,
-   });
    if (state.gamePhase === GamePhase.Planning && state.playerTurn) {
       const activePlayer = state.activePlayer();
+
       if (activePlayer && activePlayer.isAI) {
-         console.log('AI is active, running AI logic...');
          AIPlayerLogic();
          return true;
       } else {
-         console.log('No active AI player or not AI turn.');
+         //  console.log('No active AI player or not AI turn.');
          return false;
       }
    } else {
-      console.log('Game phase is not Planning or not player turn.');
+      //   console.log('Game phase is not Planning or not player turn.');
       return false;
    }
 };
 
 export const makeAIMoves = async (times: number) => {
-   console.log(`Making ${times} AI moves.`);
+   const state = useMasterState.getState();
    for (let i = 0; i < times; i++) {
-      console.log(`Move ${i + 1} of ${times}`);
       await sleep(250);
       const success = runAI();
 
       if (!success) {
-         console.log('AI turn failed, stopping AI moves.');
+         console.log(
+            'AI turn failed, stopping AI moves. Player name is',
+            state.activePlayer()?.name,
+         );
          break;
       }
+
       await sleep(250);
    }
 };

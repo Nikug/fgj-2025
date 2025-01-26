@@ -103,7 +103,10 @@ export const Player = (props: Props) => {
          allowKeyboard &&
          !triggeredForThisTurn
       ) {
-         console.log('AI should move now!');
+         console.log(
+            'AI should move now! Player name is',
+            player.name,
+         );
          setTriggeredForThisTurn(true);
          makeAIMoves(5);
       }

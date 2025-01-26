@@ -53,18 +53,21 @@ export interface MasterState {
    addExtraAttack: (player: Player) => void;
    actionActionsPerTurn: number;
    weaponMovePerTurn: number;
-   moveWeapon: (weapon: Weapon, pos: V2) => Promise<void>;
+   moveWeapon: (weapon: Weapon, pos: V2) => void;
    runActionPhase: () => Promise<void>;
 
    obstacles: Obstacle[];
    hasObstacle: (pos: V2) => boolean;
    damageObstacle: (pos: V2, damage: number) => void;
 
-   killPlayer: (id: string) => void;
+   killPlayer: (id: string, killerId: string) => void;
    waitingAction: boolean;
    setWaitingAction: (wait: boolean) => void;
    removeWeapons: (weapons: Weapon[]) => void;
    checkWeaponPos: (weapon: Weapon) => void;
+
+   scoreboard: Record<string, number>;
+   addScore: (playerId: string, score: number) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -108,6 +111,7 @@ export const useMasterState = create<MasterState>()(
                weapons: [],
                deadPlayers: [],
                obstacles: obstacleList(),
+               scoreboard: {},
             };
          }),
       playerOrder: [],
@@ -211,10 +215,15 @@ export const useMasterState = create<MasterState>()(
                playSound('move', 0.7);
             }
 
-            p.queueueueueuedActions = [
-               ...p.queueueueueuedActions,
-               newAction,
-            ];
+            if (
+               p.queueueueueuedActions.length < state.actionsPerTurn
+            ) {
+               p.queueueueueuedActions = [
+                  ...p.queueueueueuedActions,
+                  newAction,
+               ];
+            }
+
             if (
                p.queueueueueuedActions.length >= state.actionsPerTurn
             ) {
@@ -231,19 +240,15 @@ export const useMasterState = create<MasterState>()(
                      // Panic mode, this should not happen but it keeps happening all the time
                      console.log('Going to panic');
                      console.log('AAAAAAAAAAAAAA');
-                     const newOrder = state.playerOrder.filter(id =>
-                        state.players.some(
-                           player =>
-                              player.id === id && !player.isDead,
-                        ),
+                     // Create new order from player list
+                     const newNewOrder = state.players.filter(
+                        p => !p.isDead,
                      );
-                     const nextNextTurn = newOrder.find(id =>
-                        state.players.find(
-                           p =>
-                              p.id === id &&
-                              p.queueueueueuedActions.length === 0,
-                        ),
+                     const newIndex = newNewOrder.find(
+                        p => p.queueueueueuedActions.length === 0,
                      );
+                     state.playerOrder = newNewOrder.map(p => p.id);
+                     const nextNextTurn = newIndex?.id;
                      if (nextNextTurn) nextTurn = nextNextTurn;
                      else state.gamePhase = GamePhase.Action;
                   } else {
@@ -260,23 +265,20 @@ export const useMasterState = create<MasterState>()(
             get().runActionPhase();
          }
       },
-      moveWeapon: async (w, pos) => {
-         return new Promise(resolve => {
-            set(state => {
-               console.log('hahaa', pos);
-               state.weapons.find(e => e.id == w.id)!.pos = pos;
-            });
-            resolve();
+      moveWeapon: (w, pos) => {
+         set(state => {
+            console.log('hahaa', pos);
+            state.weapons.find(e => e.id == w.id)!.pos = pos;
          });
       },
-      checkWeaponPos: w => {
+      checkWeaponPos: a => {
          const obstacles = get().obstacles;
          const players = get().players;
          const damageObstacle = get().damageObstacle;
          const kill = get().killPlayer;
          const removeWeapons = get().removeWeapons;
          const allWeapons = get().weapons;
-
+         const w = get().weapons.find(e => e.id === a.id)!;
          const target = getFromPos(
             w,
             obstacles,
@@ -287,7 +289,7 @@ export const useMasterState = create<MasterState>()(
          if (target.player) {
             playSound('hit');
             popPlayer(target.player, () => {
-               kill(target.player!.id);
+               kill(target.player!.id, a.playerId);
             });
             console.log('hit player', target.player);
             if (w.type != WeaponType.Lazor) {
@@ -338,7 +340,7 @@ export const useMasterState = create<MasterState>()(
             });
             state.obstacles = remainingObstacles;
          }),
-      killPlayer: id =>
+      killPlayer: (id, killerId) => {
          set(state => {
             const newPlayers: Player[] = [];
             for (const player of state.players) {
@@ -353,9 +355,20 @@ export const useMasterState = create<MasterState>()(
                }
             }
             state.players = newPlayers;
-         }),
+         });
+
+         get().addScore(killerId, id === killerId ? -1 : 1);
+      },
       waitingAction: false,
       setWaitingAction: (wait: boolean) =>
          set(() => ({ waitingAction: wait })),
+
+      scoreboard: {},
+      addScore: (playerId: string, score: number) =>
+         set(state => {
+            if (state.scoreboard[playerId])
+               state.scoreboard[playerId] += score;
+            else state.scoreboard[playerId] = score;
+         }),
    })),
 );
