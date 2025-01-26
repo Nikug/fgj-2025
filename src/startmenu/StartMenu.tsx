@@ -143,7 +143,6 @@ export function StartMenu({ changeScene }: StartMenuProps) {
 
    const addAIPlayer = () => {
       const mode = getRandomPlayerMode();
-      console.log({ i, colors, color: colors[i] });
 
       setPlayers([
          ...players,
