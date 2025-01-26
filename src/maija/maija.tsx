@@ -404,22 +404,30 @@ const tryToMoveToRandomValidDirection = (actions: Action[]) => {
          );
 
       if (previousMoveAction) {
-         const oppositeDirection = mapMoveActionToDirection(
+         const direction = mapMoveActionToDirection(
             previousMoveAction!,
          );
+         const oppositeDirection = {
+            rtl: 'ltr',
+            ltr: 'rtl',
+            ttb: 'btt',
+            btt: 'ttb',
+         }[direction!];
 
-         const filteredDirections = validDirections.filter(
-            dir => dir !== oppositeDirection,
-         );
+         if (oppositeDirection) {
+            const filteredDirections = validDirections.filter(
+               dir => dir !== oppositeDirection,
+            );
 
-         if (filteredDirections.length > 0) {
-            const randomDirection =
-               filteredDirections[
-                  Math.floor(
-                     Math.random() * filteredDirections.length,
-                  )
-               ];
-            return mapDirectionToMoveAction(randomDirection);
+            if (filteredDirections.length > 0) {
+               const randomDirection =
+                  filteredDirections[
+                     Math.floor(
+                        Math.random() * filteredDirections.length,
+                     )
+                  ];
+               return mapDirectionToMoveAction(randomDirection);
+            }
          }
       }
    }
