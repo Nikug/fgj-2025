@@ -9,6 +9,94 @@ import {
    Player as PlayerType,
 } from '../types';
 
+const getPositionsOfOwnAttacks = (
+   initialPos: V2,
+   actions: Action[],
+): V2[] => {
+   const newPos = { ...initialPos };
+   let attackPosition = null;
+   const attackPositions = [];
+
+   for (const action of actions) {
+      switch (action) {
+         case Action.MoveUp:
+            newPos.y -= 1;
+            break;
+         case Action.MoveDown:
+            newPos.y += 1;
+            break;
+         case Action.MoveLeft:
+            newPos.x -= 1;
+            break;
+         case Action.MoveRight:
+            newPos.x += 1;
+            break;
+         case Action.AttackUp:
+            attackPosition = { ...newPos };
+            attackPosition.y -= 1;
+            attackPositions.push(attackPosition);
+            break;
+         case Action.AttackDown:
+            attackPosition = { ...newPos };
+            attackPosition.y += 1;
+            attackPositions.push(attackPosition);
+            break;
+         case Action.AttackLeft:
+            attackPosition = { ...newPos };
+            attackPosition.x -= 1;
+            attackPositions.push(attackPosition);
+            break;
+         case Action.AttackRight:
+            attackPosition = { ...newPos };
+            attackPosition.x += 1;
+            attackPositions.push(attackPosition);
+            break;
+         default:
+            break;
+      }
+   }
+
+   return attackPositions;
+};
+
+const getDistance = (pos1: V2, pos2: V2) =>
+   Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
+
+const getPositionAfterActions = (
+   initialPos: V2,
+   actions: Action[],
+): V2 => {
+   const newPos = { ...initialPos };
+
+   actions.forEach(action => {
+      switch (action) {
+         case Action.MoveUp:
+            newPos.y -= 1;
+            break;
+         case Action.MoveDown:
+            newPos.y += 1;
+            break;
+         case Action.MoveLeft:
+            newPos.x -= 1;
+            break;
+         case Action.MoveRight:
+            newPos.x += 1;
+            break;
+         default:
+            break;
+      }
+   });
+
+   return newPos;
+};
+
+const getEnemyPlayers = (): PlayerType[] => {
+   const state = useMasterState.getState();
+   const { players } = state;
+   const activePlayer = state.activePlayer();
+   return players.filter(player => player.id !== activePlayer?.id);
+};
+
 export const AIPlayerLogic = async () => {
    const state = useMasterState.getState();
    const activePlayer = state.activePlayer();
@@ -22,66 +110,14 @@ export const AIPlayerLogic = async () => {
       `AI is taking its turn: Player ID ${activePlayer.id}`,
    );
 
-   const { players, hasObstacle, queueueueAction, actionsPerTurn } =
-      state;
+   const { hasObstacle, queueueueAction, actionsPerTurn } = state;
 
-   const enemyPlayers = players.filter(
-      player => player.id !== activePlayer.id,
+   const enemyPlayers = getEnemyPlayers();
+
+   console.log(
+      `Number of enemy players found: ${enemyPlayers.length}`,
    );
 
-   console.log(`Enemy players found: ${enemyPlayers.length}`);
-
-   const getPositionsOfOwnAttacks = (
-      initialPos: V2,
-      actions: Action[],
-   ): V2[] => {
-      const newPos = { ...initialPos };
-      let attackPosition = null;
-      const attackPositions = [];
-
-      for (const action of actions) {
-         switch (action) {
-            case Action.MoveUp:
-               newPos.y -= 1;
-               break;
-            case Action.MoveDown:
-               newPos.y += 1;
-               break;
-            case Action.MoveLeft:
-               newPos.x -= 1;
-               break;
-            case Action.MoveRight:
-               newPos.x += 1;
-               break;
-            case Action.AttackUp:
-               attackPosition = { ...newPos };
-               attackPosition.y -= 1;
-               attackPositions.push(attackPosition);
-               break;
-            case Action.AttackDown:
-               attackPosition = { ...newPos };
-               attackPosition.y += 1;
-               attackPositions.push(attackPosition);
-               break;
-            case Action.AttackLeft:
-               attackPosition = { ...newPos };
-               attackPosition.x -= 1;
-               attackPositions.push(attackPosition);
-               break;
-            case Action.AttackRight:
-               attackPosition = { ...newPos };
-               attackPosition.x += 1;
-               attackPositions.push(attackPosition);
-               break;
-            default:
-               break;
-         }
-      }
-
-      return attackPositions;
-   };
-
-   // Utility functions
    const isPositionValid = (pos: V2) => {
       const ownActions = getPositionsOfOwnAttacks(
          activePlayer.pos,
@@ -95,13 +131,6 @@ export const AIPlayerLogic = async () => {
          pos,
       });
 
-      // if (ownActions.length > 0) {
-      //    debugger;
-      //    const aaa = getPositionsOfOwnAttacks(
-      //       activePlayer.pos,
-      //       activePlayer.queueueueueuedActions.concat(actions),
-      //    );
-      // }
       return (
          pos.x >= 0 &&
          pos.y >= 0 &&
@@ -119,12 +148,6 @@ export const AIPlayerLogic = async () => {
    };
    console.log('Checking position validity...');
 
-   const getDistance = (pos1: V2, pos2: V2) =>
-      Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
-
-   console.log('Distance function defined.');
-
-   // Decision-making
    const actions: Action[] = [];
    let actionsUsed = 0;
 
@@ -137,11 +160,10 @@ export const AIPlayerLogic = async () => {
             closest: { player: PlayerType | null; distance: number },
             enemy,
          ) => {
-            const currentPosition =
-               getCurrentPlayerPositionAfterActions(
-                  activePlayer.pos,
-                  activePlayer.queueueueueuedActions.concat(actions),
-               );
+            const currentPosition = getPositionAfterActions(
+               activePlayer.pos,
+               activePlayer.queueueueueuedActions.concat(actions),
+            );
             const distance = getDistance(currentPosition, enemy.pos);
             console.log(
                `Distance to enemy ${enemy.id}: ${distance}`,
@@ -153,37 +175,7 @@ export const AIPlayerLogic = async () => {
          { player: null, distance: Infinity },
       ).player;
 
-   console.log('Find closest enemy function defined.');
-
-   const getCurrentPlayerPositionAfterActions = (
-      initialPos: V2,
-      actions: Action[],
-   ): V2 => {
-      const newPos = { ...initialPos };
-
-      actions.forEach(action => {
-         switch (action) {
-            case Action.MoveUp:
-               newPos.y -= 1;
-               break;
-            case Action.MoveDown:
-               newPos.y += 1;
-               break;
-            case Action.MoveLeft:
-               newPos.x -= 1;
-               break;
-            case Action.MoveRight:
-               newPos.x += 1;
-               break;
-            default:
-               break;
-         }
-      });
-
-      return newPos;
-   };
-
-   const newPosition = getCurrentPlayerPositionAfterActions(
+   const newPosition = getPositionAfterActions(
       activePlayer.pos,
       actions,
    );
@@ -193,7 +185,7 @@ export const AIPlayerLogic = async () => {
 
    // 1. Try to attack if an enemy is in range
    const attackDirection = (enemyPos: V2): Direction | null => {
-      const currentPosition = getCurrentPlayerPositionAfterActions(
+      const currentPosition = getPositionAfterActions(
          activePlayer.pos,
          activePlayer.queueueueueuedActions.concat(actions),
       );
@@ -284,11 +276,10 @@ export const AIPlayerLogic = async () => {
       console.log('Attempting to move towards closest enemy.');
 
       const moveDirection = (): Direction | null => {
-         const currentPosition =
-            getCurrentPlayerPositionAfterActions(
-               activePlayer.pos,
-               activePlayer.queueueueueuedActions.concat(actions),
-            );
+         const currentPosition = getPositionAfterActions(
+            activePlayer.pos,
+            activePlayer.queueueueueuedActions.concat(actions),
+         );
          const dx = closestEnemy.pos.x - currentPosition.x;
          const dy = closestEnemy.pos.y - currentPosition.y;
 
