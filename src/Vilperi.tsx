@@ -103,12 +103,10 @@ export const PowerUpModel = forwardRef<
             justifyContent: 'center',
             alignItems: 'center',
          }}
+         className="power-up-idle-bounce"
+         ref={ref}
       >
-         <div
-            ref={ref}
-            className={getPowerUpClassNames(model)}
-         ></div>
-         <div className="power-up-icon bubble-idle-animation-1">
+         <div className="power-up-icon power-up-idle-rotate">
             <p className="power-up-icon-inner">{content}</p>
          </div>
       </div>
@@ -183,7 +181,7 @@ export const getPowerUpClassNames = (model: PowerUp) => {
          break;
    }
 
-   return `power-up bubble-idle-animation-1 ${modelClassName}`;
+   return `power-up ${modelClassName}`;
 };
 
 export const Router = () => {
