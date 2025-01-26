@@ -4,15 +4,56 @@ import {
    getGridElementMoveFrom,
    getGridElementMoveTo,
 } from '../states/resolver';
-import { moveFromElementToElement } from '../Vilperi';
+import {
+   moveFromElementToElement,
+   VilperiBox,
+   VilperiRow,
+} from '../Vilperi';
 interface LaaaseriProps {
    id: string;
    direction: Direction;
 }
+
+const getLaaaseriCss = (direction: Direction) => {
+   switch (direction) {
+      case 'rtl':
+         return {
+            '--laaaseri-width': '130%',
+            '--laaaseri-height': '3px',
+            '--laaaseri-left': '-30%',
+            '--laaaseri-top': '50%',
+         };
+      case 'ltr':
+         return {
+            '--laaaseri-width': '130%',
+            '--laaaseri-height': '3px',
+            '--laaaseri-left': '0',
+            '--laaaseri-top': '50%',
+         };
+      case 'ttb':
+         return {
+            '--laaaseri-width': '3px',
+            '--laaaseri-height': '130%',
+            '--laaaseri-top': '0',
+            '--laaaseri-left': '50%',
+         };
+      case 'btt':
+         return {
+            '--laaaseri-width': '3px',
+            '--laaaseri-height': '130%',
+            '--laaaseri-top': '-30%',
+            '--laaaseri-left': '50%',
+         };
+   }
+};
 export const Laaaseri = memo((props: LaaaseriProps) => {
+   const styles = getLaaaseriCss(props.direction);
    return (
       <div id={props.id} className="proj-container">
-         <div className="star">★</div>
+         <div
+            style={styles as React.CSSProperties}
+            className="laaaseri"
+         ></div>
       </div>
    );
 });
@@ -202,6 +243,21 @@ export const Aleksi = () => {
             flexWrap: 'wrap',
             gap: '100px',
          }}
-      ></div>
+      >
+         <VilperiRow>
+            <VilperiBox size="medium">
+               <Laaaseri id="aa" direction="ltr" />
+            </VilperiBox>
+            <VilperiBox size="medium">
+               <Laaaseri id="aa" direction="rtl" />
+            </VilperiBox>
+            <VilperiBox size="medium">
+               <Laaaseri id="aa" direction="ttb" />
+            </VilperiBox>
+            <VilperiBox size="medium">
+               <Laaaseri id="aa" direction="btt" />
+            </VilperiBox>
+         </VilperiRow>
+      </div>
    );
 };

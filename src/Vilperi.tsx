@@ -1,10 +1,4 @@
-import {
-   forwardRef,
-   memo,
-   PropsWithChildren,
-   useRef,
-   useState,
-} from 'react';
+import { forwardRef, memo, PropsWithChildren, useRef } from 'react';
 import App from './App';
 import {
    Player as PlayerType,
@@ -21,14 +15,17 @@ interface Props {
    color?: string;
    id: string;
    highlight?: boolean;
+   powerUps?: PowerUp[];
 }
 
 export const PlayerModel = memo((props: Props) => {
-   const { model, color, id, highlight } = props;
+   const { model, color, id, highlight, powerUps } = props;
 
    const cssVars = {
       '--player-color': color,
    } as React.CSSProperties;
+
+   const handsCount = 1 + countPlusOnes(powerUps ?? []);
 
    return (
       <div
@@ -71,8 +68,26 @@ export const PlayerModel = memo((props: Props) => {
             ></div>
          </div>
 
-         {/* Player Hands */}
-         <PlayerHands model={model} />
+         {[...Array(handsCount).keys()].map(index => (
+            <PlayerHands
+               model={
+                  powerUps && powerUps.includes(PowerUp.Lazor)
+                     ? PlayerModelType.Lazor
+                     : model
+               }
+               side={
+                  index === 0
+                     ? 'right'
+                     : index === 1
+                     ? 'left'
+                     : index === 2
+                     ? 'top-right'
+                     : index === 3
+                     ? 'top-left'
+                     : 'none'
+               }
+            />
+         ))}
       </div>
    );
 });
@@ -115,21 +130,59 @@ export const PowerUpModel = forwardRef<
 
 interface PlayerHandsProps {
    model: PlayerModelType;
+   side?: 'left' | 'right' | 'top-right' | 'top-left' | 'none';
 }
 
 export const PlayerHands = (props: PlayerHandsProps) => {
-   const { model } = props;
+   const { model, side } = props;
+
+   if (side === 'none') {
+      return null;
+   }
+
    const randomAnimation = Math.ceil(Math.random() * 4);
    let animation = `hand-idle-animation-${randomAnimation}`;
    switch (model) {
       case PlayerModelType.Monkey:
-         return <div className={`player-hand ${animation}`}>🍌</div>;
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🍌
+            </div>
+         );
       case PlayerModelType.Ninja:
-         return <div className={`player-hand ${animation}`}>🌟</div>;
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🌟
+            </div>
+         );
       case PlayerModelType.Robot:
-         return <div className={`player-hand ${animation}`}>🪚</div>;
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🪚
+            </div>
+         );
       case PlayerModelType.Wizard:
-         return <div className={`player-hand ${animation}`}>🔮</div>;
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🔮
+            </div>
+         );
+      case PlayerModelType.Lazor:
+         return (
+            <div
+               className={`player-hand player-hand-${side} ${animation}`}
+            >
+               🔫
+            </div>
+         );
    }
 };
 
@@ -225,6 +278,12 @@ export const Vilperi = () => {
                   id={id()}
                   color={pastellivärit[0]}
                   model={PlayerModelType.Monkey}
+                  powerUps={[
+                     PowerUp.PlusOne,
+                     PowerUp.PlusOne,
+                     PowerUp.PlusOne,
+                     PowerUp.PlusOne,
+                  ]}
                />
             </VilperiBox>
          </VilperiRow>
@@ -287,12 +346,14 @@ export const Vilperi = () => {
                   id={id()}
                   color={pastellivärit[3]}
                   model={PlayerModelType.Wizard}
+                  powerUps={[PowerUp.Lazor]}
                />
             </VilperiBox>
             <VilperiBox size="large">
                <PlayerModel
                   id={id()}
                   color={pastellivärit[3]}
+                  powerUps={[PowerUp.PlusOne]}
                   model={PlayerModelType.Wizard}
                />
             </VilperiBox>
@@ -495,7 +556,6 @@ const VilperiGrid = () => {
             <div style={{ position: 'absolute' }}>Cell 1</div>
             <PlayerModel
                id={id()}
-               ref={playerElement}
                model={PlayerModelType.Wizard}
                color={pastellivärit[1]}
             />
@@ -649,4 +709,16 @@ export const VilperiBox = (props: VilperiBoxProps) => {
          {children}
       </div>
    );
+};
+
+const countPlusOnes = (powerUps: PowerUp[]) => {
+   let count = 0;
+
+   powerUps.forEach(pp => {
+      if (pp === PowerUp.PlusOne) {
+         count += 1;
+      }
+   });
+
+   return count;
 };

@@ -1,19 +1,28 @@
 .avatar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.5rem 1rem;
-    color: black;
-    border-radius: 8px;
-    font-size: 1.3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  color: black;
+  border-radius: 8px;
+  font-size: 1.3rem;
 
-    .avatar__number {
-        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    }
+  .avatar__number {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  }
 }
 
 .avatar--active {
-    outline: 5px solid rgb(255, 0, 255);
+  outline: 5px solid rgb(255, 0, 255);
+}
+
+.avatar__score__text {
+  text-wrap: nowrap;
+  font-size: 1rem;
+}
+
+.avatar__score__number {
+  font-size: 1.5rem;
 }

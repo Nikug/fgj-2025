@@ -47,6 +47,7 @@ export interface Player {
    isDead: boolean;
    isAI?: boolean;
    attacksPerTurn: number;
+   powerUps: PowerUp[];
 }
 
 export const enum Scene {
@@ -59,6 +60,7 @@ export const enum PlayerModelType {
    Ninja,
    Robot,
    Wizard,
+   Lazor,
 }
 
 export const enum GamePhase {

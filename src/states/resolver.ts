@@ -73,9 +73,9 @@ const resolveProjectiles = async () => {
 const handleWeapon = async (w: Weapon) => {
    const moveWeapon = useMasterState.getState().moveWeapon;
    const weaponDistance =
-      w.type == WeaponType.Lazor ?
-         69
-      :  useMasterState.getState().weaponMovePerTurn;
+      w.type == WeaponType.Lazor
+         ? 69
+         : useMasterState.getState().weaponMovePerTurn;
    const handleWeaponPos = useMasterState.getState().checkWeaponPos;
 
    const id = w.id;
@@ -89,12 +89,10 @@ const handleWeapon = async (w: Weapon) => {
       }
       const nextPos = getNextPos(weapon!.pos, weapon!.direction);
       playSound('projectile');
-      await sleep(1)
+      await sleep(1);
       animeWeaponMove(weapon!, nextPos);
       await sleep(310);
-      console.log(weapon.pos)
       moveWeapon(weapon!, nextPos);
-      console.log(weapon.pos)
       if (
          nextPos.x > cols ||
          nextPos.y > rows ||
@@ -132,10 +130,6 @@ const resolveMovements = async () => {
          const player =
             useMasterState.getState().players[playerIndex];
          const action = player.queueueueueuedActions[actionIndex];
-         const powers = useMasterState.getState().powers;
-
-         console.log('player actions', player.queueueueueuedActions);
-         console.log('powers', powers);
 
          const newPos = { ...player.pos };
          const moevement = getMovement(action, player.pos);
@@ -341,8 +335,9 @@ const resolveMovements = async () => {
                window.alert('what');
          }
 
-         if (weaponOverlap(moevement, weapons)) {
-            kill(player.id);
+         const overlappingWeapon = weaponOverlap(moevement, weapons);
+         if (overlappingWeapon) {
+            kill(player.id, overlappingWeapon.playerId);
             playerIndex--;
             alivePlayerCount--;
             break;
@@ -410,6 +405,7 @@ const checkPowerUpFromPos = (
             if (p) {
                const i = state.players.indexOf(p);
                state.players[i].hasLazor = true;
+               state.players[i].powerUps.push(PowerUp.Lazor);
                state.powers = state.powers.filter(e => e !== power);
             }
             break;
@@ -418,6 +414,7 @@ const checkPowerUpFromPos = (
             const p = state.players.find(e => e.id === id);
             if (p) {
                p.attacksPerTurn += 1;
+               p.powerUps.push(PowerUp.PlusOne);
                state.powers = state.powers.filter(e => e !== power);
             }
             break;

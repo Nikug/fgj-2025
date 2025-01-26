@@ -9,6 +9,7 @@ import {
    Obstacle,
    UnlimitedPoweeer,
    WeaponType,
+   PowerUp,
 } from '../types';
 import { immer } from 'zustand/middleware/immer';
 import { shuffleList } from '../random';
@@ -59,11 +60,14 @@ export interface MasterState {
    hasObstacle: (pos: V2) => boolean;
    damageObstacle: (pos: V2, damage: number) => void;
 
-   killPlayer: (id: string) => void;
+   killPlayer: (id: string, killerId: string) => void;
    waitingAction: boolean;
    setWaitingAction: (wait: boolean) => void;
    removeWeapons: (weapons: Weapon[]) => void;
    checkWeaponPos: (weapon: Weapon) => void;
+
+   scoreboard: Record<string, number>;
+   addScore: (playerId: string, score: number) => void;
 }
 
 export const useMasterState = create<MasterState>()(
@@ -107,6 +111,7 @@ export const useMasterState = create<MasterState>()(
                weapons: [],
                deadPlayers: [],
                obstacles: obstacleList(),
+               scoreboard: {},
             };
          }),
       playerOrder: [],
@@ -125,6 +130,9 @@ export const useMasterState = create<MasterState>()(
             }
 
             state.players[targetPlayerIndex].attacksPerTurn += 1;
+            state.players[targetPlayerIndex].powerUps.push(
+               PowerUp.PlusOne,
+            );
          }),
 
       actionActionsPerTurn: 1,
@@ -258,10 +266,10 @@ export const useMasterState = create<MasterState>()(
          }
       },
       moveWeapon: (w, pos) => {
-            set(state => {
-               console.log('hahaa', pos);
-               state.weapons.find(e => e.id == w.id)!.pos = pos;
-            });
+         set(state => {
+            console.log('hahaa', pos);
+            state.weapons.find(e => e.id == w.id)!.pos = pos;
+         });
       },
       checkWeaponPos: a => {
          const obstacles = get().obstacles;
@@ -281,7 +289,7 @@ export const useMasterState = create<MasterState>()(
          if (target.player) {
             playSound('hit');
             popPlayer(target.player, () => {
-               kill(target.player!.id);
+               kill(target.player!.id, a.playerId);
             });
             console.log('hit player', target.player);
             if (w.type != WeaponType.Lazor) {
@@ -332,7 +340,7 @@ export const useMasterState = create<MasterState>()(
             });
             state.obstacles = remainingObstacles;
          }),
-      killPlayer: id =>
+      killPlayer: (id, killerId) => {
          set(state => {
             const newPlayers: Player[] = [];
             for (const player of state.players) {
@@ -347,9 +355,20 @@ export const useMasterState = create<MasterState>()(
                }
             }
             state.players = newPlayers;
-         }),
+         });
+
+         get().addScore(killerId, id === killerId ? -1 : 1);
+      },
       waitingAction: false,
       setWaitingAction: (wait: boolean) =>
          set(() => ({ waitingAction: wait })),
+
+      scoreboard: {},
+      addScore: (playerId: string, score: number) =>
+         set(state => {
+            if (state.scoreboard[playerId])
+               state.scoreboard[playerId] += score;
+            else state.scoreboard[playerId] = score;
+         }),
    })),
 );

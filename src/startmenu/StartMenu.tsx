@@ -117,6 +117,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
                isDead: false,
                attacksPerTurn: 1,
                hasLazor: false,
+               powerUps: [],
             },
          ]);
          setPlayerMode(getRandomPlayerMode());
@@ -157,6 +158,7 @@ export function StartMenu({ changeScene }: StartMenuProps) {
             isAI: true,
             attacksPerTurn: 1,
             hasLazor: false,
+            powerUps: [],
          },
       ]);
       if (newI >= colors.length) {

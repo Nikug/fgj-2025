@@ -27,6 +27,7 @@ function App() {
    const playerTurnId = useMasterState(state => state.playerTurn);
    const hasObstacle = useMasterState(state => state.hasObstacle);
    const activePlayer = useMasterState(state => state.activePlayer);
+   const scoreboard = useMasterState(state => state.scoreboard);
 
    const setGamePhase = useMasterState(state => state.setGamePhase);
    const actionsPerTurn = useMasterState(
@@ -173,6 +174,7 @@ function App() {
                         key={player.id}
                         player={player}
                         active={player.id === playerTurnId}
+                        score={scoreboard[player.id] ?? 0}
                      />
                   ))}
                </div>

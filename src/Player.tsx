@@ -126,12 +126,15 @@ export const Player = (props: Props) => {
       setTriggeredForThisTurn(false);
    }, [gamePhase]);
 
+   console.log(player);
+
    return (
       <PlayerModel
          id={player.elementId}
          model={player.mode}
          color={player.color}
          highlight={isOwnTurn}
+         powerUps={player.powerUps}
       />
    );
 };
