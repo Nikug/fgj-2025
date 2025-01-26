@@ -265,7 +265,7 @@ export const useMasterState = create<MasterState>()(
          const kill = get().killPlayer;
          const removeWeapons = get().removeWeapons;
          const allWeapons = get().weapons;
-         const w = get().weapons.find(e => e.id === a.id);
+         const w = get().weapons.find(e => e.id === a.id)!;
          const target = getFromPos(
             w,
             obstacles,
